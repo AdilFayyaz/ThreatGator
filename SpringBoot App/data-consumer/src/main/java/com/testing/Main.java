@@ -1,143 +1,27 @@
-package com.service;
+package com.testing;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.model.*;
-import org.apache.http.HttpHost;
-import org.elasticsearch.action.index.IndexRequest;
-import org.elasticsearch.action.index.IndexResponse;
-import org.elasticsearch.client.RequestOptions;
-import org.elasticsearch.client.RestClient;
-import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.common.xcontent.XContentType;
+import com.model.ElasticModel;
+import com.model.Entity;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
-import org.springframework.http.HttpEntity;
-import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.HttpStatusCodeException;
-import org.springframework.web.client.RestTemplate;
-import com.service.ErrorHandler;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.sql.SQLOutput;
-import java.util.*;
 
-@Service
-@RestController
-public class KafkaService {
+import java.util.LinkedHashMap;
+import java.util.Objects;
 
-    private ArrayList<RedditThread> threads= new ArrayList<>();
-    private ArrayList<RedditComment> comments = new ArrayList<>();
-    private ArrayList<Tweet> tweets = new ArrayList<>();
-    private ArrayList<LinkedHashMap<String, String>> taggedData= new ArrayList<>();
-    private ArrayList<ElasticModel> finalObjects=new ArrayList<ElasticModel>();
-    public RestTemplate restTemplate = new RestTemplate();
 
-    String inferencer="http://127.0.0.1:5000/getInference";
-    // Annotation required to listen
-    // the message from Kafka server
-    @KafkaListener(topics = "reddit-threads",
-            groupId = "id", containerFactory
-            = "RedditThreadListener")
-    public void publish(redditKafka thread) throws JSONException {
-//        restTemplate.setErrorHandler(new ErrorHandler());
-        System.out.println("New Entry: " + thread);
-        for (int i=0; i<thread.threads.size(); i++){
-            threads.add(thread.threads.get(i));
-            JSONObject r = new JSONObject();
-            byte[] bytes = thread.threads.get(i).getSelftext().getBytes();
-            String utf_8_string = new String(bytes,StandardCharsets.UTF_8);
-            r.put("sentence", utf_8_string);
-            if(utf_8_string.equals(thread.threads.get(i).getSelftext())){
-//                System.out.println("MATCHEDDDD");
-//                System.out.println(utf_8_string);
-//                System.out.println(thread.threads.get(i).getSelftext());
-                String[] words = utf_8_string.split("\\s+");
-                if(words.length < 300) {
-                    try {
-                        String s = restTemplate.postForObject(inferencer, new HttpEntity<>(r.toString()), String.class);
-                        System.out.println(s);
-                        taggedData.add(convertString(s));
-                    } catch (HttpStatusCodeException e) {
-                        System.out.println("Error Found");
-                    }
-                }
-
-            }
-
-        }
-    }
-
-    @KafkaListener(topics = "reddit-comments",
-            groupId = "id", containerFactory
-            = "RedditCommentListener")
-    public void publish(redditKafkaC comment) throws JSONException {
-        System.out.println("New Entry: " + comment);
-        for (int i=0; i<comment.comments.size(); i++){
-            comments.add(comment.comments.get(i));
-            JSONObject r = new JSONObject();
-            r.put("sentence", comment.comments.get(i).getBody());
-
-            String s=restTemplate.postForObject(inferencer, new HttpEntity<>(r.toString()), String.class);
-            System.out.println(s);
-            taggedData.add(convertString(s));
-        }
-
-    }
-
-    @KafkaListener(topics = "tweets",
-    groupId = "id", containerFactory = "tweetListener")
-    public void publish(tweetKafka tweet) throws JSONException {
-
-        System.out.println("New Entry: " + tweet);
-        for (int i=0; i<tweet.tweetList.size(); i++){
-            tweets.add(tweet.tweetList.get(i));
-            JSONObject r = new JSONObject();
-            String addTweet = tweet.tweetList.get(i).getBody();
-            r.put("sentence", addTweet);
-            String[] words = addTweet.split("\\s+");
-            if(words.length < 300) {
-                try {
-                    String s = restTemplate.postForObject(inferencer, new HttpEntity<>(r.toString()), String.class);
-                    System.out.println(s);
-                    taggedData.add(convertString(s));
-                }
-                catch (HttpStatusCodeException e) {
-                    System.out.println("Error Found");
-                }
-            }
-        }
-    }
-    @RequestMapping("/getInference")
-    public String getInferences() throws JSONException {
-        String s;
-        RestTemplate restTemplate = new RestTemplate();
-        JSONObject r = new JSONObject();
-        r.put("sentence", tweets.get(2).getBody());
-        s=restTemplate.postForObject(inferencer, new HttpEntity<>(r.toString()), String.class);
-        System.out.println(s);
-        return s;
-    }
-    @RequestMapping("/getTaggedData")
-    public void getTaggedData() {
-        System.out.println(taggedData.toString());
-    }
+public class Main {
     public LinkedHashMap<String, String> convertString(String s) throws JSONException {
         LinkedHashMap<String, String> h = new LinkedHashMap<>();
         JSONArray a= new JSONArray(s);
 //        System.out.println(a.length());
         JSONArray Words= a.getJSONArray(0);
-//        System.out.println(Words.length());
+        System.out.println(Words.length());
 //        for(int i=0; i< Words.length();i++){
 //            System.out.println(Words.getString(i));
 //        }
 
         JSONArray Tags= a.getJSONArray(1);
-//        System.out.println(Tags.length());
+        System.out.println(Tags.length());
 //        for(int i=0; i< Tags.length();i++){
 //            System.out.println(Tags.getString(i));
 //        }
@@ -274,13 +158,15 @@ public class KafkaService {
         //the entities will be added to their respective arrays inside that object
         //this object will be added to the ArrayList declared above called finalobjects
         System.out.println(Obj.toString());
-        finalObjects.add(Obj);
+//        finalObjects.add(Obj);
         return h;
     }
 
-    public void insertEntity(String current, String temp, ElasticModel Obj){
-        if (Objects.equals(current, "malware"))
+    public void insertEntity(String current, String temp, ElasticModel Obj) {
+        if (Objects.equals(current, "malware")) {
+            System.out.println("Malware ending");
             Obj.malwares.add(new Entity(temp));
+        }
         else if (Objects.equals(current, "indicator"))
             Obj.indicators.add(new Entity(temp));
         else if (Objects.equals(current, "infrastructure"))
@@ -299,27 +185,11 @@ public class KafkaService {
             Obj.campaigns.add(new Entity(temp));
     }
 
-    @RequestMapping("/pushToElastic")
-    public String pushToElastic() throws IOException {
-        String s="";
-        //this function will create connection to elasticsearch
-        RestHighLevelClient client = new RestHighLevelClient(
-                RestClient.builder(
-                        new HttpHost("localhost", 9200, "http")));
-        // a loop will run over the finalObjects ArrayList
-        for (int i=0; i<finalObjects.size(); i++){
-            ObjectMapper mapper= new ObjectMapper();
-            String jsonstring=mapper.writeValueAsString(finalObjects.get(i));
-            IndexRequest req= new IndexRequest("tagged_data")
-                    //.id(new_cve.id)
-                    .source(jsonstring, XContentType.JSON);
-            IndexResponse response=client.index(req, RequestOptions.DEFAULT); //inserting to elasticsearch
-            System.out.println("Response Id: "+response.getId());
-
-        }
-        // then for each index, using object mapper as in FileAccess.java will map that to json
-        //that json will be added to elasticsearch
-        // at the end display success?
-        return s;
+    public static void main(String args[]) throws JSONException {
+        String s= "[[\"All\",\"jokes\",\"to\",\"the\",\"side\",\"this\",\"is\",\"a\",\"generalist\",\"post\",\"and\",\"I've\",\"tried\",\"finding\",\"the\",\"suitor\",\"on\",\"the\",\"internet\",\"for\",\"this\",\"exploit\",\"and\",\"can't\",\"find\",\"legit\",\"threat\",\"actors.\",\"So\",\"my\",\"question\",\"is\",\"WHO\",\"and\",\"WHY\",\"would\",\"someone\",\"want\",\"to\",\"hack\",\"MineCraft\",\"out\",\"of\",\"all\",\"games\",\"?\",\"Is\",\"it\",\"someone\",\"that\",\"was\",\"bored\",\"and\",\"testing\",\"their\",\"skilkset?\",\"Maybe\",\"disgruntled\",\"employees\",\"or\",\"ex\",\"employees?\",\"Someone\",\"that\",\"got\",\"mad\",\"over\",\"the\",\"outcome\",\"of\",\"playing\",\"the\",\"game\",\"?\",\"What\",\"reasoning\",\"would\",\"someone\",\"have\",\"?\",\"Can\",\"this\",\"exploit\",\"lead\",\"to\",\"randsomware\",\"or\",\"something?\",\"This\",\"game\",\"came\",\"out\",\"2011\",\"and\",\"although\",\"it\",\"is\",\"very\",\"popular\",\"its\",\"moreso\",\"an\",\"outdated\",\"game\",\"and\",\"only\",\"people\",\"really\",\"playing\",\"it\",\"are\",\"kids\",\"and\",\"loyalist.....\",\"This\",\"maybe\",\"a\",\"biased\",\"opinion\",\"but\",\"I\",\"don't\",\"think\",\"people\",\"are\",\"waking\",\"up\",\"in\",\"2021\",\"saying\",\"\\\"hey\",\"I\",\"have\",\"to\",\"get\",\"Minecraft\",\"it\",\"is\",\"a\",\"must\",\"have\",\"game\",\"\\\"\"],[\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"B-M\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"B-M\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"B-INF\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\",\"O\"]]";
+        Main m = new Main();
+        m.convertString(s);
     }
 }
+
+
