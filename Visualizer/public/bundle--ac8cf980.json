@@ -1,0 +1,1568 @@
+{
+  "type": "bundle",
+  "id": "bundle--ac8cf980-2781-4c1f-92b5-47953a56c3a6",
+  "objects": [
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--3fdd01e5-aa5f-4cb1-a4a6-05b186b0cf7d",
+      "created": "2021-09-10T06:12:03.305238Z",
+      "modified": "2021-09-10T06:12:03.305238Z",
+      "name": "195.158.234.60",
+      "indicator_types": ["malicious-activity"],
+      "pattern": "[ipv4:value = '195.158.234.60']",
+      "pattern_type": "stix",
+      "pattern_version": "2.1",
+      "valid_from": "2021-09-10T06:12:03.305238Z"
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--41986c72-d6df-4f3c-aad5-c718abd7bf40",
+      "created": "2021-09-10T06:12:09.73136Z",
+      "modified": "2021-09-10T06:12:09.73136Z",
+      "name": "T1548",
+      "external_references": [
+        {
+          "source_name": "ATT&CK",
+          "external_id": "T1548"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--3613719b-50ac-413b-b9b4-dd66ab87a924",
+      "created": "2021-09-10T06:12:09.73136Z",
+      "modified": "2021-09-10T06:12:09.73136Z",
+      "name": "T1548.002",
+      "description": "[APT37](https://attack.mitre.org/groups/G0067) has a function in the initial dropper to bypass Windows UAC in order to execute the next payload with higher privileges.(Citation: Securelist ScarCruft May 2019)",
+      "external_references": [
+        {
+          "source_name": "ATT&CK",
+          "external_id": "T1548.002"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--e642da81-7c4d-458d-8a06-06e60180b6e5",
+      "created": "2021-09-10T06:12:09.739305Z",
+      "modified": "2021-09-10T06:12:09.739305Z",
+      "name": "T1071",
+      "external_references": [
+        {
+          "source_name": "ATT&CK",
+          "external_id": "T1071"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--c86019b5-b815-4ee0-962c-6ed10f372f62",
+      "created": "2021-09-10T06:12:09.739305Z",
+      "modified": "2021-09-10T06:12:09.739305Z",
+      "name": "T1071.001",
+      "description": "[APT37](https://attack.mitre.org/groups/G0067) uses HTTPS to conceal C2 communications.(Citation: Talos Group123)",
+      "external_references": [
+        {
+          "source_name": "ATT&CK",
+          "external_id": "T1071.001"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--40e9de93-2926-4774-9e57-4d3ba8867771",
+      "created": "2021-09-10T06:12:09.739305Z",
+      "modified": "2021-09-10T06:12:09.739305Z",
+      "name": "T1123",
+      "description": "[APT37](https://attack.mitre.org/groups/G0067) has used an audio capturing utility known as SOUNDWAVE that captures microphone input.(Citation: FireEye APT37 Feb 2018)",
+      "external_references": [
+        {
+          "source_name": "ATT&CK",
+          "external_id": "T1123"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--f1f3372c-11bb-4b8b-a519-dedf11083952",
+      "created": "2021-09-10T06:12:09.739305Z",
+      "modified": "2021-09-10T06:12:09.739305Z",
+      "name": "T1547",
+      "external_references": [
+        {
+          "source_name": "ATT&CK",
+          "external_id": "T1547"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--bafc076f-3287-419b-aa24-d64d0b918e9b",
+      "created": "2021-09-10T06:12:09.739305Z",
+      "modified": "2021-09-10T06:12:09.739305Z",
+      "name": "T1547.001",
+      "description": "[APT37](https://attack.mitre.org/groups/G0067)'s has added persistence via the Registry key HKCU\\Software\\Microsoft\\CurrentVersion\\Run\\.(Citation: FireEye APT37 Feb 2018)(Citation: Talos Group123)",
+      "external_references": [
+        {
+          "source_name": "ATT&CK",
+          "external_id": "T1547.001"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--6b6ad2fd-307c-440c-b8cf-8f08e5c15269",
+      "created": "2021-09-10T06:12:09.747307Z",
+      "modified": "2021-09-10T06:12:09.747307Z",
+      "name": "T1059",
+      "external_references": [
+        {
+          "source_name": "ATT&CK",
+          "external_id": "T1059"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--ab77b747-a73b-4e9b-ae37-cd3456cb9321",
+      "created": "2021-09-10T06:12:09.747307Z",
+      "modified": "2021-09-10T06:12:09.747307Z",
+      "name": "T1059.003",
+      "description": "[APT37](https://attack.mitre.org/groups/G0067) has used the command-line interface.(Citation: FireEye APT37 Feb 2018)(Citation: Talos Group123)",
+      "external_references": [
+        {
+          "source_name": "ATT&CK",
+          "external_id": "T1059.003"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--6af28eeb-d035-4b73-9ccd-a747a327b092",
+      "created": "2021-09-10T06:12:09.747307Z",
+      "modified": "2021-09-10T06:12:09.747307Z",
+      "name": "T1059.005",
+      "description": "[APT37](https://attack.mitre.org/groups/G0067) executes shellcode and a VBA script to decode Base64 strings.(Citation: Talos Group123)",
+      "external_references": [
+        {
+          "source_name": "ATT&CK",
+          "external_id": "T1059.005"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--2acd9829-1d34-46d1-aec2-c80379b120a5",
+      "created": "2021-09-10T06:12:09.747307Z",
+      "modified": "2021-09-10T06:12:09.747307Z",
+      "name": "T1555",
+      "external_references": [
+        {
+          "source_name": "ATT&CK",
+          "external_id": "T1555"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--d4d47587-4de9-405e-a07f-dbe544ffaac5",
+      "created": "2021-09-10T06:12:09.747307Z",
+      "modified": "2021-09-10T06:12:09.747307Z",
+      "name": "T1555.003",
+      "description": "[APT37](https://attack.mitre.org/groups/G0067) has used a credential stealer known as ZUMKONG that can harvest usernames and passwords stored in browsers.(Citation: FireEye APT37 Feb 2018)",
+      "external_references": [
+        {
+          "source_name": "ATT&CK",
+          "external_id": "T1555.003"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--8176f18d-10e7-47c7-ad35-fabd4e57dff9",
+      "created": "2021-09-10T06:12:09.750233Z",
+      "modified": "2021-09-10T06:12:09.750233Z",
+      "name": "T1005",
+      "description": "[APT37](https://attack.mitre.org/groups/G0067) has collected data from victims' local systems.(Citation: FireEye APT37 Feb 2018)",
+      "external_references": [
+        {
+          "source_name": "ATT&CK",
+          "external_id": "T1005"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--e6fe048f-1cd0-4ec6-84f3-0da995b14420",
+      "created": "2021-09-10T06:12:09.751159Z",
+      "modified": "2021-09-10T06:12:09.751159Z",
+      "name": "T1561",
+      "external_references": [
+        {
+          "source_name": "ATT&CK",
+          "external_id": "T1561"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--b24c0be4-e61e-4094-8dfc-2a0ae076b249",
+      "created": "2021-09-10T06:12:09.751159Z",
+      "modified": "2021-09-10T06:12:09.751159Z",
+      "name": "T1561.002",
+      "description": "[APT37](https://attack.mitre.org/groups/G0067) has access to destructive malware that is capable of overwriting a machine's Master Boot Record (MBR).(Citation: FireEye APT37 Feb 2018)(Citation: Talos Group123)",
+      "external_references": [
+        {
+          "source_name": "ATT&CK",
+          "external_id": "T1561.002"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--04b63995-c947-4dc7-aae7-039261cb8232",
+      "created": "2021-09-10T06:12:09.751159Z",
+      "modified": "2021-09-10T06:12:09.751159Z",
+      "name": "T1189",
+      "description": "[APT37](https://attack.mitre.org/groups/G0067) has used strategic web compromises, particularly of South Korean websites, to distribute malware. The group has also used torrent file-sharing sites to more indiscriminately disseminate malware to victims. As part of their compromises, the group has used a Javascript based profiler called RICECURRY to profile a victim's web browser and deliver malicious code accordingly.(Citation: Securelist ScarCruft Jun 2016)(Citation: FireEye APT37 Feb 2018)",
+      "external_references": [
+        {
+          "source_name": "ATT&CK",
+          "external_id": "T1189"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--60554569-f241-4120-b9a6-37a278e022cd",
+      "created": "2021-09-10T06:12:09.751159Z",
+      "modified": "2021-09-10T06:12:09.751159Z",
+      "name": "T1203",
+      "description": "[APT37](https://attack.mitre.org/groups/G0067) has used Flash Player (CVE-2016-4117, CVE-2018-4878) and Word (CVE-2017-0199) exploits for execution.(Citation: Securelist ScarCruft Jun 2016)(Citation: FireEye APT37 Feb 2018)(Citation: Talos Group123)",
+      "external_references": [
+        {
+          "source_name": "ATT&CK",
+          "external_id": "T1203"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--fa8e67b8-02de-4f0b-b3d9-85fba577264a",
+      "created": "2021-09-10T06:12:09.754701Z",
+      "modified": "2021-09-10T06:12:09.754701Z",
+      "name": "T1105",
+      "description": "[APT37](https://attack.mitre.org/groups/G0067) has downloaded second stage malware from compromised websites.(Citation: FireEye APT37 Feb 2018)(Citation: Securelist ScarCruft May 2019)",
+      "external_references": [
+        {
+          "source_name": "ATT&CK",
+          "external_id": "T1105"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--5ca286a8-ee64-44ea-8f1e-7b77078de11d",
+      "created": "2021-09-10T06:12:09.754701Z",
+      "modified": "2021-09-10T06:12:09.754701Z",
+      "name": "T1559",
+      "external_references": [
+        {
+          "source_name": "ATT&CK",
+          "external_id": "T1559"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--5c7731e4-a0b1-45a6-9432-7fa29208d11c",
+      "created": "2021-09-10T06:12:09.754701Z",
+      "modified": "2021-09-10T06:12:09.754701Z",
+      "name": "T1559.002",
+      "description": "[APT37](https://attack.mitre.org/groups/G0067) has used Windows DDE for execution of commands and a malicious VBS.(Citation: Securelist ScarCruft Jun 2016)",
+      "external_references": [
+        {
+          "source_name": "ATT&CK",
+          "external_id": "T1559.002"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--70f1d8e9-92e2-477c-be26-81c0f11068d2",
+      "created": "2021-09-10T06:12:09.754701Z",
+      "modified": "2021-09-10T06:12:09.754701Z",
+      "name": "T1036",
+      "external_references": [
+        {
+          "source_name": "ATT&CK",
+          "external_id": "T1036"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--7ce2078e-9e36-4933-9cb6-e2867e10f3ec",
+      "created": "2021-09-10T06:12:09.754701Z",
+      "modified": "2021-09-10T06:12:09.754701Z",
+      "name": "T1036.001",
+      "description": "[APT37](https://attack.mitre.org/groups/G0067) has signed its malware with an invalid digital certificates listed as \u201cTencent Technology (Shenzhen) Company Limited.\u201d(Citation: Securelist ScarCruft Jun 2016)",
+      "external_references": [
+        {
+          "source_name": "ATT&CK",
+          "external_id": "T1036.001"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--fd251232-4f97-4b12-8bd7-c11748230345",
+      "created": "2021-09-10T06:12:09.754701Z",
+      "modified": "2021-09-10T06:12:09.754701Z",
+      "name": "T1106",
+      "description": "[APT37](https://attack.mitre.org/groups/G0067) leverages the Windows API calls: VirtualAlloc(), WriteProcessMemory(), and CreateRemoteThread() for process injection.(Citation: Talos Group123)",
+      "external_references": [
+        {
+          "source_name": "ATT&CK",
+          "external_id": "T1106"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--1777cbbc-f40e-4557-ac24-136df50bb213",
+      "created": "2021-09-10T06:12:09.754701Z",
+      "modified": "2021-09-10T06:12:09.754701Z",
+      "name": "T1027",
+      "description": "[APT37](https://attack.mitre.org/groups/G0067) obfuscates strings and payloads.(Citation: Talos Group123)(Citation: Securelist ScarCruft May 2019)",
+      "external_references": [
+        {
+          "source_name": "ATT&CK",
+          "external_id": "T1027"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--7816b73d-2cdf-4e74-86dc-0293615280da",
+      "created": "2021-09-10T06:12:09.754701Z",
+      "modified": "2021-09-10T06:12:09.754701Z",
+      "name": "T1027.003",
+      "description": "[APT37](https://attack.mitre.org/groups/G0067) uses steganography to send images to users that are embedded with shellcode.(Citation: Talos Group123)(Citation: Securelist ScarCruft May 2019)",
+      "external_references": [
+        {
+          "source_name": "ATT&CK",
+          "external_id": "T1027.003"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--b0bb7b08-24d6-49e5-aee4-472e5058a33f",
+      "created": "2021-09-10T06:12:09.759735Z",
+      "modified": "2021-09-10T06:12:09.759735Z",
+      "name": "T1120",
+      "description": "[APT37](https://attack.mitre.org/groups/G0067) has a Bluetooth device harvester, which uses Windows Bluetooth APIs to find information on connected Bluetooth devices. (Citation: Securelist ScarCruft May 2019)",
+      "external_references": [
+        {
+          "source_name": "ATT&CK",
+          "external_id": "T1120"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--43a5e86d-6737-4e34-8b17-bae47978cbdf",
+      "created": "2021-09-10T06:12:09.759735Z",
+      "modified": "2021-09-10T06:12:09.759735Z",
+      "name": "T1566",
+      "external_references": [
+        {
+          "source_name": "ATT&CK",
+          "external_id": "T1566"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--03f6e390-e692-4313-941f-6c93e1c17d86",
+      "created": "2021-09-10T06:12:09.760803Z",
+      "modified": "2021-09-10T06:12:09.760803Z",
+      "name": "T1566.001",
+      "description": "[APT37](https://attack.mitre.org/groups/G0067) delivers malware using spearphishing emails with malicious HWP attachments.(Citation: FireEye APT37 Feb 2018)(Citation: Talos Group123)(Citation: Securelist ScarCruft May 2019)",
+      "external_references": [
+        {
+          "source_name": "ATT&CK",
+          "external_id": "T1566.001"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--2f9aad1a-3029-4f22-b537-44be23c44d1b",
+      "created": "2021-09-10T06:12:09.760803Z",
+      "modified": "2021-09-10T06:12:09.760803Z",
+      "name": "T1057",
+      "description": "[APT37](https://attack.mitre.org/groups/G0067)'s Freenki malware lists running processes using the Microsoft Windows API.(Citation: Talos Group123)",
+      "external_references": [
+        {
+          "source_name": "ATT&CK",
+          "external_id": "T1057"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--b9d4b806-4d75-4512-94be-7ea9e876e547",
+      "created": "2021-09-10T06:12:09.760803Z",
+      "modified": "2021-09-10T06:12:09.760803Z",
+      "name": "T1055",
+      "description": "[APT37](https://attack.mitre.org/groups/G0067) injects its malware variant, [ROKRAT](https://attack.mitre.org/software/S0240), into the cmd.exe process.(Citation: Talos Group123)",
+      "external_references": [
+        {
+          "source_name": "ATT&CK",
+          "external_id": "T1055"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--b1053b0b-1a76-4435-a610-25a38fd72900",
+      "created": "2021-09-10T06:12:09.760803Z",
+      "modified": "2021-09-10T06:12:09.760803Z",
+      "name": "T1082",
+      "description": "[APT37](https://attack.mitre.org/groups/G0067) collects the computer name, the BIOS model, and execution path.(Citation: Talos Group123)",
+      "external_references": [
+        {
+          "source_name": "ATT&CK",
+          "external_id": "T1082"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--7dc41454-564d-424a-955a-c9cb457b2047",
+      "created": "2021-09-10T06:12:09.760803Z",
+      "modified": "2021-09-10T06:12:09.760803Z",
+      "name": "T1033",
+      "description": "[APT37](https://attack.mitre.org/groups/G0067) identifies the victim username.(Citation: Talos Group123)",
+      "external_references": [
+        {
+          "source_name": "ATT&CK",
+          "external_id": "T1033"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--971aa43b-949c-4f65-a0cb-5960cf3ff6b3",
+      "created": "2021-09-10T06:12:09.760803Z",
+      "modified": "2021-09-10T06:12:09.760803Z",
+      "name": "T1529",
+      "description": "[APT37](https://attack.mitre.org/groups/G0067) has used malware that will issue the command shutdown /r /t 1 to reboot a system after wiping its MBR.(Citation: Talos Group123)",
+      "external_references": [
+        {
+          "source_name": "ATT&CK",
+          "external_id": "T1529"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--ebbe0bc1-5c17-44b2-8ca9-040f84abfbe9",
+      "created": "2021-09-10T06:12:09.760803Z",
+      "modified": "2021-09-10T06:12:09.760803Z",
+      "name": "T1204",
+      "external_references": [
+        {
+          "source_name": "ATT&CK",
+          "external_id": "T1204"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--aa7bf991-3d4d-4dbe-bc80-7a209de962d9",
+      "created": "2021-09-10T06:12:09.760803Z",
+      "modified": "2021-09-10T06:12:09.760803Z",
+      "name": "T1204.002",
+      "description": "[APT37](https://attack.mitre.org/groups/G0067) has sent spearphishing attachments attempting to get a user to open them.(Citation: FireEye APT37 Feb 2018)",
+      "external_references": [
+        {
+          "source_name": "ATT&CK",
+          "external_id": "T1204.002"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--b3738c51-a590-4e8a-a061-e134280ff449",
+      "created": "2021-09-10T06:12:09.760803Z",
+      "modified": "2021-09-10T06:12:09.760803Z",
+      "name": "T1102",
+      "external_references": [
+        {
+          "source_name": "ATT&CK",
+          "external_id": "T1102"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--89548ead-7c1c-4be5-b2ac-6d2ccafaee7c",
+      "created": "2021-09-10T06:12:09.760803Z",
+      "modified": "2021-09-10T06:12:09.760803Z",
+      "name": "T1102.002",
+      "description": "[APT37](https://attack.mitre.org/groups/G0067) leverages social networking sites and cloud platforms (AOL, Twitter, Yandex, Mediafire, pCloud, Dropbox, and Box) for C2.(Citation: FireEye APT37 Feb 2018)(Citation: Talos Group123)",
+      "external_references": [
+        {
+          "source_name": "ATT&CK",
+          "external_id": "T1102.002"
+        }
+      ]
+    },
+    {
+      "type": "campaign",
+      "spec_version": "2.1",
+      "id": "campaign--b44471c3-7661-4868-9fc3-aa3716f685d0",
+      "created": "2021-09-10T06:12:03.870368Z",
+      "modified": "2021-09-10T06:12:03.870368Z",
+      "name": "HIDDEN COBRA",
+      "description": "HIDDEN COBRA actors have leveraged their capabilities to target and compromise a range of victims; some intrusions have resulted in the exfiltration of data while others have been disruptive in nature"
+    },
+    {
+      "type": "location",
+      "spec_version": "2.1",
+      "id": "location--dbc58df8-b68c-462e-adb6-103248047c79",
+      "created": "2021-09-10T06:12:03.871433Z",
+      "modified": "2021-09-10T06:12:03.871433Z",
+      "region": "Asia"
+    },
+    {
+      "type": "location",
+      "spec_version": "2.1",
+      "id": "location--5b7ed48c-6a41-42aa-9f03-fb6323dbe491",
+      "created": "2021-09-10T06:12:03.871433Z",
+      "modified": "2021-09-10T06:12:03.871433Z",
+      "region": "Asia"
+    },
+    {
+      "type": "location",
+      "spec_version": "2.1",
+      "id": "location--5d86b610-8977-41d7-9460-42b258c63b1d",
+      "created": "2021-09-10T06:12:03.871433Z",
+      "modified": "2021-09-10T06:12:03.871433Z",
+      "region": "Asia"
+    },
+    {
+      "type": "location",
+      "spec_version": "2.1",
+      "id": "location--9ff9b3d5-c453-4a10-a1d1-4fba0f7c4abf",
+      "created": "2021-09-10T06:12:03.871433Z",
+      "modified": "2021-09-10T06:12:03.871433Z",
+      "region": "Asia"
+    },
+    {
+      "type": "location",
+      "spec_version": "2.1",
+      "id": "location--bfe77587-2288-411b-af87-539f18f80e50",
+      "created": "2021-09-10T06:12:03.871433Z",
+      "modified": "2021-09-10T06:12:03.871433Z",
+      "region": "Asia"
+    },
+    {
+      "type": "location",
+      "spec_version": "2.1",
+      "id": "location--51b58330-2c94-467e-866a-7b46ca135e60",
+      "created": "2021-09-10T06:12:03.871433Z",
+      "modified": "2021-09-10T06:12:03.871433Z",
+      "region": "Asia"
+    },
+    {
+      "type": "location",
+      "spec_version": "2.1",
+      "id": "location--787b5e79-0d0e-4c07-8bbe-5f8dc99619c2",
+      "created": "2021-09-10T06:12:03.871433Z",
+      "modified": "2021-09-10T06:12:03.871433Z",
+      "region": "Europe"
+    },
+    {
+      "type": "location",
+      "spec_version": "2.1",
+      "id": "location--53e62af1-0389-4cbc-9200-28d7b04e7365",
+      "created": "2021-09-10T06:12:03.871433Z",
+      "modified": "2021-09-10T06:12:03.871433Z",
+      "region": "Europe"
+    },
+    {
+      "type": "location",
+      "spec_version": "2.1",
+      "id": "location--ff4b1a5f-5ac1-491b-83b3-a4b265590b86",
+      "created": "2021-09-10T06:12:03.871433Z",
+      "modified": "2021-09-10T06:12:03.871433Z",
+      "region": "Asia"
+    },
+    {
+      "type": "location",
+      "spec_version": "2.1",
+      "id": "location--db61c688-3cfa-402c-9eb3-92e1dd7e63c0",
+      "created": "2021-09-10T06:12:03.879002Z",
+      "modified": "2021-09-10T06:12:03.879002Z",
+      "region": "Europe"
+    },
+    {
+      "type": "location",
+      "spec_version": "2.1",
+      "id": "location--719e46d4-5216-48d1-b4b3-29db1370833a",
+      "created": "2021-09-10T06:12:03.880033Z",
+      "modified": "2021-09-10T06:12:03.880033Z",
+      "region": "Americas"
+    },
+    {
+      "type": "location",
+      "spec_version": "2.1",
+      "id": "location--9aeba074-cc49-4dc4-b921-a333193b4640",
+      "created": "2021-09-10T06:12:03.881078Z",
+      "modified": "2021-09-10T06:12:03.881078Z",
+      "region": "Asia"
+    },
+    {
+      "type": "malware",
+      "spec_version": "2.1",
+      "id": "malware--139d3a7f-aff3-4729-accc-f9122043d029",
+      "created": "2021-09-10T06:12:11.269323Z",
+      "modified": "2021-09-10T06:12:11.269323Z",
+      "name": "CORALDECK",
+      "description": "CORALDECK is an exfiltration tool used by APT37 . [1]",
+      "is_family": true
+    },
+    {
+      "type": "malware",
+      "spec_version": "2.1",
+      "id": "malware--827add25-cfc8-47e7-a756-02eb2925f7aa",
+      "created": "2021-09-10T06:12:12.928946Z",
+      "modified": "2021-09-10T06:12:12.928946Z",
+      "name": "DOGCALL",
+      "description": "DOGCALL is a backdoor used by APT37 that has been used to target South Korean government and military organizations in 2017. It is typically dropped using a Hangul Word Processor (HWP) exploit. [1]",
+      "is_family": true
+    },
+    {
+      "type": "malware",
+      "spec_version": "2.1",
+      "id": "malware--c3fbea7c-58c3-495f-a1d4-34fa3ee3d21d",
+      "created": "2021-09-10T06:12:14.879334Z",
+      "modified": "2021-09-10T06:12:14.879334Z",
+      "name": "Final1stspy",
+      "description": "Final1stspy is a dropper family that has been used to deliver DOGCALL . [1]",
+      "is_family": true
+    },
+    {
+      "type": "malware",
+      "spec_version": "2.1",
+      "id": "malware--6a1695a5-d8e7-494f-809f-1ebdada06280",
+      "created": "2021-09-10T06:12:16.320624Z",
+      "modified": "2021-09-10T06:12:16.320624Z",
+      "name": "HAPPYWORK",
+      "description": "HAPPYWORK is a downloader used by APT37 to target South Korean government and financial victims in November 2016. [1]",
+      "is_family": true
+    },
+    {
+      "type": "malware",
+      "spec_version": "2.1",
+      "id": "malware--55987489-9dde-41fa-b62c-37b1d2f2f2fc",
+      "created": "2021-09-10T06:12:17.909889Z",
+      "modified": "2021-09-10T06:12:17.909889Z",
+      "name": "KARAE",
+      "description": "KARAE is a backdoor typically used by APT37 as first-stage malware. [1]",
+      "is_family": true
+    },
+    {
+      "type": "malware",
+      "spec_version": "2.1",
+      "id": "malware--1675310c-34d4-46c4-b736-96312aec9f2e",
+      "created": "2021-09-10T06:12:19.380558Z",
+      "modified": "2021-09-10T06:12:19.380558Z",
+      "name": "NavRAT",
+      "description": "NavRAT is a remote access tool designed to upload, download, and execute files. It has been observed in attacks targeting South Korea. [1]",
+      "is_family": true
+    },
+    {
+      "type": "malware",
+      "spec_version": "2.1",
+      "id": "malware--98a9e04a-0cd0-4227-913f-b168f75a303c",
+      "created": "2021-09-10T06:12:21.171423Z",
+      "modified": "2021-09-10T06:12:21.171423Z",
+      "name": "POORAIM",
+      "description": "POORAIM is a backdoor used by APT37 in campaigns since at least 2014. [1]",
+      "is_family": true
+    },
+    {
+      "type": "malware",
+      "spec_version": "2.1",
+      "id": "malware--e44a5a37-1dd0-4977-b737-970a0f3d46db",
+      "created": "2021-09-10T06:12:22.994433Z",
+      "modified": "2021-09-10T06:12:22.994433Z",
+      "name": "ROKRAT",
+      "description": "ROKRAT is a cloud-based remote access tool (RAT) used by APT37 . This software has been used to target victims in South Korea. APT37 used ROKRAT during several campaigns in 2016 through 2018. [1] [2]",
+      "is_family": true
+    },
+    {
+      "type": "malware",
+      "spec_version": "2.1",
+      "id": "malware--48177bc4-0157-47a4-bd62-b5037cee2a00",
+      "created": "2021-09-10T06:12:24.604061Z",
+      "modified": "2021-09-10T06:12:24.604061Z",
+      "name": "SHUTTERSPEED",
+      "description": "SHUTTERSPEED is a backdoor used by APT37 . [1]",
+      "is_family": true
+    },
+    {
+      "type": "malware",
+      "spec_version": "2.1",
+      "id": "malware--987d38fe-7746-4237-ad85-a04cce408d91",
+      "created": "2021-09-10T06:12:26.127687Z",
+      "modified": "2021-09-10T06:12:26.127687Z",
+      "name": "SLOWDRIFT",
+      "description": "SLOWDRIFT is a backdoor used by APT37 against academic and strategic victims in South Korea. [1]",
+      "is_family": true
+    },
+    {
+      "type": "malware",
+      "spec_version": "2.1",
+      "id": "malware--c4b97fd5-e5bd-43e5-97c3-67bac5761023",
+      "created": "2021-09-10T06:12:27.60096Z",
+      "modified": "2021-09-10T06:12:27.60096Z",
+      "name": "WINERACK",
+      "description": "WINERACK is a backdoor used by APT37 . [1]",
+      "is_family": true
+    },
+    {
+      "type": "vulnerability",
+      "spec_version": "2.1",
+      "id": "vulnerability--eddff6a3-d677-4c54-aef4-00e89830141d",
+      "created": "2021-09-10T06:12:40.341887Z",
+      "modified": "2021-09-10T06:12:40.341887Z",
+      "name": "CVE-2015-6585",
+      "description": " Hangul Word Processor Vulnerability",
+      "external_references": [
+        {
+          "source_name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2015-6585",
+          "external_id": "CVE-2015-6585"
+        }
+      ]
+    },
+    {
+      "type": "vulnerability",
+      "spec_version": "2.1",
+      "id": "vulnerability--8f036e72-e2de-4fd5-a384-d36fbd3ff683",
+      "created": "2021-09-10T06:12:40.341887Z",
+      "modified": "2021-09-10T06:12:40.341887Z",
+      "name": "CVE-2015-8651",
+      "description": " Adobe Flash Player 18.0.0.324 and 19.x Vulnerability",
+      "external_references": [
+        {
+          "source_name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2015-8651",
+          "external_id": "CVE-2015-8651"
+        }
+      ]
+    },
+    {
+      "type": "vulnerability",
+      "spec_version": "2.1",
+      "id": "vulnerability--2706acb2-fbfe-42cc-a8f6-40267766d971",
+      "created": "2021-09-10T06:12:40.341887Z",
+      "modified": "2021-09-10T06:12:40.341887Z",
+      "name": "CVE-2016-0034",
+      "description": " Microsoft Silverlight 5.1.41212.0 Vulnerability",
+      "external_references": [
+        {
+          "source_name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2016-0034",
+          "external_id": "CVE-2016-0034"
+        }
+      ]
+    },
+    {
+      "type": "vulnerability",
+      "spec_version": "2.1",
+      "id": "vulnerability--498316f8-ea3a-4354-af18-4f930be2c655",
+      "created": "2021-09-10T06:12:40.341887Z",
+      "modified": "2021-09-10T06:12:40.341887Z",
+      "name": "CVE-2016-1019",
+      "description": " Adobe Flash Player 21.0.0.197 Vulnerability",
+      "external_references": [
+        {
+          "source_name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2016-1019",
+          "external_id": "CVE-2016-1019"
+        }
+      ]
+    },
+    {
+      "type": "vulnerability",
+      "spec_version": "2.1",
+      "id": "vulnerability--9b030cba-d9f2-4090-858b-57e38048f21e",
+      "created": "2021-09-10T06:12:40.350072Z",
+      "modified": "2021-09-10T06:12:40.350072Z",
+      "name": "CVE-2016-4117",
+      "description": " Adobe Flash Player 21.0.0.226 Vulnerability",
+      "external_references": [
+        {
+          "source_name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2016-4117",
+          "external_id": "CVE-2016-4117"
+        }
+      ]
+    },
+    {
+      "type": "threat-actor",
+      "spec_version": "2.1",
+      "id": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "created": "2021-09-10T06:12:03.869326Z",
+      "modified": "2021-09-10T06:12:03.869326Z",
+      "name": "APT 37",
+      "description": "APT37 (Reaper): The Overlooked North Korean Actor, to learn more about our assessment that this threat actor is working on behalf of the North Korean government, as well as various other details about their operations: \n\u00e2\u20ac\u00a2 Targeting: Primarily South Korea \u00e2\u20ac\u201c though also Japan, Vietnam and the Middle East \u00e2\u20ac\u201c in various industry verticals, including chemicals, electronics, manufacturing, aerospace, automotive, and healthcare.\n \u00e2\u20ac\u00a2 Initial Infection Tactics: Social engineering tactics tailored specifically to desired targets, strategic web compromises typical of targeted cyber espionage operations, and the use of torrent file-sharing sites to distribute malware more indiscriminately. \n\u00e2\u20ac\u00a2 Exploited Vulnerabilities: Frequent exploitation of vulnerabilities in Hangul Word Processor (HWP), as well as Adobe Flash. The group has demonstrated access to zero-day vulnerabilities (CVE-2018-0802), and the ability to incorporate them into operations. \n\u00e2\u20ac\u00a2 Command and Control Infrastructure: Compromised servers, messaging platforms, and cloud service providers to avoid detection. The group has shown increasing sophistication by improving their operational security over time. \n\u00e2\u20ac\u00a2 Malware: A diverse suite of malware for initial intrusion and exfiltration. Along with custom malware used for espionage purposes, APT37 also has access to destructive malware.",
+      "threat_actor_types": ["crime-syndicate"],
+      "aliases": [
+        "Reaper",
+        "TEMP.Reaper",
+        "Ricochet Chollima",
+        "ScarCruft",
+        "Thallium",
+        "Group 123",
+        "Red Eyes",
+        "Geumseong121",
+        "Venus121",
+        "Hermit",
+        "ATK 4",
+        "ITG10"
+      ]
+    },
+    {
+      "type": "email-addr",
+      "spec_version": "2.1",
+      "id": "email-addr--3e614eee-b16d-5049-9b0a-fae04a9cd101",
+      "value": "hostmaster@ripe.net"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--bf2f6bbf-e1f8-4dcb-9297-384d15c2b9ca",
+      "created": "2021-09-10T06:12:40.489889Z",
+      "modified": "2021-09-10T06:12:40.489889Z",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--3fdd01e5-aa5f-4cb1-a4a6-05b186b0cf7d",
+      "target_ref": "campaign--b44471c3-7661-4868-9fc3-aa3716f685d0"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--5cc76e2a-4da5-40f7-bfba-6e99c516bd9e",
+      "created": "2021-09-10T06:12:40.493909Z",
+      "modified": "2021-09-10T06:12:40.493909Z",
+      "relationship_type": "attributed-to",
+      "source_ref": "campaign--b44471c3-7661-4868-9fc3-aa3716f685d0",
+      "target_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--06c74add-0c29-4b43-afbb-10bf23959e2a",
+      "created": "2021-09-10T06:12:40.493909Z",
+      "modified": "2021-09-10T06:12:40.493909Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "attack-pattern--41986c72-d6df-4f3c-aad5-c718abd7bf40"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--3093a572-1ad9-46db-b449-21a22ab71de3",
+      "created": "2021-09-10T06:12:40.500553Z",
+      "modified": "2021-09-10T06:12:40.500553Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "attack-pattern--3613719b-50ac-413b-b9b4-dd66ab87a924"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--0984e66a-47ec-430f-bba6-9541376785fa",
+      "created": "2021-09-10T06:12:40.501913Z",
+      "modified": "2021-09-10T06:12:40.501913Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "attack-pattern--e642da81-7c4d-458d-8a06-06e60180b6e5"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--e7b8dea3-5f1e-4c68-a6b6-5d4ec9ea2f54",
+      "created": "2021-09-10T06:12:40.501913Z",
+      "modified": "2021-09-10T06:12:40.501913Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "attack-pattern--c86019b5-b815-4ee0-962c-6ed10f372f62"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--6b6eac31-076d-457d-8438-53294769e124",
+      "created": "2021-09-10T06:12:40.501913Z",
+      "modified": "2021-09-10T06:12:40.501913Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "attack-pattern--40e9de93-2926-4774-9e57-4d3ba8867771"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--bbad948a-9f03-4aa8-b076-310e8b8629c9",
+      "created": "2021-09-10T06:12:40.501913Z",
+      "modified": "2021-09-10T06:12:40.501913Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "attack-pattern--f1f3372c-11bb-4b8b-a519-dedf11083952"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--b30b6af8-ba3d-4fff-998f-1d40b44f43a5",
+      "created": "2021-09-10T06:12:40.501913Z",
+      "modified": "2021-09-10T06:12:40.501913Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "attack-pattern--bafc076f-3287-419b-aa24-d64d0b918e9b"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--3629929c-f095-4035-b042-d421bf74c2c3",
+      "created": "2021-09-10T06:12:40.509603Z",
+      "modified": "2021-09-10T06:12:40.509603Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "attack-pattern--6b6ad2fd-307c-440c-b8cf-8f08e5c15269"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--f192acc4-1b9e-408f-bbea-d6b782b8a3dc",
+      "created": "2021-09-10T06:12:40.511018Z",
+      "modified": "2021-09-10T06:12:40.511018Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "attack-pattern--ab77b747-a73b-4e9b-ae37-cd3456cb9321"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--0259a460-c063-4287-8e6e-cce23c01822e",
+      "created": "2021-09-10T06:12:40.511018Z",
+      "modified": "2021-09-10T06:12:40.511018Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "attack-pattern--6af28eeb-d035-4b73-9ccd-a747a327b092"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--9c15cdd6-2932-4eee-8de6-be2e36c93736",
+      "created": "2021-09-10T06:12:40.511018Z",
+      "modified": "2021-09-10T06:12:40.511018Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "attack-pattern--2acd9829-1d34-46d1-aec2-c80379b120a5"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--bc09fb9e-fd99-4ad4-961a-b348b0d319d8",
+      "created": "2021-09-10T06:12:40.511018Z",
+      "modified": "2021-09-10T06:12:40.511018Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "attack-pattern--d4d47587-4de9-405e-a07f-dbe544ffaac5"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--97f96eee-615d-4dd4-b61d-cc7f3f586689",
+      "created": "2021-09-10T06:12:40.511018Z",
+      "modified": "2021-09-10T06:12:40.511018Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "attack-pattern--8176f18d-10e7-47c7-ad35-fabd4e57dff9"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--5b5cf080-a72f-4345-b199-437ebffad6fe",
+      "created": "2021-09-10T06:12:40.511018Z",
+      "modified": "2021-09-10T06:12:40.511018Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "attack-pattern--e6fe048f-1cd0-4ec6-84f3-0da995b14420"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--7c511679-134e-47f0-afa5-c8ffe01473fa",
+      "created": "2021-09-10T06:12:40.519623Z",
+      "modified": "2021-09-10T06:12:40.519623Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "attack-pattern--b24c0be4-e61e-4094-8dfc-2a0ae076b249"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--b997bbfc-edcd-4c20-b9a2-d064f81e84a2",
+      "created": "2021-09-10T06:12:40.519623Z",
+      "modified": "2021-09-10T06:12:40.519623Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "attack-pattern--04b63995-c947-4dc7-aae7-039261cb8232"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--ce33b1cd-2647-48a9-ab59-13fc5ef84614",
+      "created": "2021-09-10T06:12:40.519623Z",
+      "modified": "2021-09-10T06:12:40.519623Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "attack-pattern--60554569-f241-4120-b9a6-37a278e022cd"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--48f46a9e-73b0-4024-97f5-58a02e72dbbd",
+      "created": "2021-09-10T06:12:40.524142Z",
+      "modified": "2021-09-10T06:12:40.524142Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "attack-pattern--fa8e67b8-02de-4f0b-b3d9-85fba577264a"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--d512d38f-3ddb-4ad6-9177-204f4553a1de",
+      "created": "2021-09-10T06:12:40.524142Z",
+      "modified": "2021-09-10T06:12:40.524142Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "attack-pattern--5ca286a8-ee64-44ea-8f1e-7b77078de11d"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--e0a2d8a0-2fb8-4b7d-b414-b4a2f616a9be",
+      "created": "2021-09-10T06:12:40.524142Z",
+      "modified": "2021-09-10T06:12:40.524142Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "attack-pattern--5c7731e4-a0b1-45a6-9432-7fa29208d11c"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--de7f13ca-3a00-4990-8646-f330d5932da5",
+      "created": "2021-09-10T06:12:40.531508Z",
+      "modified": "2021-09-10T06:12:40.531508Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "attack-pattern--70f1d8e9-92e2-477c-be26-81c0f11068d2"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--a18f77b1-aaec-409c-9845-69f66e3f3fc6",
+      "created": "2021-09-10T06:12:40.531508Z",
+      "modified": "2021-09-10T06:12:40.531508Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "attack-pattern--7ce2078e-9e36-4933-9cb6-e2867e10f3ec"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--fbf1e02f-d720-494c-938a-ad03dfa1a5db",
+      "created": "2021-09-10T06:12:40.531508Z",
+      "modified": "2021-09-10T06:12:40.531508Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "attack-pattern--fd251232-4f97-4b12-8bd7-c11748230345"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--3aef7793-8d20-44aa-a6de-82d7b06555a0",
+      "created": "2021-09-10T06:12:40.531508Z",
+      "modified": "2021-09-10T06:12:40.531508Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "attack-pattern--1777cbbc-f40e-4557-ac24-136df50bb213"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--01b0e22a-90d7-40ef-b991-8c5bec5cb3a7",
+      "created": "2021-09-10T06:12:40.531508Z",
+      "modified": "2021-09-10T06:12:40.531508Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "attack-pattern--7816b73d-2cdf-4e74-86dc-0293615280da"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--f4a85826-9a8b-43dc-96b6-9c2ab1799134",
+      "created": "2021-09-10T06:12:40.539676Z",
+      "modified": "2021-09-10T06:12:40.539676Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "attack-pattern--b0bb7b08-24d6-49e5-aee4-472e5058a33f"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--eead1a66-2777-4189-8901-0c6afd26ff9e",
+      "created": "2021-09-10T06:12:40.541001Z",
+      "modified": "2021-09-10T06:12:40.541001Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "attack-pattern--43a5e86d-6737-4e34-8b17-bae47978cbdf"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--1c648413-cb6b-40b3-9ae7-d94147871c93",
+      "created": "2021-09-10T06:12:40.542063Z",
+      "modified": "2021-09-10T06:12:40.542063Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "attack-pattern--03f6e390-e692-4313-941f-6c93e1c17d86"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--108a0e0e-2e6c-48c5-bac7-0232a4ca46ce",
+      "created": "2021-09-10T06:12:40.542063Z",
+      "modified": "2021-09-10T06:12:40.542063Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "attack-pattern--2f9aad1a-3029-4f22-b537-44be23c44d1b"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--24ff0523-cfdb-4d79-9f99-c63fe00719df",
+      "created": "2021-09-10T06:12:40.542063Z",
+      "modified": "2021-09-10T06:12:40.542063Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "attack-pattern--b9d4b806-4d75-4512-94be-7ea9e876e547"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--fd826335-f293-4479-8874-d9a4a2232903",
+      "created": "2021-09-10T06:12:40.549672Z",
+      "modified": "2021-09-10T06:12:40.549672Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "attack-pattern--b1053b0b-1a76-4435-a610-25a38fd72900"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--716df6ed-bc79-4603-ba62-23a42c433719",
+      "created": "2021-09-10T06:12:40.549672Z",
+      "modified": "2021-09-10T06:12:40.549672Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "attack-pattern--7dc41454-564d-424a-955a-c9cb457b2047"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--dc8950bd-a79d-4cbe-a8f4-43334934e472",
+      "created": "2021-09-10T06:12:40.554192Z",
+      "modified": "2021-09-10T06:12:40.554192Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "attack-pattern--971aa43b-949c-4f65-a0cb-5960cf3ff6b3"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--f37742d8-131d-467d-bb37-df029313d7dd",
+      "created": "2021-09-10T06:12:40.554192Z",
+      "modified": "2021-09-10T06:12:40.554192Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "attack-pattern--ebbe0bc1-5c17-44b2-8ca9-040f84abfbe9"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--51903005-ce1a-4bf6-b8ec-c1eda7632770",
+      "created": "2021-09-10T06:12:40.554192Z",
+      "modified": "2021-09-10T06:12:40.554192Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "attack-pattern--aa7bf991-3d4d-4dbe-bc80-7a209de962d9"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--1047b5f8-4f62-4ac3-b7a5-f97ecadf1ee9",
+      "created": "2021-09-10T06:12:40.554192Z",
+      "modified": "2021-09-10T06:12:40.554192Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "attack-pattern--b3738c51-a590-4e8a-a061-e134280ff449"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--90e654db-0188-404b-b9ff-34cac3f96f5d",
+      "created": "2021-09-10T06:12:40.559272Z",
+      "modified": "2021-09-10T06:12:40.559272Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "attack-pattern--89548ead-7c1c-4be5-b2ac-6d2ccafaee7c"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--965f76df-f8e5-46df-973e-48b2225a1b39",
+      "created": "2021-09-10T06:12:40.560322Z",
+      "modified": "2021-09-10T06:12:40.560322Z",
+      "relationship_type": "targets",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "location--dbc58df8-b68c-462e-adb6-103248047c79"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--7c560084-cae1-4ee6-ba4d-047aac32e54d",
+      "created": "2021-09-10T06:12:40.561405Z",
+      "modified": "2021-09-10T06:12:40.561405Z",
+      "relationship_type": "targets",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "location--5b7ed48c-6a41-42aa-9f03-fb6323dbe491"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--2b732d5f-96eb-4555-9594-eb55971c27e0",
+      "created": "2021-09-10T06:12:40.561405Z",
+      "modified": "2021-09-10T06:12:40.561405Z",
+      "relationship_type": "targets",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "location--5d86b610-8977-41d7-9460-42b258c63b1d"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--1840bce7-2d7d-43f0-b517-39caa4b4f679",
+      "created": "2021-09-10T06:12:40.561405Z",
+      "modified": "2021-09-10T06:12:40.561405Z",
+      "relationship_type": "targets",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "location--9ff9b3d5-c453-4a10-a1d1-4fba0f7c4abf"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--b4637c69-4b9e-4486-9f18-61e1e9e3a19d",
+      "created": "2021-09-10T06:12:40.561405Z",
+      "modified": "2021-09-10T06:12:40.561405Z",
+      "relationship_type": "targets",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "location--bfe77587-2288-411b-af87-539f18f80e50"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--58d29cd7-6fa6-4592-a310-b89d727c77a7",
+      "created": "2021-09-10T06:12:40.561405Z",
+      "modified": "2021-09-10T06:12:40.561405Z",
+      "relationship_type": "targets",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "location--51b58330-2c94-467e-866a-7b46ca135e60"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--7600c842-7289-49c9-b536-fc254d87f785",
+      "created": "2021-09-10T06:12:40.561405Z",
+      "modified": "2021-09-10T06:12:40.561405Z",
+      "relationship_type": "targets",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "location--787b5e79-0d0e-4c07-8bbe-5f8dc99619c2"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--4e36f0a7-41c4-4055-b227-b2dea88bd262",
+      "created": "2021-09-10T06:12:40.568945Z",
+      "modified": "2021-09-10T06:12:40.568945Z",
+      "relationship_type": "targets",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "location--53e62af1-0389-4cbc-9200-28d7b04e7365"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--35834750-0bb5-44ed-b94f-774d29b937eb",
+      "created": "2021-09-10T06:12:40.569983Z",
+      "modified": "2021-09-10T06:12:40.569983Z",
+      "relationship_type": "targets",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "location--ff4b1a5f-5ac1-491b-83b3-a4b265590b86"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--b205fa10-50af-4445-a258-c1c3a30010a0",
+      "created": "2021-09-10T06:12:40.569983Z",
+      "modified": "2021-09-10T06:12:40.569983Z",
+      "relationship_type": "targets",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "location--db61c688-3cfa-402c-9eb3-92e1dd7e63c0"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--69b8f358-2007-4e80-9d28-cd327aab2ada",
+      "created": "2021-09-10T06:12:40.571112Z",
+      "modified": "2021-09-10T06:12:40.571112Z",
+      "relationship_type": "targets",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "location--719e46d4-5216-48d1-b4b3-29db1370833a"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--31bfa7c3-6e90-4057-b264-efd1dbdf144f",
+      "created": "2021-09-10T06:12:40.571112Z",
+      "modified": "2021-09-10T06:12:40.571112Z",
+      "relationship_type": "targets",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "location--9aeba074-cc49-4dc4-b921-a333193b4640"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--c53a13f9-e437-45d1-b76d-bb7e4d889a31",
+      "created": "2021-09-10T06:12:40.571112Z",
+      "modified": "2021-09-10T06:12:40.571112Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "malware--139d3a7f-aff3-4729-accc-f9122043d029"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--96298bbb-7f2a-4073-8656-683110ceab80",
+      "created": "2021-09-10T06:12:40.571112Z",
+      "modified": "2021-09-10T06:12:40.571112Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "malware--827add25-cfc8-47e7-a756-02eb2925f7aa"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--f00ebb58-0bcd-4820-b567-86663ad680bd",
+      "created": "2021-09-10T06:12:40.571112Z",
+      "modified": "2021-09-10T06:12:40.571112Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "malware--c3fbea7c-58c3-495f-a1d4-34fa3ee3d21d"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--dcf2e63e-ce7a-4c97-9711-d1dc568fee48",
+      "created": "2021-09-10T06:12:40.571112Z",
+      "modified": "2021-09-10T06:12:40.571112Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "malware--6a1695a5-d8e7-494f-809f-1ebdada06280"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--9268dc68-ca7a-42af-bbd6-b946d88ad472",
+      "created": "2021-09-10T06:12:40.571112Z",
+      "modified": "2021-09-10T06:12:40.571112Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "malware--55987489-9dde-41fa-b62c-37b1d2f2f2fc"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--eaaa2157-0dd4-4bb7-91e3-967d8393e937",
+      "created": "2021-09-10T06:12:40.571112Z",
+      "modified": "2021-09-10T06:12:40.571112Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "malware--1675310c-34d4-46c4-b736-96312aec9f2e"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--77c2e636-4869-46b3-a3e4-0d37e805b182",
+      "created": "2021-09-10T06:12:40.571112Z",
+      "modified": "2021-09-10T06:12:40.571112Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "malware--98a9e04a-0cd0-4227-913f-b168f75a303c"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--38fd7937-d5d7-47f2-9ba0-bd7c1e67123d",
+      "created": "2021-09-10T06:12:40.579733Z",
+      "modified": "2021-09-10T06:12:40.579733Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "malware--e44a5a37-1dd0-4977-b737-970a0f3d46db"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--07694a90-04f1-47ed-9f68-3fb9e9508640",
+      "created": "2021-09-10T06:12:40.580984Z",
+      "modified": "2021-09-10T06:12:40.580984Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "malware--48177bc4-0157-47a4-bd62-b5037cee2a00"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--99da217d-87df-4839-a50e-5ebb5871b7da",
+      "created": "2021-09-10T06:12:40.580984Z",
+      "modified": "2021-09-10T06:12:40.580984Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "malware--987d38fe-7746-4237-ad85-a04cce408d91"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--7c2e24a0-8f99-45bf-a84e-f65dc6cd2e6b",
+      "created": "2021-09-10T06:12:40.580984Z",
+      "modified": "2021-09-10T06:12:40.580984Z",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "malware--c4b97fd5-e5bd-43e5-97c3-67bac5761023"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--5e6e7fe6-94ea-438e-b11a-97d305381c48",
+      "created": "2021-09-10T06:12:40.580984Z",
+      "modified": "2021-09-10T06:12:40.580984Z",
+      "relationship_type": "targets",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "vulnerability--eddff6a3-d677-4c54-aef4-00e89830141d"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--12e9f51a-52e8-4ac4-9c55-52234097a31d",
+      "created": "2021-09-10T06:12:40.580984Z",
+      "modified": "2021-09-10T06:12:40.580984Z",
+      "relationship_type": "targets",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "vulnerability--8f036e72-e2de-4fd5-a384-d36fbd3ff683"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--f5b6ad32-40ec-4b5a-bbcf-f9bb77b4bc0a",
+      "created": "2021-09-10T06:12:40.580984Z",
+      "modified": "2021-09-10T06:12:40.580984Z",
+      "relationship_type": "targets",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "vulnerability--2706acb2-fbfe-42cc-a8f6-40267766d971"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--c3e390fa-c424-4beb-b9e5-de486acf82b1",
+      "created": "2021-09-10T06:12:40.580984Z",
+      "modified": "2021-09-10T06:12:40.580984Z",
+      "relationship_type": "targets",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "vulnerability--498316f8-ea3a-4354-af18-4f930be2c655"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--d9945a59-6994-49e5-b7e7-a6276817bdb6",
+      "created": "2021-09-10T06:12:40.580984Z",
+      "modified": "2021-09-10T06:12:40.580984Z",
+      "relationship_type": "targets",
+      "source_ref": "threat-actor--d6e36257-88bf-4fa7-bae4-466bdab0617a",
+      "target_ref": "vulnerability--9b030cba-d9f2-4090-858b-57e38048f21e"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--e0baea9d-f7c4-41c8-8acc-dc81d220bcce",
+      "created": "2021-09-10T06:12:40.580984Z",
+      "modified": "2021-09-10T06:12:40.580984Z",
+      "relationship_type": "based-on",
+      "source_ref": "indicator--3fdd01e5-aa5f-4cb1-a4a6-05b186b0cf7d",
+      "target_ref": "email-addr--3e614eee-b16d-5049-9b0a-fae04a9cd101"
+    }
+  ]
+}
