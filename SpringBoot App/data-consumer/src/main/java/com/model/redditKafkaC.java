@@ -2,6 +2,7 @@ package com.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -9,6 +10,14 @@ import org.json.JSONArray;
 public class redditKafkaC {
     private String topicContent;
     public ArrayList<RedditComment> comments;
+
+    public String preProcessStrings(String input){
+        String processed=input.trim();
+        //processed=processed.toLowerCase(Locale.ROOT);
+        processed=processed.replaceAll("\\p{Punct}","");
+        return processed;
+    }
+
 
     public redditKafkaC(String topicContent) throws JSONException {
         comments= new ArrayList<>();
@@ -36,6 +45,7 @@ public class redditKafkaC {
                     obj.getDouble("downs"),
                     obj.getDouble("score"),
                     obj.getString("kind"));
+            c.setBody(preProcessStrings(c.getBody()));
             comments.add(c);
         }
     }

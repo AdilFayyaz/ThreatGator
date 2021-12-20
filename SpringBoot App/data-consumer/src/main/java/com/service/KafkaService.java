@@ -49,10 +49,11 @@ public class KafkaService {
         for (int i=0; i<thread.threads.size(); i++){
             threads.add(thread.threads.get(i));
             JSONObject r = new JSONObject();
-            byte[] bytes = thread.threads.get(i).getSelftext().getBytes();
+            String total=thread.threads.get(i).getTitle()+" "+thread.threads.get(i).getSelftext();
+            byte[] bytes = total.getBytes();
             String utf_8_string = new String(bytes,StandardCharsets.UTF_8);
             r.put("sentence", utf_8_string);
-            if(utf_8_string.equals(thread.threads.get(i).getSelftext())){
+            if(utf_8_string.equals(total)){
 //                System.out.println("MATCHEDDDD");
 //                System.out.println(utf_8_string);
 //                System.out.println(thread.threads.get(i).getSelftext());
@@ -61,7 +62,7 @@ public class KafkaService {
                     try {
                         String s = restTemplate.postForObject(inferencer, new HttpEntity<>(r.toString()), String.class);
                         System.out.println(s);
-                        taggedData.add(convertString(s));
+                        taggedData.add(convertString(s, "Reddit",total ));
                     } catch (HttpStatusCodeException e) {
                         System.out.println("Error Found");
                     }
@@ -84,7 +85,7 @@ public class KafkaService {
 
             String s=restTemplate.postForObject(inferencer, new HttpEntity<>(r.toString()), String.class);
             System.out.println(s);
-            taggedData.add(convertString(s));
+            taggedData.add(convertString(s, "Reddit", comment.comments.get(i).getBody()));
         }
 
     }
@@ -104,7 +105,7 @@ public class KafkaService {
                 try {
                     String s = restTemplate.postForObject(inferencer, new HttpEntity<>(r.toString()), String.class);
                     System.out.println(s);
-                    taggedData.add(convertString(s));
+                    taggedData.add(convertString(s, "Twitter", addTweet));
                 }
                 catch (HttpStatusCodeException e) {
                     System.out.println("Error Found");
@@ -126,7 +127,9 @@ public class KafkaService {
     public void getTaggedData() {
         System.out.println(taggedData.toString());
     }
-    public LinkedHashMap<String, String> convertString(String s) throws JSONException {
+
+
+    public LinkedHashMap<String, String> convertString(String s, String source, String text) throws JSONException {
         LinkedHashMap<String, String> h = new LinkedHashMap<>();
         JSONArray a= new JSONArray(s);
 //        System.out.println(a.length());
@@ -156,6 +159,9 @@ public class KafkaService {
         System.out.println("The tagged data is " + h.toString());
         //create a new object of type elastic model
         ElasticModel Obj = new ElasticModel();
+        Obj.source=source;
+        Obj.rawText=text;
+        Obj.hash=Obj.rawText.hashCode();
         boolean wordStarted = false;
         String temp = "";
         String current = "";
@@ -299,6 +305,15 @@ public class KafkaService {
             Obj.campaigns.add(new Entity(temp));
     }
 
+    public Boolean checkIfEmpty(ElasticModel obj){
+        if (obj.campaigns.size()==0 && obj.vulnerabilities.size()==0 && obj.tools.size()==0 && obj.threatActors.size()==0
+        && obj.locations.size()==0 && obj.identities.size()==0 && obj.infrastructures.size()==0
+        && obj.indicators.size()==0 && obj.malwares.size()==0){
+            return true;
+        }
+        return false;
+    }
+
     @RequestMapping("/pushToElastic")
     public String pushToElastic() throws IOException {
         String s="";
@@ -306,15 +321,19 @@ public class KafkaService {
         RestHighLevelClient client = new RestHighLevelClient(
                 RestClient.builder(
                         new HttpHost("localhost", 9200, "http")));
+
+
         // a loop will run over the finalObjects ArrayList
         for (int i=0; i<finalObjects.size(); i++){
-            ObjectMapper mapper= new ObjectMapper();
-            String jsonstring=mapper.writeValueAsString(finalObjects.get(i));
-            IndexRequest req= new IndexRequest("tagged_data")
-                    //.id(new_cve.id)
-                    .source(jsonstring, XContentType.JSON);
-            IndexResponse response=client.index(req, RequestOptions.DEFAULT); //inserting to elasticsearch
-            System.out.println("Response Id: "+response.getId());
+            if (!checkIfEmpty(finalObjects.get(i))) {
+                ObjectMapper mapper = new ObjectMapper();
+                String jsonstring = mapper.writeValueAsString(finalObjects.get(i));
+                IndexRequest req = new IndexRequest("tagged_data")
+                        .id(String.valueOf(finalObjects.get(i).hash))
+                        .source(jsonstring, XContentType.JSON);
+                IndexResponse response = client.index(req, RequestOptions.DEFAULT); //inserting to elasticsearch
+                System.out.println("Response Id: " + response.getId());
+            }
 
         }
         // then for each index, using object mapper as in FileAccess.java will map that to json
