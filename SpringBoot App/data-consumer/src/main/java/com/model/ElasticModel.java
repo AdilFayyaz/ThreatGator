@@ -7,6 +7,9 @@ import java.util.ArrayList;
 
 public class ElasticModel {
     //attributes can be added later as needed for prioritization module like score, time etc
+    public int hash=0; //to uniquely identify
+    public String source="";
+    public String rawText="";
     public ArrayList<Entity> malwares=new ArrayList<>();
     public ArrayList<Entity> threatActors=new ArrayList<>();
     public ArrayList<Entity> identities=new ArrayList<>();
@@ -20,7 +23,10 @@ public class ElasticModel {
     @Override
     public String toString() {
         return "ElasticModel{" +
-                "malwares=" + malwares +
+                "hash=" + hash +
+                ", source='" + source + '\'' +
+                ", rawText='" + rawText + '\'' +
+                ", malwares=" + malwares +
                 ", threatActors=" + threatActors +
                 ", identities=" + identities +
                 ", locations=" + locations +
@@ -28,6 +34,7 @@ public class ElasticModel {
                 ", vulnerabilities=" + vulnerabilities +
                 ", infrastructures=" + infrastructures +
                 ", indicators=" + indicators +
+                ", campaigns=" + campaigns +
                 '}';
     }
 }
