@@ -1,0 +1,6 @@
+.container__table {
+    /*height: 500px;*/
+    /*width: 50%;*/
+    overflow-y: scroll;  /* or auto */
+    overflow-x: scroll;
+}
