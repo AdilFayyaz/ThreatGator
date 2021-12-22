@@ -8,14 +8,14 @@ import { navigate } from "@reach/router"//npm install @reach/router
 import { useState, useEffect } from 'react'
 import Dashboard from "./dashboard";
 import {useNavigate} from "react-router-dom";
-// import {Tab, TabList, TabPanel, Tabs} from "react-tabs";
 
-
+// class addSource is a component which will be called only when an Admin signs in
 class addSource extends React.Component{
 
 
     constructor(){
         super();
+        //all the state variables required in managing the add source component
         this.state ={
             accountName:'',
             account:'',
@@ -58,18 +58,20 @@ class addSource extends React.Component{
         console.log(this.prompt)
     }
 
+   // function to create drop down items from sources
    createDropDownItem(name){
 
         return(  <Dropdown.Item eventKey={name} >{name}</Dropdown.Item>);
     }
+    // called when navigating to dashboard
     async navigateTo(){
 
         navigate("/dashboard", {replace: true})
         window.location.reload(false);
     }
+    // the function fetches all the sources from the source management service
     async getSources(event){
 
-        //await navigate("/dashboard", {replace: true})
         event.preventDefault();
 
         const requestOptions = {
@@ -77,23 +79,22 @@ class addSource extends React.Component{
             headers: { 'Content-Type': 'application/json'}
 
         };
+        //fething sources from source management service
         fetch('http://127.0.0.1:8081/sources/getAll', requestOptions)
             .then(response => response.json())
             .then((data) => {
-
+                //push all sources in array
                 this.state.numOfSources=data.length
                 for (var i=0;i<this.state.numOfSources;i++){
-                    // this.setState({ sourcesNames: [this.state.sourcesNames, new String(data[i]["name"])] })
                     this.state.sourcesNames.push(data[i])
                 }
-                this.state.msg="hello"
-                this.msg2=this.state.sourcesNames[0]
-                console.log("hererere")
+
 
 
             });
 
     }
+    // function that lets the user add sources via source management service
     async addSource(event){
         //await navigate("/dashboard", {replace: true})
         event.preventDefault();
@@ -107,6 +108,7 @@ class addSource extends React.Component{
             })
 
         };
+        //connection to source management
         fetch('http://127.0.0.1:8081/sources/addSource', requestOptions)
             .then(response => response.text())
             .then((data) => {
@@ -116,16 +118,16 @@ class addSource extends React.Component{
                 console.log(data)
                 if (this.state.data === "New source added"){
                     alert("New source added!");
-                    // this.navigateTo();
-                    // await navigate("/dashboard")
+
                 }
                 else{
                     alert('Enter the required Information')
                 }
             });
     }
+    //function that adds accounts associated with the sources via source management service
     async addAccount(event){
-     console.log("innn")
+
         event.preventDefault();
 
         const requestOptions = {
@@ -137,24 +139,24 @@ class addSource extends React.Component{
             })
 
         };
+        //connection to source management
         fetch('http://127.0.0.1:8081/sources/addSource/account', requestOptions)
             .then(response => response.text())
             .then((data) => {
 
                 this.state.data=data
 
-                console.log("hereeeeeeeeeeeeeeeeeeeeeee")
                 console.log(data)
                 if (this.state.data === "New account added"){
                     alert("New account added");
-                    // this.navigateTo();
-                    // await navigate("/dashboard")
+
                 }
                 else{
-                    alert('Enter the correct credentials')
+                    alert('Enter the correct information')
                 }
             });
     }
+    // handlers for different input fields
     async handleAccount(event){
         let items = [];
         for (let i=0; i<this.state.numOfSources; i++){
@@ -196,28 +198,22 @@ class addSource extends React.Component{
         console.log(this.state.selectedSource);
     }
     handleDataFormat(event){
-        // this.setState({username: event.target.value});
         this.state.DataFormat=event.target.value
         console.log(this.state.DataFormat)
 
     }
     handleSourceType(event) {
-        // this.setState({username: event.target.value});
         this.state.SourceType = event.target.value
         console.log(this.state.SourceType)
 
     }
 
     handleURL(event){
-            // this.setState({username: event.target.value});
             this.state.Url=event.target.value
             console.log(this.state.Url)
 
     }
-    // handleAccount=(e)=>{
-    //     console.log(e);
-    //     // setValue(e)
-    // }
+
     msg2;
 
     handleHandle(event) {
@@ -249,15 +245,14 @@ class addSource extends React.Component{
     render(){
 
         return(
-
+                //main container
                 <div className="App-header" >
-
+                        {/*back ground card display*/}
                         <div className="bg-card" style={{borderRadius:"3rem"}}>
 
-                        {/*<div className="image">*/}
+                        {/*threat gator logo image */}
                         <img className="image" src="./threatgator.png" style={{borderRadius: '0rem',width:"20rem",height:"20rem"}}/>
-                        {/*</div>*/}
-                        {/*<div className="tabs">*/}
+                        {/*tabs list */}
                         <Tabs className="tabs">
                             <TabList  style={{}}>
                                 <Tab style={{color:"silver"}}>Add Source</Tab>
@@ -267,28 +262,28 @@ class addSource extends React.Component{
                             <TabPanel>
                                 <p align={"center"} style={{color:"silver"}}>Add Source</p>
                                 <Form style={{alignContent:"center"}} onSubmit={(e)=>{
-
+                                    // add source to source manager when all information has been provided
                                     this.addSource(e);
                                 }}>
 
 
-
+                                    {/*name of the source eg Twitter*/}
                                     <Form.Group className="mb-3" controlId="formBasicName" onChange={this.handleName.bind(this)}>
                                         <Form.Control style={{marginLeft:"33%",paddingTop:"2%",width:"35%",height:"5%",borderRadius:"50px",backgroundColor:"transparent",color:"white"}} type="name" placeholder="Source Name" />
 
                                     </Form.Group>
                                     <Row style={{position:"absolute",margin:"5%"}}></Row>
 
-
+                                    {/*data format from the source eg txt,xml,json*/}
                                     <Form.Group className="mb-3" controlId="formBasicName" onChange={this.handleDataFormat.bind(this)}>
                                         <Form.Control style={{marginLeft:"33%",paddingTop:"2%",width:"35%",height:"5%",borderRadius:"50px",backgroundColor:"transparent",color:"white"}} type="name" placeholder="Data format" />
 
                                     </Form.Group>
-
+                                    {/*source type e.g  social media*/}
                                     <Form.Group className="mb-3" controlId="formBasicName" onChange={this.handleSourceType.bind(this)}>
                                         <Form.Control style={{marginLeft:"33%",paddingTop:"2%",width:"35%",height:"5%",borderRadius:"50px",backgroundColor:"transparent",color:"white"}} type="name" placeholder="Source Type" />
                                     </Form.Group>
-
+                                    {/*link of the source eg https://www.twitter.com*/}
                                     <Form.Group className="mb-3" controlId="formBasicURL" onChange={this.handleURL.bind(this)}>
                                         <Form.Control style={{marginLeft:"33%",paddingTop:"2%",width:"35%",height:"5%",borderRadius:"50px",backgroundColor:"transparent",color:"white"}} type="url" placeholder="Url" />
                                     </Form.Group>
@@ -317,15 +312,17 @@ class addSource extends React.Component{
                                     </Dropdown.Menu>
                                 </Dropdown>
 
-
+                                {/*handle incase of  twitter account*/}
                                 <Form.Group className="mb-3" controlId="formBasicName" onChange={this.handleHandle.bind(this)}>
                                     <Form.Control style={{marginLeft:"33%",paddingTop:"2%",width:"35%",height:"5%",borderRadius:"50px",backgroundColor:"transparent",color:"white"}} type="name" placeholder="Enter handle(twitter)" />
 
                                 </Form.Group>
+                            {/*user incase of reddit account*/}
                             <Form.Group className="mb-3" controlId="formBasicName" onChange={this.handleUser.bind(this)}>
                                 <Form.Control style={{marginLeft:"33%",paddingTop:"2%",width:"35%",height:"5%",borderRadius:"50px",backgroundColor:"transparent",color:"white"}} type="name" placeholder="Enter username(reddit)" />
 
                             </Form.Group>
+                            {/*date of tweet or reddit subthread if applicable*/}
                             <Form.Group className="mb-3" controlId="formBasicDate" onChange={this.handleDate.bind(this)}>
                                 <Form.Control style={{marginLeft:"33%",paddingTop:"2%",width:"35%",height:"5%",borderRadius:"50px",backgroundColor:"transparent",color:"white"}} type="date" placeholder="Enter Date" />
 
@@ -344,6 +341,7 @@ class addSource extends React.Component{
 
                         </Tabs>
                         <div>
+                        {/*    log out and navigation to sign in page*/}
                         <button style={{borderRadius:"10px",backgroundColor:"silver",marginLeft:"12.5rem"}}
                             onClick={
                                 this.logOutNavigation.bind(this)
