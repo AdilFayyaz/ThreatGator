@@ -36,5 +36,9 @@ It includes curation of threat intelligence data from different sources particul
 3. Run npm start to start React Server
 4. Navigate to https://localhost:3000 to access sign in page for ThreatGator
 
+## Hardware Requirements
+Minimum 12 GB RAM <br/>
+Preferably 16 GB RAM
+
 <br/>
 *Model has been trained using the following notebook by Niels Rogge: https://colab.research.google.com/github/NielsRogge/Transformers-Tutorials/blob/master/BERT/Custom_Named_Entity_Recognition_with_BERT_only_first_wordpiece.ipynb#scrollTo=4Gz-wHAw3xMk
