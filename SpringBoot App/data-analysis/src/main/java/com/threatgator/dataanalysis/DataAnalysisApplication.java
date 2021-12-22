@@ -14,11 +14,7 @@ public class DataAnalysisApplication {
     public static void main(String[] args) throws JSONException, IOException {
 
         SpringApplication.run(DataAnalysisApplication.class, args);
-        elasticMapper connect= new elasticMapper();
-        malwares mal = new malwares();
-        connect.SearchMalwares(mal);
-        System.out.println("***************************************************");
-        System.out.println(mal.getMalwaresMap());
+
     }
 
 }
