@@ -8,10 +8,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+// search results class
 public class searchResults {
-
+    // Map of search result - key: hash, value: report
     Map reports = new HashMap<String, String>();
 
+    // get search results
     public JSONObject getSearchResults() throws JSONException, IOException {
         Iterator hmIterator = reports.entrySet().iterator();
         JSONObject j  = new JSONObject();
@@ -21,6 +23,7 @@ public class searchResults {
         }
         return j;
     }
+    // add search reports
     public void addSearchReports(String report, String hash){
         reports.put(report, hash);
     }

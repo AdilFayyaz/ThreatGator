@@ -2,15 +2,18 @@ package com.threatgator.source_management.model;
 import javax.persistence.*;
 import java.util.List;
 
+// Source Model Class
 @Entity
 public class Source {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected int id;
+    protected int id; // Primary key
+    // Other table entries
     protected String name;
     protected String dataFormat;
     protected String sourceType;
     protected String url;
+    // defined relationship
     @OneToMany(targetEntity = Account.class,cascade = CascadeType.ALL,mappedBy = "source",fetch=FetchType.LAZY)
 //    @JoinColumn(name = "src_ac_fk",referencedColumnName = "id")
     private List<Account> accountsList;
@@ -18,7 +21,7 @@ public class Source {
     public Source() {
 
     }
-
+    // Getters and Setters
     public int getId() {
         return id;
     }

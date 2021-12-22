@@ -4,6 +4,7 @@ public class user_details {
     String username;
     String password;
 
+    // getters and setters
     public String getUsername() {
         return username;
     }

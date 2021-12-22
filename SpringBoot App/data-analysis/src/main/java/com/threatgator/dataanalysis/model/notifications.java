@@ -8,14 +8,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
+// notifications related class
 public class notifications {
+    // notifications map
     Map notifications = new HashMap<String,String>();
-
+    // add notifications function
     void addNotifications(String notif, String _hash){
         notifications.put(notif,_hash);
     }
-
+    // get notifications function
     public JSONObject getNotifications(int value) throws JSONException {
         Iterator hmIterator = notifications.entrySet().iterator();
         JSONObject j = new JSONObject();
