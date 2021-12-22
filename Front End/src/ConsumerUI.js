@@ -8,6 +8,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import {Card, Stack, Row, Button, Form, Image, Dropdown} from 'react-bootstrap'
 import {Modal} from "react-bootstrap";
 var scraperApiURL = "http://127.0.0.1:8000/"
+//UI to show data being consumed from kafka
 const ViewConsumedData = () =>{
    
     const [tweets,SetTweets] = useState([])
@@ -48,7 +49,7 @@ const ViewConsumedData = () =>{
     const openModalScrapeReddit = () => SetIsOpenScrapeReddit(true);
     const closeModalScrapeReddit = () => SetIsOpenScrapeReddit(false);
 
-
+    //connection with data consumer service to get tweets
     const getTweets = (event) =>{
         event.preventDefault();
         fetch('http://127.0.0.1:8080/viewRawTweets')
@@ -59,7 +60,7 @@ const ViewConsumedData = () =>{
                 openModalTweets()
             });
     }
-
+    //connection with data consumer service to get reddit threads
     const getThreads = (event) =>{
         event.preventDefault();
         fetch('http://127.0.0.1:8080/viewRawThreads')
@@ -70,7 +71,7 @@ const ViewConsumedData = () =>{
                 openModalRawThreads()
             });
     }
-
+    //connection with data consumer service to get comments
     const getComments = (event) =>{
         event.preventDefault();
         fetch('http://127.0.0.1:8080/viewRawComments')
@@ -81,7 +82,7 @@ const ViewConsumedData = () =>{
                 openModalComments()
         });
     }
-
+    //connection with data consumer service to get tagged data
     const getTaggedData = (event) => {
         event.preventDefault();
 
@@ -94,7 +95,7 @@ const ViewConsumedData = () =>{
         });
     }
 
-
+    //connection with data consumer service to get inference for a particular sentence
     const getInference = (event) =>{
         event.preventDefault();
 
@@ -113,7 +114,7 @@ const ViewConsumedData = () =>{
         SetSentence(event.target.value)
         // this.state.sentence=event.target.value
     }
-    
+    // social media scrapers
     const scrapeTwitter = (event) =>{
         event.preventDefault()
         openModalScrapeTwt()
@@ -136,6 +137,7 @@ const ViewConsumedData = () =>{
             
           })
     }
+
     const fetchAllTweets = (event) => {
            
         if(event.target.twtHandle.value && event.target.tillDate.value){
@@ -173,6 +175,7 @@ const ViewConsumedData = () =>{
         event.preventDefault()
         openModalScrapeReddit()
     }
+    // call this to push on elastic
     const pushToElastic = (event) => {
         event.preventDefault()
         fetch("http://127.0.0.1:8080/pushToElastic")
@@ -188,10 +191,10 @@ const ViewConsumedData = () =>{
             <Button href="/dashboard"style={{backgroundColor: '#162237',borderRight:"transparent",borderLeft:"transparent",borderBottom:"transparent"}} >Return</Button>
             </div>
                 <div className="bg-card" style={{borderRadius:"3rem"}}>
-                    {/*<div className="image">*/}
+                    {/*threatgator image*/}
                     <img className="image" src="./threatgator.png" style={{borderRadius: '0rem',width:"20rem",height:"20rem"}}/>
                     {/*</div>*/}
-                    {/*<div className="tabs">*/}
+                    {/*tab list starts here*/}
                     <Tabs className="tabs">
                         <TabList  style={{}}>
                             <Tab style={{color:"silver"}} onClick={scrapeTwitter}>Scrape Twitter</Tab>

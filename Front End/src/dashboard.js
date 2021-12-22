@@ -1,12 +1,9 @@
 import logo from './logo.svg';
 // import './App.css';
 import React, { Component } from "react";
-// import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import {  Table } from "semantic-ui-react";
-// npm install semantic-ui-react semantic-ui-css
-// import { MDBScrollbar, MDBSmoothScroll } from 'mdbreact';
 import {Modal} from "react-bootstrap";
 import { useEffect, useState } from "react";
 import {navigate} from "@reach/router"
@@ -36,7 +33,7 @@ import { Line ,Doughnut} from "react-chartjs-2";
 import {MDBCol, MDBFormInline, MDBIcon, MDBInput} from "mdbreact";
 import SearchResults from './searchResults';
 
-
+// data for the line graph
 const data = {
   labels: ["Sunday", "Monday", "Tuesday",
     "Wednesday", "Thursday", "Friday", "Saturday"],
@@ -51,7 +48,7 @@ const data = {
   ]
 }
 
-
+// function to return carosel cards
 let img='./icons.png';
 function getcard(string,color,imag){
 
@@ -70,7 +67,7 @@ function getcard(string,color,imag){
   );
 }
 
-// let x;
+// returns notification tiles by writing string x to it
 function getNotificationCards(x){
   return(<Button 
     style={{ width: '40rem' , height: '3rem',backgroundColor:'#1c2b45',borderRadius:'3rem'} } 
@@ -80,6 +77,7 @@ function getNotificationCards(x){
 
 
 const UserDashboard =()=> {
+  //hooks to cater data state changes
   const [DoughnutData, setDoughnutData] = useState({})
   const [WeekData, setWeekData] = useState({})
   const [NotificationsData, setNotificationsData] = useState([])
@@ -111,7 +109,7 @@ const UserDashboard =()=> {
   const openModalExchange = () => SetIsOpenExchange(true);
   const closeModalExchange = () => SetIsOpenExchange(false);
 
-
+  // fetching data from data analysis service for doughnut graph e.g top 3 malwares
   let arr = []
   const doughnut = () =>{
     let topMalwares = [];
@@ -139,6 +137,7 @@ const UserDashboard =()=> {
     })
   }
     )};
+  // fetching data from data analysis service for line graph e.g week hits
 
     const hitsGraph = () =>{
       let hits = [];
@@ -162,6 +161,7 @@ const UserDashboard =()=> {
       })
     }
       )};
+  // fetching data from data analysis service for notifications
 
   const notifications = () =>{
       let alerts = [];
@@ -177,6 +177,8 @@ const UserDashboard =()=> {
       // SetHashNotif(Object.keys(data))
     }
     )};
+  // fetching data from data analysis service for vulnerability button
+
   const getVulnerabilities = event =>{
     event.preventDefault()
     fetch("http://127.0.0.1:8082/dataAnalysis/getVulnerabilities")
@@ -186,6 +188,7 @@ const UserDashboard =()=> {
             openModalVuln()
           })
   }
+  // fetching data from data analysis service for reports
   const getReports = event =>{
     event.preventDefault()
     fetch("http://127.0.0.1:8082/dataAnalysis/getReports")
@@ -195,6 +198,7 @@ const UserDashboard =()=> {
             openModalReport()
           })
   }
+  // fetching data from data analysis service for threat exchange platform's data
 
   const getTEPReports = event =>{
     event.preventDefault()
@@ -207,6 +211,7 @@ const UserDashboard =()=> {
             openModalExchange()
           })
   }
+  // fetching data from data analysis service for any keyword's search result
 
   const getSearchResults = event =>{
     event.preventDefault()
@@ -222,9 +227,8 @@ const UserDashboard =()=> {
             SetKeywordResult(data)
             openModalSearch()
           })
-    // navigate(`/searchResults/${SearchKeyword}`, {replace: false}, { state: { data: SearchKeyword } })
   };
-
+  //handlers for input fields
   const handleSearchChange = event =>{
     event.preventDefault();
     SetSearchKeyword(event.target.value);
@@ -419,7 +423,7 @@ const UserDashboard =()=> {
         </Stack>
 
 
-        {/* Top Notifications */}
+        {/* Top Notifications when clicked */}
         <Modal show={isOpen} onHide={closeModal}
               // size = "lg"
               fullscreen = {true}
@@ -608,7 +612,7 @@ const UserDashboard =()=> {
           </Modal.Footer>
         </Modal>
 
-        {/* Exchange Reports */}
+        {/* Threat Exchange Reports */}
         <Modal show={isOpenExchange} onHide={closeModalExchange}
           fullscreen={true}
           

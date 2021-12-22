@@ -1,8 +1,6 @@
 import React, { Component } from "react";
-// import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import 'bootstrap/dist/css/bootstrap.min.css'
-// import { MDBScrollbar, MDBSmoothScroll } from 'mdbreact';
 import { useEffect, useState } from "react";
 import {navigate, useParams} from "@reach/router"
 import './scrollbar.css';
@@ -35,6 +33,7 @@ class SearchResults extends React.Component{
         console.log(id)
         
     }
+    // fetch search data against a particular keywords from data analysis service
     async getSearchResults(){
         
         /// SearchKeyword = props.SearchKeyword   

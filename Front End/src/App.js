@@ -11,6 +11,7 @@ let signIn1=new signIn();
 let addSource1=new addSource();
 // let dashboard1=new UserDashboard();
     return (
+        //all the routes to diff pages defined here
         <Router>
             <Routes>
                 <Route path='/' element={new signIn().render()} />
