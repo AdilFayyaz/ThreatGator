@@ -5,6 +5,7 @@ import * as url from "url";
 import {Button} from "react-bootstrap";
 import SlidingPane from "react-sliding-pane";
 import "react-sliding-pane/dist/react-sliding-pane.css";
+//STIX relations
 export class sro {
     constructor(type, id, relationship_type, source, target) {
         this.type=type;
@@ -14,6 +15,7 @@ export class sro {
         this.target=target;
     }
 }
+//STIX Domain Object (sdo)
 export class sdo{
     constructor(type, id, name) {
         this.type=type;
@@ -21,7 +23,7 @@ export class sdo{
         this.name=name;
     }
 }
-
+// customization of graph
 const options = {
     layout: {
         hierarchical: {
@@ -139,14 +141,7 @@ const options = {
             springConstant: 0.18,
             avoidOverlap: 1.5
         },
-    // //     maxVelocity: 146,
-    // //     solver: "forceAtlas2Based",
-    //     timestep: 0.35,
-    //     stabilization: {
-    //         enabled: true,
-    //         iterations: 1000,
-    //         updateInterval: 25
-    //     }
+
     },
   edges: {
     color: "#000000"
@@ -159,6 +154,8 @@ const Visualizer=() =>{
     const [state, setState] = useState({
         isPaneOpen: false,
     });
+
+    //data for graph
     const getData=()=>{
         fetch('bundle--97b40f76.json'
             ,{
@@ -237,11 +234,13 @@ const Visualizer=() =>{
         <div>
             <h1>STIX Visualizer</h1>
             <div>
+            {/*    nav back to dashboard*/}
             <Button href="/dashboard"style={{backgroundColor: '#162237',borderRight:"transparent",borderLeft:"transparent",borderBottom:"transparent"}} >Return</Button>
             </div>
             <button onClick={() => setState({ isPaneOpen: true })}>
                 View Legend
             </button>
+            {/*legend for graph*/}
             <SlidingPane
                 isOpen={state.isPaneOpen}
                 title="Legend"
