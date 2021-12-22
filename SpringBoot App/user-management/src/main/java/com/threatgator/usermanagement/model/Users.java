@@ -5,15 +5,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+// Users class  -table
 @Entity
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int id; //pk
+    // other fields
     private String name;
     private String email;
     private String password;
 
+    // Constructor
     public Users(String name, String email, String password) {
         this.name = name;
         this.email = email;
@@ -24,6 +27,7 @@ public class Users {
 
     }
 
+    // getters and setters
     public String getName() {
         return name;
     }

@@ -1,5 +1,5 @@
 package com.threatgator.dataanalysis.model;
-
+// Class of geo information - not being used right now
 public class geo {
     public String charset;
     public String areaCode;

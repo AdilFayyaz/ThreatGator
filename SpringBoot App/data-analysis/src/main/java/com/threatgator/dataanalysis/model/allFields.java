@@ -5,7 +5,7 @@ import org.springframework.boot.configurationprocessor.json.JSONObject;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-
+// Class representing all the fields in elastic search
 public class allFields {
     String source;
     String hash;
@@ -37,7 +37,7 @@ public class allFields {
         this.indicators = indicators;
         this.campaigns = campaigns;
     }
-
+    // Getters and Setters
     public String getSource() {
         return source;
     }
@@ -134,6 +134,7 @@ public class allFields {
         this.campaigns = campaigns;
     }
 
+    // get field results in JSON format
     public JSONObject getJSONFields() throws JSONException {
         JSONObject j = new JSONObject();
         j.put("source", getSource());
@@ -149,6 +150,7 @@ public class allFields {
         j.put("campaigns", getCampaigns());
         return j;
     }
+    // Get field results in Map format
     public Map getLinkedMapFields(){
         Map j = new LinkedHashMap<String,String>();
         j.put("source", getSource());

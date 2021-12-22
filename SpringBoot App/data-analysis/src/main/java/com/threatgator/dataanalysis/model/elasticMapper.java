@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.*;
-
+// Accesses the elastic search data store
 public class elasticMapper {
     public RestHighLevelClient client = new RestHighLevelClient(
             RestClient.builder(
@@ -30,11 +30,10 @@ public class elasticMapper {
     static {
         RequestOptions.Builder builder = RequestOptions.DEFAULT.toBuilder();
         builder.addParameter("size", "300");
-//        builder.setHttpAsyncResponseConsumerFactory(
-//                new HttpAsyncResponseConsumerFactory
-//                        .HeapBufferedResponseConsumerFactory(30 * 1024 * 1024 * 1024));
+
         COMMON_OPTIONS = builder.build();
     }
+    // Pre process the strings of sentences
     public String preProcessStrings(String input){
         String processed = input.trim();
         processed = processed.toLowerCase(Locale.ROOT);
@@ -42,6 +41,7 @@ public class elasticMapper {
         return processed;
     }
     public void SearchMalwares(malwares mal) throws IOException, JSONException {
+        // Get data with index tagged data from elastic search
         SearchRequest request= new SearchRequest("tagged_data");
         SearchSourceBuilder searchSourceBuilder=new SearchSourceBuilder();
         searchSourceBuilder.query(QueryBuilders.matchAllQuery());
@@ -50,12 +50,13 @@ public class elasticMapper {
         SearchResponse response=client.search(request, COMMON_OPTIONS);
 
         SearchHit[] hits=response.getHits().getHits();
-
+        // Loop over the hits - found results
         for(SearchHit hit: hits){
 //            System.out.println("Doc Id: "+hit.getId());
             String sourceAsString=hit.getSourceAsString();
             JSONObject jsonComplete = new JSONObject(sourceAsString);
             try {
+                // get array of json elements about malwares
                 JSONArray element = jsonComplete.getJSONArray("malwares");
                 for(int i=0; i<element.length(); i++){
                     JSONObject e = element.getJSONObject(i);
@@ -71,6 +72,7 @@ public class elasticMapper {
         }
     }
 
+    // Get notifications information from elastic search - malwares + vulnerabilities
     public void GetNotifications(notifications notif) throws IOException, JSONException {
         SearchRequest request= new SearchRequest("tagged_data");
         SearchSourceBuilder searchSourceBuilder=new SearchSourceBuilder();
@@ -87,6 +89,7 @@ public class elasticMapper {
 
             try {
                 String notifAlert = "";
+                // get malwares
                 JSONArray element = jsonComplete.getJSONArray("malwares");
                 for(int i=0; i<element.length(); i++){
                     JSONObject e = element.getJSONObject(i);
@@ -99,6 +102,7 @@ public class elasticMapper {
                         notifAlert += name;
                     }
                 }
+                // get vulnerabilities
                 JSONArray element2 = jsonComplete.getJSONArray("vulnerabilities");
                 for(int i=0; i<element2.length(); i++){
                     JSONObject e = element2.getJSONObject(i);
@@ -122,6 +126,7 @@ public class elasticMapper {
             }
         }
     }
+    // get only vulnerabilities data
     public void SearchVulnerabilities(vulnerabilities vuln) throws IOException, JSONException {
         SearchRequest request= new SearchRequest("tagged_data");
         SearchSourceBuilder searchSourceBuilder=new SearchSourceBuilder();
@@ -154,6 +159,7 @@ public class elasticMapper {
         }
     }
 
+    // get results for search keyword
     public void GetSearchResult(searchResults _reports, String keyword) throws IOException, JSONException {
         SearchRequest request= new SearchRequest("tagged_data");
         SearchSourceBuilder searchSourceBuilder=new SearchSourceBuilder();
@@ -170,11 +176,12 @@ public class elasticMapper {
             JSONObject jsonComplete = new JSONObject(sourceAsString);
 
             try {
+                // get raw text field
                 String sentence = jsonComplete.getString("rawText");
                 String processed_sentence = preProcessStrings(sentence);
                 keyword = keyword.toLowerCase(Locale.ROOT);
                 if (!sentence.isEmpty() && processed_sentence.contains(keyword)) {
-                    String _hash = jsonComplete.getString("hash");
+                    String _hash = jsonComplete.getString("hash"); // get hash of the string
                     _reports.addSearchReports(_hash, sentence);
                 }
 
@@ -185,6 +192,7 @@ public class elasticMapper {
         }
     }
 
+    // helper function - get results from elastic given a hashed value
     public void GetAllResultsOnHash(allFields fields, String hash) throws IOException, JSONException {
         SearchRequest request= new SearchRequest("tagged_data");
         SearchSourceBuilder searchSourceBuilder=new SearchSourceBuilder();
@@ -334,6 +342,7 @@ public class elasticMapper {
         }
     }
 
+    // get a list of all hashes for each index in elastic search
     public ArrayList<String> GetAllHashes() throws IOException, JSONException {
         SearchRequest request= new SearchRequest("tagged_data");
         SearchSourceBuilder searchSourceBuilder=new SearchSourceBuilder();
@@ -351,6 +360,7 @@ public class elasticMapper {
         return hashes;
     }
 
+    // get weeks data from elasticsearch - using time attribute
     public ArrayList<Integer> GetWeekHits() throws IOException, JSONException {
         SearchRequest request= new SearchRequest("tagged_data");
         SearchSourceBuilder searchSourceBuilder=new SearchSourceBuilder();
@@ -396,6 +406,7 @@ public class elasticMapper {
         return daysHit;
     }
 
+    // get data from one-tip-dumps
     public ArrayList<threatExchange> GetThreatExchangeData() throws IOException, JSONException {
         SearchRequest request= new SearchRequest("one_tip_data");
         SearchSourceBuilder searchSourceBuilder=new SearchSourceBuilder();

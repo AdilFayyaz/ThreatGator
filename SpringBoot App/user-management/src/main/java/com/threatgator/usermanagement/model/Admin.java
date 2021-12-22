@@ -4,16 +4,18 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
+// Admin class - table in the DB
 @Entity
 public class Admin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int id; // primary key
+    // other fields
     private String name;
     private String email;
     private String password;
 
+    // Constructor
     public Admin(String name, String email, String password) {
         this.name = name;
         this.email = email;
@@ -23,7 +25,7 @@ public class Admin {
     public Admin() {
 
     }
-
+    // getters and setters
     public String getName() {
         return name;
     }
