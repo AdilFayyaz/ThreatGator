@@ -16,6 +16,7 @@ import org.json.JSONObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpStatusCodeException;
@@ -113,20 +114,22 @@ public class KafkaService {
             }
         }
     }
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @RequestMapping("/getInference")
-    public String getInferences() throws JSONException {
+    public String getInferences(String sentence) throws JSONException {
         String s;
         RestTemplate restTemplate = new RestTemplate();
         JSONObject r = new JSONObject();
-        r.put("sentence", tweets.get(2).getBody());
+        r.put("sentence", sentence);
         s=restTemplate.postForObject(inferencer, new HttpEntity<>(r.toString()), String.class);
         System.out.println(s);
         return s;
     }
-    @RequestMapping("/getTaggedData")
-    public void getTaggedData() {
-        System.out.println(taggedData.toString());
-    }
+//    @RequestMapping("/getTaggedData")
+//    public void getTaggedData() {
+//        System.out.println(taggedData.toString());
+//    }
+
 
 
     public LinkedHashMap<String, String> convertString(String s, String source, String text) throws JSONException {
@@ -159,6 +162,7 @@ public class KafkaService {
         System.out.println("The tagged data is " + h.toString());
         //create a new object of type elastic model
         ElasticModel Obj = new ElasticModel();
+        Obj.time = System.currentTimeMillis();
         Obj.source=source;
         Obj.rawText=text;
         Obj.hash=Obj.rawText.hashCode();
@@ -341,4 +345,32 @@ public class KafkaService {
         // at the end display success?
         return s;
     }
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @RequestMapping("/viewRawTweets")
+    public ArrayList<Tweet> getTweets() throws JsonProcessingException {
+//        ObjectMapper mapper = new ObjectMapper();
+//        String jsonString = mapper.writeValueAsString(tweets);
+//        return jsonString;
+        return tweets;
+    }
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @RequestMapping("/viewRawThreads")
+    public ArrayList<RedditThread> getThreads() throws JsonProcessingException {
+        return threads;
+    }
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @RequestMapping("/viewRawComments")
+    public ArrayList<RedditComment> getComments() throws JsonProcessingException {
+        return comments;
+    }
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @RequestMapping("/viewTaggedData")
+    public ArrayList<ElasticModel> getTagged() throws JsonProcessingException {
+        return finalObjects;
+    }
+
 }

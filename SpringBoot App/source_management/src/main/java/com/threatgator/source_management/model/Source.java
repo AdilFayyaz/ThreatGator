@@ -11,8 +11,8 @@ public class Source {
     protected String dataFormat;
     protected String sourceType;
     protected String url;
-    @OneToMany(targetEntity = Account.class,cascade = CascadeType.ALL)
-    @JoinColumn(name = "src_ac_fk",referencedColumnName = "id")
+    @OneToMany(targetEntity = Account.class,cascade = CascadeType.ALL,mappedBy = "source",fetch=FetchType.LAZY)
+//    @JoinColumn(name = "src_ac_fk",referencedColumnName = "id")
     private List<Account> accountsList;
 
     public Source() {

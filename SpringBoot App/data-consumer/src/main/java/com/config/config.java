@@ -1,6 +1,5 @@
 package com.config;
 
-import com.model.RedditThread;
 import com.model.redditKafka;
 import com.model.redditKafkaC;
 import com.model.tweetKafka;

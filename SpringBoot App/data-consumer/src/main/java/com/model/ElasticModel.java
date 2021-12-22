@@ -10,6 +10,7 @@ public class ElasticModel {
     public int hash=0; //to uniquely identify
     public String source="";
     public String rawText="";
+    public long time=0;
     public ArrayList<Entity> malwares=new ArrayList<>();
     public ArrayList<Entity> threatActors=new ArrayList<>();
     public ArrayList<Entity> identities=new ArrayList<>();
