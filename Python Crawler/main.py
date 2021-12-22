@@ -65,8 +65,8 @@ async def get_tweets(req: Request):
     del tweets[requestData["handle"]]
     # tweets['source'] = "twitter"
 
-    json_tweets = json.dumps(tweets)
-    producer.send('tweets', value=json_tweets)
+    json_tweets = json.dumps(tweets) # convert to json
+    producer.send('tweets', value=json_tweets) # push onto kafka to 'tweets'
     return tweets
 
 
@@ -79,7 +79,7 @@ async def get_reddit_mp_mr(req: Request):
         _, data = rCrawler.fetch_most_popular_data(requestData["subreddit"], rCrawler.headers, {'limit': 50}, 1)
     elif requestData["type"] == "mr":
         _, data = rCrawler.fetch_most_recent_data(requestData["subreddit"], rCrawler.headers, {'limit': 50}, 1)
-    d2 = data.to_json(orient="records");
+    d2 = data.to_json(orient="records"); # convert to json
     producer.send('reddit-threads', value=d2)  # sending the fetched threads to the topic called reddit-threads
     returnDic = {}
     returnDic["title"] = data["title"]
@@ -97,8 +97,8 @@ async def get_reddit_user(req: Request):
 
     if requestData["type"] == 1:
         _, data = rCrawler.fetch_comments_by_user(requestData["username"], rCrawler.headers, {'limit': 50}, 1)
-    d2 = data.to_json(orient="records");
-    producer.send('reddit-comments', value=d2)
+    d2 = data.to_json(orient="records"); # convert to json
+    producer.send('reddit-comments', value=d2)  # sending the fetched threads to the topic called reddit-comments
     returnDic = {}
     returnDic['body'] = data['body']
     # data["source"] = "reddit_user"
@@ -115,7 +115,7 @@ async def get_reddit_user_submit(req: Request):
     #     import webbrowser
     #     webbrowser.open('https://stackoverflow.com/questions/4302027/how-to-open-a-url-in-python')
     _, data = rCrawler.fetch_submitted_by_user(requestData["username"], rCrawler.headers, {'limit': 50}, 1)
-    d2 = data.to_json(orient="records");
+    d2 = data.to_json(orient="records"); # convert to json
     producer.send('reddit-threads', value=d2)  # sending the fetched threads to the topic called reddit-threads
     returnDic = {}
     returnDic["title"] = data["title"]
@@ -131,7 +131,7 @@ async def recent_reddit_data(req: Request):
     _, data = rCrawler.fetch_most_recent_data(requestData["username"], rCrawler.headers, {'limit': 1000}, 1)
     #data["selftext"] = data["selftext"].encode().decode('utf-8', 'replace')
     #data["title"] = data["title"].encode().decode('utf-8', 'replace')
-    d2 = data.to_json(orient="records");
+    d2 = data.to_json(orient="records"); # convert to json
     producer.send('reddit-threads', value=d2)  # sending the fetched threads to the topic called reddit-threads
     returnDic = {}
     returnDic["title"] = data["title"]
