@@ -1,0 +1,32 @@
+// Here you can add other styles
+.glass{
+
+  background: rgba(69, 84, 108, 0.3);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(6.1px);
+  -webkit-backdrop-filter: blur(6.1px);
+  border: 1px solid rgba(69, 84, 108, 0.09);
+}
+.loginGlass{
+  background: rgba(22, 34, 55, 0.54);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5.6px);
+  -webkit-backdrop-filter: blur(5.6px);
+}
+.box{
+  width: 100%;
+
+  background-color: transparent;
+  /*margin-top: 40rem;*/
+  position: absolute;
+  top: 77%; /*controls height of the waves*/
+  left: 0;
+  opacity: 0.5;  /* for demo purpose  */
+}
+.stack-top{
+  background-color: transparent;
+  z-index: 8;
+  margin: 0px; /* for demo purpose  */
+}
