@@ -3,23 +3,27 @@ package com.threatgator.source_management.model;
 import javax.persistence.*;
 import java.util.Optional;
 
+// Model Class for Accounts
 @Entity
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected int id_;
+    protected int id_; // Primary key in database
 
-    private transient int source_id;
+    private transient int source_id; // will be fk in source table
 
+    // defined relationship
     @ManyToOne
     @JoinColumn(name = "id")
     private Source source;
 
+    // Protected variables
     protected String handle;
     protected String username;
     protected String isHandle;
     protected String Date;
 
+    //Getter and Setters
     public Source getSource() {
         return source;
     }

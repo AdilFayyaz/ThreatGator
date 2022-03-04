@@ -12,7 +12,7 @@ import java.io.IOException;
 public class DataAnalysisApplication {
 
     public static void main(String[] args) throws JSONException, IOException {
-
+        // Run spring application
         SpringApplication.run(DataAnalysisApplication.class, args);
 
     }

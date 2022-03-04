@@ -26,6 +26,8 @@ public class RedditThread {
         this.kind = kind;
     }
 
+    // getters and setters
+
     public String getSubReddit() {
         return subReddit;
     }

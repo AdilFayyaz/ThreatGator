@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
-
+// Controller class communicating with the front end
 @RestController
 @RequestMapping("/dataAnalysis")
 public class analysisController {
@@ -22,19 +22,19 @@ public class analysisController {
         connect.SearchMalwares(mal);
         connect.GetNotifications(notif);
     }
-
+    // Fetch the top malwares from elastic search
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/getTopMalwares/{value}")
     public String getTopMalwares(@PathVariable int value) throws JSONException, IOException {
         return mal.getTopMalwares(value).toString();
     }
-
+    // Get top notification values from elastic search
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/getNotifications/{value}")
     public String getNotifications(@PathVariable int value) throws JSONException, IOException{
         return notif.getNotifications(value).toString();
     }
-
+    // return search result related reports from the elastic store
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/getSearchResults")
     public String getSearchResults(@RequestBody String keyword) throws JSONException, IOException {
@@ -43,6 +43,7 @@ public class analysisController {
         String r = search.getSearchResults().toString();
         return r;
     }
+    // helper function that fetches result given the hash of a document from elastic store
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/getResultOnHash")
     public String getResultsOnHash(@RequestBody String hash) throws JSONException, IOException {
@@ -53,6 +54,7 @@ public class analysisController {
         return r;
     }
 
+    // get vulnerabilities list from elasticsearch
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/getVulnerabilities")
     public String getVulnerabilities() throws JSONException, IOException {
@@ -63,7 +65,7 @@ public class analysisController {
         return r;
     }
 
-
+    // get a list of the reports from elastic search
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/getReports")
     public String getReports() throws JSONException, IOException {
@@ -81,6 +83,7 @@ public class analysisController {
         return j.toString();
     }
 
+    // get the number of reports fetched in the week
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/getWeekHits")
     public ArrayList<Integer> getWeekHits() throws JSONException, IOException {
@@ -89,6 +92,7 @@ public class analysisController {
         return hits;
     }
 
+    // get threat data from dumps
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/getThreatExchangeData")
     public String getThreatExchangeData() throws JSONException, IOException {

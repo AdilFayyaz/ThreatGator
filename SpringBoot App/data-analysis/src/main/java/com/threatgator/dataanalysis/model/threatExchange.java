@@ -6,6 +6,7 @@ import org.springframework.boot.configurationprocessor.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+// Class containing threat exchange dumps fields
 public class threatExchange {
     public String id;
     public String lastSeen;
@@ -29,7 +30,7 @@ public class threatExchange {
         this.dataSources = dataSources;
     }
 
-
+    // get JSON Object of exchange data
     public JSONObject getJSONExchangeData() throws JSONException{
         JSONObject j = new JSONObject();
         j.put("id", id);

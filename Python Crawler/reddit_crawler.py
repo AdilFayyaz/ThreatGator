@@ -3,7 +3,7 @@ import json
 import pandas as pd
 from source import *
 
-
+# inherit from source
 class RedditCrawler(Source):
     def __init__(self):
         Source.__init__(self, "json", "Reddit", "Social Media", "www.reddit.com")
@@ -13,6 +13,7 @@ class RedditCrawler(Source):
         self._PASSWORD = 'fyp16azh'
         self.headers = None
 
+    # function to authenticate the class and get access token
     def authenticate(self):
         auth = requests.auth.HTTPBasicAuth(self._CLIENT_ID, self._TOKEN)
 
@@ -39,11 +40,14 @@ class RedditCrawler(Source):
         self.headers = headers
 
         return headers
+        
 
+    # function to fetch threads that are most popular
     def fetch_most_popular_data(self, subreddit, headers, params, num):
         data = pd.DataFrame()
         response = []
-
+        
+        # loop to fetch more than 50 threads
         for i in range(num):
             res = requests.get("https://oauth.reddit.com/r/" + subreddit + "/hot",
                                headers=headers, params=params)
@@ -65,12 +69,14 @@ class RedditCrawler(Source):
                 }, ignore_index=True)
 
             latest = data.iloc[len(data) - 1]
-            params['after'] = latest['fullname']
+            params['after'] = latest['fullname'] # assign from where to start fetching next round of threads
             response.append(res)
 
         print(data)
         return response, data
-
+        
+        
+    # function to fetch most recent threads
     def fetch_most_recent_data(self, subreddit, headers, params, num):
         data = pd.DataFrame()
         response = []
@@ -96,12 +102,13 @@ class RedditCrawler(Source):
                 }, ignore_index=True)
 
             latest = data.iloc[len(data) - 1]
-            params['after'] = latest['fullname']
+            params['after'] = latest['fullname'] # assign from where to start fetching next round of threads
             response.append(res)
 
         print(data)
         return response, data
-
+        
+    # function to fetch all comments on  a given thread
     def fetch_comments(self, subreddit, articleid, headers, params, num):
         data = pd.DataFrame()
 
@@ -131,7 +138,8 @@ class RedditCrawler(Source):
         #
         print(data)
         return req, data
-
+        
+    # function to fetch all comments by a given user
     def fetch_comments_by_user(self, username, headers, params, num):
         data = pd.DataFrame()
         response = []
@@ -163,6 +171,7 @@ class RedditCrawler(Source):
         print(data)
         return response, data
 
+    # function to fetch all threads by a given user
     def fetch_submitted_by_user(self, username, headers, params, num):
         data = pd.DataFrame()
         response = []
@@ -186,7 +195,7 @@ class RedditCrawler(Source):
                 }, ignore_index=True)
 
             latest = data.iloc[len(data) - 1]
-            params['after'] = latest['fullname']
+            params['after'] = latest['fullname'] # assign from where to start fetching next round of threads
             response.append(res)
 
         print(data)

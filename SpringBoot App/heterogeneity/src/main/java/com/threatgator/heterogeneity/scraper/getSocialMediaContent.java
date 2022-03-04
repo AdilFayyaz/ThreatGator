@@ -7,12 +7,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
-
+// End points to scrape the data from different sources
 @RestController
 public class getSocialMediaContent {
     String url = "http://127.0.0.1:8000/source/reddit/mostRecentData";
     String url_twitter = "http://127.0.0.1:8000/source/twitter";
     Object[] reddits;
+
+    // Get data from Reddit given a username
     @RequestMapping("/getReddits")
     public String getReddits(@RequestParam String username) throws JSONException {
         String s;
@@ -23,6 +25,7 @@ public class getSocialMediaContent {
         return s;
     }
 
+    // Get data from tweets given a name
     @RequestMapping("/getTweetsFromAccount")
     public String getTweetsProfiles(@RequestParam String name) throws JSONException{
         String s;
