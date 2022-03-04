@@ -1,9 +1,6 @@
 # needed installations
 # pip install -U spacy
-# python -m spacy download en_core_web_trf -- might not be needed
-# pip install -U spacy-nightly --pre
 # pip install -U spacy[transformers]
-# pip install spacy==2.2.2
 # pip install spacy-transformers
 # pip install -U spacy-nightly --pre
 import spacy
