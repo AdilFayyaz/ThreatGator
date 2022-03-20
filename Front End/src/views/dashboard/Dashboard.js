@@ -24,6 +24,7 @@ import {
   CToastHeader,
 } from '@coreui/react'
 import { CChartDoughnut, CChartLine } from '@coreui/react-chartjs'
+// import { Line ,Doughnut} from "react-chartjs-2";
 import { getStyle, hexToRgba } from '@coreui/utils'
 import CIcon from '@coreui/icons-react'
 import {
@@ -120,13 +121,14 @@ const Dashboard = (props) => {
             {
               label: 'statistics',
               data: topMalwaresData,
+              borderColor: ['rgba(255,206,86,0.2)'],
               backgroundColor: [
-                'rgb(255, 99, 132)',
-                'rgb(54, 162, 235)',
-                'rgb(255, 205, 86)',
-                'rgb(34,139,34)',
+                'rgba(232,99,132,1)',
+                'rgba(232,211,6,1)',
+                'rgba(54,162,235,1)',
+                'rgba(255,159,64,1)',
               ],
-              hoverOffset: 4,
+              pointBackgroundColor: 'rgba(255,206,86,0.2)',
             },
           ],
         })
@@ -141,15 +143,30 @@ const Dashboard = (props) => {
       .then((res) => res.json())
       .then((data) => {
         hits = data
+        console.log(hits)
         setWeekData({
           labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
           datasets: [
             {
               label: 'Number of Hits',
+              fill: false,
+              lineTension: 0.1,
+              backgroundColor: 'rgba(75,192,192,0.4)',
+              borderColor: 'rgba(75,192,192,1)',
+              borderCapStyle: 'butt',
+              borderDash: [],
+              borderDashOffset: 0.0,
+              borderJoinStyle: 'miter',
+              pointBorderColor: 'rgba(75,192,192,1)',
+              pointBackgroundColor: '#fff',
+              pointBorderWidth: 1,
+              pointHoverRadius: 5,
+              pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+              pointHoverBorderColor: 'rgba(220,220,220,1)',
+              pointHoverBorderWidth: 2,
+              pointRadius: 1,
+              pointHitRadius: 10,
               data: hits,
-              fill: true,
-              backgroundColor: 'rgba(6, 156,51, .3)',
-              borderColor: '#02b844',
             },
           ],
         })
@@ -245,65 +262,19 @@ const Dashboard = (props) => {
   //   navigate('/visualizer', { replace: true })
   //   window.location.reload(false)
   // }
-
   useEffect(() => {
-    // doughnut()
-    // notifications()
-    // hitsGraph()
+    doughnut()
+    notifications()
+    hitsGraph()
     return () => {
       console.log('returning -xyzzz')
     }
   }, [location])
-  const data1 = {
-    labels: ['Mon', 'Tue', 'Wed', 'Thurs', 'Fri'],
-    datasets: [
-      {
-        label: 'Attendance for Week 1',
-        data: [25, 24, 25, 25, 3],
-        borderColor: ['rgba(255,206,86,0.2)'],
-        backgroundColor: [
-          'rgba(232,99,132,1)',
-          'rgba(232,211,6,1)',
-          'rgba(54,162,235,1)',
-          'rgba(255,159,64,1)',
-          'rgba(153,102,255,1)',
-        ],
-        pointBackgroundColor: 'rgba(255,206,86,0.2)',
-      },
-    ],
-  }
-  const line = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-    datasets: [
-      {
-        label: 'My First dataset',
-        fill: false,
-        lineTension: 0.1,
-        backgroundColor: 'rgba(75,192,192,0.4)',
-        borderColor: 'rgba(75,192,192,1)',
-        borderCapStyle: 'butt',
-        borderDash: [],
-        borderDashOffset: 0.0,
-        borderJoinStyle: 'miter',
-        pointBorderColor: 'rgba(75,192,192,1)',
-        pointBackgroundColor: '#fff',
-        pointBorderWidth: 1,
-        pointHoverRadius: 5,
-        pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-        pointHoverBorderColor: 'rgba(220,220,220,1)',
-        pointHoverBorderWidth: 2,
-        pointRadius: 1,
-        pointHitRadius: 10,
-        data: [65, 59, 80, 81, 56, 55, 40],
-      },
-    ],
-  }
-
   return (
     <>
-      <CRow>
+      {/* <CRow>
         <h1>Welcome {location.state.username}!</h1>
-      </CRow>
+      </CRow> */}
       {/*<WidgetsDropdown />*/}
       {/*<CAlert color="primary">A simple primary alert—check it out!</CAlert>*/}
       {/*<CAlert color="secondary">A simple secondary alert—check it out!</CAlert>*/}
@@ -328,7 +299,7 @@ const Dashboard = (props) => {
               onClick={handleNotifClick}
               style={{
                 marginBottom: '1rem',
-                width: '40rem',
+                width: '80rem',
                 height: '3rem',
                 backgroundColor: '#1c2b45',
                 borderRadius: '3rem',
@@ -360,7 +331,7 @@ const Dashboard = (props) => {
               <CChartLine
                 style={{ height: '300px', marginTop: '40px' }}
                 // WeekData
-                data={line}
+                data={WeekData}
                 options={{
                   maintainAspectRatio: false,
                   plugins: {
@@ -401,23 +372,22 @@ const Dashboard = (props) => {
           </CCard>
         </CCol>
         <CCol>
-          <CRow>
-            <CCol xs>
-              <CCard className="mb-4" style={{ position: 'absolute' }}>
-                <CCardBody>
-                  {/*donughnut graph*/}
-                  <CCol sm={5}>
-                    <h4 id="topmalwares" className="card-title mb-0">
-                      Top Malwares
-                    </h4>
-                  </CCol>
-                  {/*replace data1 with DoughnutData*/}
-                  <CChartDoughnut data={data1} />
-                </CCardBody>
-              </CCard>
-              {/* first row*/}
-            </CCol>
-          </CRow>
+          <CCol xs>
+            <CCard className="mb-4" style={{ position: 'absolute' }}>
+              <CCardBody>
+                {/* {donughnut} */}
+                <CCol sm={5}>
+                  <h4 id="topmalwares" className="card-title mb-0">
+                    Top Malwares
+                  </h4>
+                </CCol>
+                {/*replace data1 with DoughnutData*/}
+                {/* <Doughnut data={DoughnutData}  /> */}
+                <CChartDoughnut data={DoughnutData} />
+              </CCardBody>
+            </CCard>
+            {/* first row*/}
+          </CCol>
         </CCol>
       </CRow>
     </>

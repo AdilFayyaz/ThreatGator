@@ -17,39 +17,11 @@ import { useLocation } from 'react-router-dom'
 {
   /* Search Results */
 }
-// <Modal show={isOpenSearch} onHide={closeModalSearch}
-//        fullscreen={true}
-//        aria-labelledby="contained-modal-title-vcenter"
-//        centered
-
-// >
 
 const SearchResult = () => {
-  const [SearchKeyword, SetSearchKeyword] = useState('')
-  const [KeywordResult, SetKeywordResult] = useState({})
-  // fetching data from data analysis service for any keyword's search result
-
-  const getSearchResults = (event) => {
-    event.preventDefault()
-    let reports = []
-    const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: SearchKeyword,
-    }
-    fetch('http://127.0.0.1:8082/dataAnalysis/getSearchResults', requestOptions)
-      .then((res) => res.json())
-      .then((data) => {
-        SetKeywordResult(data)
-      })
-  }
-  //handlers for input fields
-  const handleSearchChange = (event) => {
-    event.preventDefault()
-    SetSearchKeyword(event.target.value)
-    console.log(SearchKeyword)
-  }
   const location = useLocation()
+  const KeywordResult = location.state.data
+  console.log(KeywordResult)
   return (
     <>
       <div>
@@ -68,11 +40,11 @@ const SearchResult = () => {
               </CTableHead>
 
               <CTableBody>
-                {Object.keys(KeywordResult).map((item, i) => {
-                  ;<CTableRow>
+                {Object.keys(KeywordResult).map((item) => (
+                  <CTableRow key={item}>
                     <CTableDataCell>{KeywordResult[item]}</CTableDataCell>
                   </CTableRow>
-                })}
+                ))}
               </CTableBody>
             </CTable>
           </CCardBody>

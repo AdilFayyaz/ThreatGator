@@ -49,9 +49,10 @@ const Searchbar = () => {
       .then((res) => res.json())
       .then((data) => {
         SetKeywordResult(data)
-        openModalSearch()
+        // console.log(data)
+        // openModalSearch()
+        history.push('/searchResults', { keyword: SearchKeyword, data: KeywordResult })
       })
-    history.push('/searchResults', { keyword: SearchKeyword })
   }
 
   //handlers for input fields

@@ -108,7 +108,7 @@ const LatestReports = () => {
                 {/*<CIcon icon={cilPeople} />*/}
                 {/*</CTableHeaderCell>*/}
                 <CTableHeaderCell className="text-center">Source</CTableHeaderCell>
-                {/*<CTableHeaderCell className="text-center">Raw Text</CTableHeaderCell>*/}
+                <CTableHeaderCell className="text-center">Raw Text</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">Malwares</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">Vulnerabilities</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">Locations</CTableHeaderCell>
