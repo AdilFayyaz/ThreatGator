@@ -25,8 +25,6 @@ public class RedditComment {
         this.kind = kind;
     }
 
-    // getters and setters
-
     public String getId() {
         return id;
     }

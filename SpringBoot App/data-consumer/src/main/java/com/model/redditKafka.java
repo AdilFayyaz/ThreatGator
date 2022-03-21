@@ -11,7 +11,6 @@ public class redditKafka {
     private String topicContent;
     public ArrayList<RedditThread> threads;
 
-    // function to remove punctuation from string
     public String preProcessStrings(String input){
         String processed=input.trim();
         //processed=processed.toLowerCase(Locale.ROOT);
@@ -19,14 +18,12 @@ public class redditKafka {
         return processed;
     }
 
-    // map incoming message that contains multiple threads into an array of RedditThread
     public redditKafka(String topicContent) throws JSONException {
         threads= new ArrayList<>();
         this.topicContent = topicContent;
-        JSONArray array= new JSONArray(topicContent); // convert string to JSON Array
+        JSONArray array= new JSONArray(topicContent);
         for (int i=0; i< array.length(); i++){
-            JSONObject obj= array.getJSONObject(i); // get JSON Object at each index
-            // get required attributes
+            JSONObject obj= array.getJSONObject(i);
             RedditThread r = new RedditThread(
                     obj.getString("subreddit"),
                     obj.getString("id"),
@@ -38,9 +35,9 @@ public class redditKafka {
                     obj.getDouble("downs"),
                     obj.getDouble("score"),
                     obj.getString("kind"));
-            r.setTitle(preProcessStrings(r.getTitle())); // preprocess title to remove punctuation
-            r.setSelftext(preProcessStrings(r.getSelftext())); // preprocess text to remove punctuation
-            threads.add(r); // add to array
+            r.setTitle(preProcessStrings(r.getTitle()));
+            r.setSelftext(preProcessStrings(r.getSelftext()));
+            threads.add(r);
         }
     }
 

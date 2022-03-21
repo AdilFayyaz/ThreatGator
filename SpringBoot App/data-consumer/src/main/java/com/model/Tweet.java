@@ -25,8 +25,6 @@ public class Tweet {
         this.retweets = retweets;
     }
 
-    // getters and setters
-
     public String getUsername() {
         return username;
     }

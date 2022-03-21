@@ -2,6 +2,8 @@ package com.model;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 //this class can then be inherited and implemented for different SDOs like malware, TA, etc...
 
@@ -20,6 +22,8 @@ public class ElasticModel {
     public ArrayList<Entity> infrastructures=new ArrayList<>();
     public ArrayList<Entity> indicators=new ArrayList<>();
     public ArrayList<Entity> campaigns=new ArrayList<>();
+    public HashMap<List<Entity>, String> relation = new HashMap<>();
+    public String bundleJson = new String();
 
     @Override
     public String toString() {
@@ -36,6 +40,8 @@ public class ElasticModel {
                 ", infrastructures=" + infrastructures +
                 ", indicators=" + indicators +
                 ", campaigns=" + campaigns +
+                ", relations=" + relation.toString() +
+                ", bundle=" + bundleJson +
                 '}';
     }
 }
