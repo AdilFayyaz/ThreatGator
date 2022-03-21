@@ -16,6 +16,7 @@ class RelationExtracter:
     def __init__(self):
         self.nlp=spacy.load("./roberta_spacy_model/model-best")
         self.nlp2 = spacy.load("./relation_extraction_model/model-best")
+        self.nlp2.add_pipe('sentencizer') # made this change - Adil (to load the pipeline multiple times)
 
     def getMax(self, x):
         return max(x, key=x.get)
@@ -27,7 +28,7 @@ class RelationExtracter:
         for doc in self.nlp.pipe(sentence, disable=["tagger"]):
             print(f"spans: {[(e.start, e.text, e.label_) for e in doc.ents]}")
             entities.append([(e.start, e.text, e.label_) for e in doc.ents])
-        self.nlp2.add_pipe('sentencizer')
+        
         # print("*****Relationships*****")
         for name, proc in self.nlp2.pipeline:
             doc = proc(doc) # Here, we split the paragraph into sentences and apply the relation extraction for each pair of entities found in each sentence.
