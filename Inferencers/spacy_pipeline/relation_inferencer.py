@@ -9,6 +9,7 @@ import pandas as pd
 from stix2 import *
 import requests, json, os
 from elasticsearch import Elasticsearch
+# pip install elasticsearch==5.5.3
 
 desired_width = 320
 
