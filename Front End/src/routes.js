@@ -6,6 +6,7 @@ const LatestReports = React.lazy(() => import('./views/sidebar/latest/LatestRepo
 const TEPReports = React.lazy(() => import('./views/sidebar/tep/TEPReports'))
 const Visualizer = React.lazy(() => import('./views/visualizer/visualizer.js'))
 const searchResults = React.lazy(() => import('./views/searchResults/searchResults.js'))
+const Report = React.lazy(() => import('./views/sidebar/latest/Report.js'))
 const Typography = React.lazy(() => import('./views/theme/typography/Typography'))
 
 // Base
@@ -62,6 +63,7 @@ const routes = [
   { path: '/TEPReports', name: 'TEP Reports', component: TEPReports },
   { path: '/visualizer', name: 'Visualizer', component: Visualizer },
   { path: '/searchResults', name: 'SearchResults', component: searchResults },
+  { path: '/Report', name: 'ReportDetails', component: Report },
   // { path: '/theme/typography', name: 'Typography', component: Typography },
   // { path: '/base', name: 'Base', component: Cards, exact: true },
   // { path: '/base/accordion', name: 'Accordion', component: Accordion },

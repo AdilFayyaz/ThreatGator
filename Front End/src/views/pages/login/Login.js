@@ -43,39 +43,38 @@ const Login = (props) => {
     console.log(username)
     history.push('/dashboard', { username: username, password: password })
     console.log(history)
-    //
-    // console.log('here')
-    // const requestOptions = {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ username: username, password: password }),
-    // }
-    // //uses the user management system
-    // fetch('http://127.0.0.1:8084/users/validateCredentials', requestOptions)
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     setData(data)
-    //
-    //     console.log(data)
-    //     if (data === true) {
-    //       history.push('/dashboard/:username')
-    //     } else {
-    //       //Admin checking
-    //       fetch('http://127.0.0.1:8084/Admin/validateAdminCredentials', requestOptions)
-    //         .then((response) => response.json())
-    //         .then((data) => {
-    //           setData(data)
-    //
-    //           console.log(data)
-    //           if (data === true) {
-    //             history.push('/addSource')
-    //
-    //           } else {
-    //             alert('Enter the correct credentials')
-    //           }
-    //         })
-    //     }
-    //   })
+
+    console.log('here')
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: username, password: password }),
+    }
+    //uses the user management system
+    fetch('http://127.0.0.1:8084/users/validateCredentials', requestOptions)
+      .then((response) => response.json())
+      .then((data) => {
+        setData(data)
+
+        console.log(data)
+        if (data === true) {
+          history.push('/dashboard/:username')
+        } else {
+          //Admin checking
+          fetch('http://127.0.0.1:8084/Admin/validateAdminCredentials', requestOptions)
+            .then((response) => response.json())
+            .then((data) => {
+              setData(data)
+
+              console.log(data)
+              if (data === true) {
+                history.push('/addSource')
+              } else {
+                alert('Enter the correct credentials')
+              }
+            })
+        }
+      })
   }
   // handler functions for email and password
 

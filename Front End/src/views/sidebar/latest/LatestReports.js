@@ -15,6 +15,8 @@ import {
   CAvatar,
   CProgress,
   CTable,
+  CButton,
+  CBadge,
 } from '@coreui/react'
 import { rgbToHex } from '@coreui/utils'
 import { DocsLink } from 'src/components'
@@ -34,6 +36,7 @@ import {
   cifUs,
   cilPeople,
 } from '@coreui/icons'
+import { useHistory } from 'react-router-dom'
 
 const ThemeView = () => {
   const [color, setColor] = useState('rgb(255, 255, 255)')
@@ -91,15 +94,81 @@ const LatestReports = () => {
       })
     console.log('in function')
   }
-
+  function goToDetails(
+    source,
+    rawtext,
+    malwares,
+    vulnerabilities,
+    locations,
+    threatActors,
+    identities,
+    tools,
+    infrastructure,
+    campaigns,
+  ) {
+    history.push('/Report', {
+      source: source,
+      rawText: rawtext,
+      malware: malwares,
+      vulnerabilities: vulnerabilities,
+      locations: locations,
+      threatActors: threatActors,
+      identities: identities,
+      tools: tools,
+      infrastructure: infrastructure,
+      campaigns: campaigns,
+    })
+  }
+  const history = useHistory()
+  var isVulnerability = true
+  var isMalware = true
+  var isLocation = true
+  var isThreatActor = true
+  var isIdentitites = true
+  var isTools = true
+  var isInfra = true
+  var isCampaign = true
+  function setTags(
+    malwares,
+    vulnerabilities,
+    locations,
+    threatActors,
+    identities,
+    tools,
+    infrastructure,
+    campaigns,
+  ) {
+    if (malwares.length == 0) {
+      isMalware = false
+    }
+    if (vulnerabilities.length == 0) {
+      isVulnerability = false
+    }
+    if (threatActors.length == 0) {
+      isThreatActor = false
+    }
+    if (locations.length == 0) {
+      isLocation = false
+    }
+    if (identities.length == 0) {
+      isIdentitites = false
+    }
+    if (tools.length == 0) {
+      isTools = false
+    }
+    if (infrastructure.length == 0) {
+      isInfra = false
+    }
+    if (campaigns.length == 0) {
+      isCampaign = false
+    }
+  }
   return (
     <>
       {getReports()}
       <CCard className="mb-4">
-        <CCardHeader>
-          ThreatGator&apos;s Latest Reports
-          <DocsLink href="https://coreui.io/docs/utilities/colors/" />
-        </CCardHeader>
+        <CCardHeader>ThreatGator&apos;s Latest Reports</CCardHeader>
+
         <CCardBody>
           <CTable align="middle" className="mb-0 border" hover responsive>
             <CTableHead color="light">
@@ -107,38 +176,140 @@ const LatestReports = () => {
                 {/*<CTableHeaderCell className="text-center">*/}
                 {/*<CIcon icon={cilPeople} />*/}
                 {/*</CTableHeaderCell>*/}
-                <CTableHeaderCell className="text-center">Source</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Raw Text</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Malwares</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Vulnerabilities</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Locations</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Threat Actors</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Identities</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Tools</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Infrastructures</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Indicators</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Campaigns</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">Raw text</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">tags</CTableHeaderCell>
 
-                {/*<CTableHeaderCell>User</CTableHeaderCell>*/}
-                {/*<CTableHeaderCell className="text-center">Country</CTableHeaderCell>*/}
-                {/*<CTableHeaderCell>Usage</CTableHeaderCell>*/}
-                {/*<CTableHeaderCell className="text-center">Payment Method</CTableHeaderCell>*/}
-                {/*<CTableHeaderCell>Activity</CTableHeaderCell>*/}
+                <CTableHeaderCell className="text-center"> </CTableHeaderCell>
+                <CTableHeaderCell className="text-center"> </CTableHeaderCell>
               </CTableRow>
             </CTableHead>
             <CTableBody>
               {Object.values(reportsData).map((el) => (
                 <CTableRow key={el}>
-                  <CTableDataCell>{el.source}</CTableDataCell>
-                  <CTableDataCell>{el.rawText}</CTableDataCell>
-                  <CTableDataCell>{el.malwares}</CTableDataCell>
-                  <CTableDataCell>{el.vulnerabilities}</CTableDataCell>
-                  <CTableDataCell>{el.locations}</CTableDataCell>
-                  <CTableDataCell>{el.threatActors}</CTableDataCell>
-                  <CTableDataCell>{el.identities}</CTableDataCell>
-                  <CTableDataCell>{el.tools}</CTableDataCell>
-                  <CTableDataCell>{el.infrastructure}</CTableDataCell>
-                  <CTableDataCell>{el.campaigns}</CTableDataCell>
+                  <CTableDataCell>
+                    <div className="rawText">{el.rawText}</div>
+                  </CTableDataCell>
+                  <CTableDataCell className="tags">
+                    {setTags(
+                      el.malwares,
+                      el.vulnerabilities,
+                      el.locations,
+                      el.threatActors,
+                      el.identities,
+                      el.tools,
+                      el.infrastructure,
+                      el.campaigns,
+                    )}
+                    {/*vulnerability tag*/}
+                    {isVulnerability ? (
+                      <CBadge
+                        className="rounded-pill"
+                        style={{ margin: '1%', backgroundColor: '#85BFC5' }}
+                      >
+                        Vulnerability
+                      </CBadge>
+                    ) : (
+                      <div></div>
+                    )}
+                    {/*if malware then malware tag*/}
+                    {isMalware ? (
+                      <CBadge
+                        className="rounded-pill"
+                        style={{ margin: '1%', backgroundColor: '#ea8e8e' }}
+                      >
+                        malware
+                      </CBadge>
+                    ) : (
+                      <div></div>
+                    )}
+                    {/*if locations tag*/}
+                    {isLocation ? (
+                      <CBadge
+                        className="rounded-pill"
+                        style={{ margin: '1%', backgroundColor: '#9A8BF3' }}
+                      >
+                        locations
+                      </CBadge>
+                    ) : (
+                      <div></div>
+                    )}
+                    {/*if threat actor tag*/}
+                    {isThreatActor ? (
+                      <CBadge
+                        className="rounded-pill"
+                        style={{ margin: '1%', backgroundColor: '#FA714A' }}
+                      >
+                        threatActors
+                      </CBadge>
+                    ) : (
+                      <div></div>
+                    )}
+                    {/*if identitites tag*/}
+                    {isIdentitites ? (
+                      <CBadge
+                        className="rounded-pill"
+                        style={{ margin: '1%', backgroundColor: '#6AC267' }}
+                      >
+                        identities
+                      </CBadge>
+                    ) : (
+                      <div></div>
+                    )}
+                    {/*if tools tag*/}
+                    {isTools ? (
+                      <CBadge
+                        className="rounded-pill"
+                        style={{ margin: '1%', backgroundColor: '#D2B6B2' }}
+                      >
+                        tools
+                      </CBadge>
+                    ) : (
+                      <div></div>
+                    )}
+                    {/*if infra tag*/}
+                    {isInfra ? (
+                      <CBadge
+                        className="rounded-pill"
+                        style={{ margin: '1%', backgroundColor: '#B6BF7A' }}
+                      >
+                        infra
+                      </CBadge>
+                    ) : (
+                      <div></div>
+                    )}
+                    {/*if campaign tag*/}
+                    {isCampaign ? (
+                      <CBadge
+                        className="rounded-pill"
+                        style={{ margin: '1%', backgroundColor: '#F39E29' }}
+                      >
+                        campaigns
+                      </CBadge>
+                    ) : (
+                      <div></div>
+                    )}
+                  </CTableDataCell>
+                  <CTableDataCell className="text-center">
+                    <CButton
+                      style={{ backgroundColor: 'blue', margin: '1%' }}
+                      onClick={goToDetails}
+                    >
+                      Details
+                    </CButton>
+                  </CTableDataCell>
+                  <CTableDataCell className="text-center"></CTableDataCell>
+
+                  {/*  <CTableRow key={el}>*/}
+                  {/*    <CTableDataCell>{el.source}</CTableDataCell>*/}
+                  {/*    <CTableDataCell>{el.malwares}</CTableDataCell>*/}
+                  {/*    <CTableDataCell>{el.vulnerabilities}</CTableDataCell>*/}
+                  {/*    <CTableDataCell>{el.locations}</CTableDataCell>*/}
+                  {/*    <CTableDataCell>{el.threatActors}</CTableDataCell>*/}
+                  {/*    /!*<CTableDataCell>{el.identities}</CTableDataCell>*!/*/}
+                  {/*    /!*<CTableDataCell>{el.tools}</CTableDataCell>*!/*/}
+                  {/*    /!*<CTableDataCell>{el.infrastructure}</CTableDataCell>*!/*/}
+                  {/*    /!*<CTableDataCell>{el.campaigns}</CTableDataCell>*!/*/}
+                  {/*  </CTableRow>*/}
                 </CTableRow>
               ))}
             </CTableBody>
