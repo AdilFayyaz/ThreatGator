@@ -2,14 +2,24 @@ package com.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.model.*;
 import org.apache.http.HttpHost;
+import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.client.indices.GetIndexRequest;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,6 +62,7 @@ public class KafkaService {
 
     String inferencer="http://127.0.0.1:5000/getInference";
     String getBundle ="http://127.0.0.1:5000/getBundle";
+    String makeStix = "http://127.0.0.1:5001/makeStix";
     // Annotation required to listen
     // the message from Kafka server
     @KafkaListener(topics = "reddit-threads",
@@ -435,6 +446,121 @@ public class KafkaService {
         }
 
     }
+
+
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @RequestMapping("/correlate")
+    public void correlateBundles() throws IOException, JSONException {
+        RestHighLevelClient client = new RestHighLevelClient(
+                RestClient.builder(
+                        new HttpHost("localhost", 9200, "http")));
+        
+        // fetch all documents in the tagged_bundle_data
+        SearchRequest request = new SearchRequest("tagged_bundle_data");
+        SearchSourceBuilder searchSourceBuilder= new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.matchAllQuery());
+        request.source(searchSourceBuilder);
+        SearchResponse response = client.search(request, RequestOptions.DEFAULT);
+        ObjectMapper mapper = new ObjectMapper();
+        List<ElasticModel> unMerged = new ArrayList<ElasticModel>();
+        for(SearchHit hit : response.getHits().getHits()) {
+            JSONObject j = new JSONObject(hit.getSourceAsString());
+            ElasticModel e = new ElasticModel();
+            e.hash=j.getInt("hash");
+            e.source=j.getString("source");
+            e.rawText=j.getString("rawText");
+            e.time=j.getLong("time");
+            e.bundleJson=j.getString("bundleJson");
+            unMerged.add(e);
+            System.out.println(e.source);
+        }
+        // clean the bundles
+        ArrayList<StixBundle> initials = new ArrayList<>();
+        for (int i=0; i< unMerged.size(); i++){
+            initials.add(new StixBundle(unMerged.get(i).bundleJson));
+            //initials.get(i).print();
+        }
+        // now get all the existing merged bundles, if any
+        GetIndexRequest req = new GetIndexRequest("stix");
+        boolean exists = client.indices().exists(req, RequestOptions.DEFAULT);
+
+        ArrayList<StixBundle> finals= new ArrayList<>();
+
+        if (!exists){
+            finals.addAll(initials);
+        }
+        else {
+            SearchRequest request2 = new SearchRequest("stix");
+            SearchSourceBuilder searchSourceBuilder2 = new SearchSourceBuilder();
+            searchSourceBuilder.query(QueryBuilders.matchAllQuery());
+            request2.source(searchSourceBuilder2);
+            SearchResponse response2 = client.search(request2, RequestOptions.DEFAULT);
+
+            for (SearchHit hit : response2.getHits().getHits()) {
+                JSONObject j = new JSONObject(hit.getSourceAsString());
+                finals.add(new StixBundle(j.getString("bundle")));
+            }
+        }
+        // now initials has just the new bundles and finals has old + new bundles
+
+        for (StixBundle initial : initials) {
+            for (StixBundle aFinal : finals) {
+
+                for (SDO ent1 : initial.entities) {
+                    for (SDO ent2 : aFinal.entities) {
+                        if (ent1.type.equals("malware") || ent1.type.equals("identity")
+                                || ent1.type.equals("threat-actor") || (ent2.type.equals("malware")
+                                || ent2.type.equals("identity") || ent2.type.equals("threat-actor"))) {
+
+                            if (ent1.name.equals(ent2.name)) { //use levenshtein distance here
+                                // add all entities and relationships of initialBundle to finalBundle
+                                for (SDO ent : initial.entities)
+                                    aFinal.addEntity(ent);
+                                for (SRO rel : initial.relationships)
+                                    aFinal.addRelationship(rel);
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+
+        // now finals has all the final stix bundles, these will be converted to stix via python and added to elastic
+
+        //emptying the previous index to only have new merged ones now
+        if (exists) {
+            DeleteIndexRequest deleteIndexRequest = new DeleteIndexRequest("stix");
+            AcknowledgedResponse deleteIndexResponse = client.indices().delete(deleteIndexRequest, RequestOptions.DEFAULT);
+        }
+
+        int i=0;
+        for (StixBundle finalBundle: finals){
+            i++;
+            ObjectMapper Nmapper = new ObjectMapper();
+            String r = Nmapper.writeValueAsString(finalBundle);
+            try {
+                String s = restTemplate.postForObject(makeStix, new HttpEntity<>(r.toString()), String.class);
+                System.out.println("*******************");
+                System.out.println(s);
+                Stix toUpload = new Stix();
+                toUpload.bundle=s;
+                String jsonstring = Nmapper.writeValueAsString(toUpload);
+                IndexRequest rQ = new IndexRequest("stix")
+                        .id(String.valueOf(i))
+                        .source(jsonstring, XContentType.JSON);
+                IndexResponse res = client.index(rQ, RequestOptions.DEFAULT);
+                System.out.println("Response Id: " + res.getId());
+
+            } catch (HttpStatusCodeException e) {
+                System.out.println("Error Occurred in Making Stix");
+            }
+        }
+        // all the docs with same id as the unmerged ones will get a field telling that theyve been merged
+
+    }
+
 
     // Old function
     @RequestMapping("/pushToElastic")
