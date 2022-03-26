@@ -42,7 +42,7 @@ public class elasticMapper {
     }
     public void SearchMalwares(malwares mal) throws IOException, JSONException {
         // Get data with index tagged data from elastic search
-        SearchRequest request= new SearchRequest("tagged_data");
+        SearchRequest request= new SearchRequest("tagged_bundle_data");
         SearchSourceBuilder searchSourceBuilder=new SearchSourceBuilder();
         searchSourceBuilder.query(QueryBuilders.matchAllQuery());
         request.source(searchSourceBuilder);
@@ -74,7 +74,7 @@ public class elasticMapper {
 
     // Get notifications information from elastic search - malwares + vulnerabilities
     public void GetNotifications(notifications notif) throws IOException, JSONException {
-        SearchRequest request= new SearchRequest("tagged_data");
+        SearchRequest request= new SearchRequest("tagged_bundle_data");
         SearchSourceBuilder searchSourceBuilder=new SearchSourceBuilder();
         searchSourceBuilder.query(QueryBuilders.matchAllQuery()).sort("time", SortOrder.DESC);
         request.source(searchSourceBuilder);
@@ -128,7 +128,7 @@ public class elasticMapper {
     }
     // get only vulnerabilities data
     public void SearchVulnerabilities(vulnerabilities vuln) throws IOException, JSONException {
-        SearchRequest request= new SearchRequest("tagged_data");
+        SearchRequest request= new SearchRequest("tagged_bundle_data");
         SearchSourceBuilder searchSourceBuilder=new SearchSourceBuilder();
         searchSourceBuilder.query(QueryBuilders.matchAllQuery());
         request.source(searchSourceBuilder);
@@ -161,7 +161,7 @@ public class elasticMapper {
 
     // get results for search keyword
     public void GetSearchResult(searchResults _reports, String keyword) throws IOException, JSONException {
-        SearchRequest request= new SearchRequest("tagged_data");
+        SearchRequest request= new SearchRequest("tagged_bundle_data");
         SearchSourceBuilder searchSourceBuilder=new SearchSourceBuilder();
         searchSourceBuilder.query(QueryBuilders.matchAllQuery());
         request.source(searchSourceBuilder);
@@ -194,7 +194,7 @@ public class elasticMapper {
 
     // helper function - get results from elastic given a hashed value
     public void GetAllResultsOnHash(allFields fields, String hash) throws IOException, JSONException {
-        SearchRequest request= new SearchRequest("tagged_data");
+        SearchRequest request= new SearchRequest("tagged_bundle_data");
         SearchSourceBuilder searchSourceBuilder=new SearchSourceBuilder();
         searchSourceBuilder.query(QueryBuilders.matchAllQuery());
         request.source(searchSourceBuilder);
@@ -344,7 +344,7 @@ public class elasticMapper {
 
     // get a list of all hashes for each index in elastic search
     public ArrayList<String> GetAllHashes() throws IOException, JSONException {
-        SearchRequest request= new SearchRequest("tagged_data");
+        SearchRequest request= new SearchRequest("tagged_bundle_data");
         SearchSourceBuilder searchSourceBuilder=new SearchSourceBuilder();
         searchSourceBuilder.query(QueryBuilders.matchAllQuery()).sort("time", SortOrder.DESC);
         request.source(searchSourceBuilder);
@@ -362,7 +362,7 @@ public class elasticMapper {
 
     // get weeks data from elasticsearch - using time attribute
     public ArrayList<Integer> GetWeekHits() throws IOException, JSONException {
-        SearchRequest request= new SearchRequest("tagged_data");
+        SearchRequest request= new SearchRequest("tagged_bundle_data");
         SearchSourceBuilder searchSourceBuilder=new SearchSourceBuilder();
         searchSourceBuilder.query(QueryBuilders.matchAllQuery()).sort("time", SortOrder.DESC);
         request.source(searchSourceBuilder);
