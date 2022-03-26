@@ -36,7 +36,7 @@ import {
   cifUs,
   cilPeople,
 } from '@coreui/icons'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 
 const ThemeView = () => {
   const [color, setColor] = useState('rgb(255, 255, 255)')
@@ -81,6 +81,7 @@ ThemeColor.propTypes = {
 }
 
 const LatestReports = () => {
+  const location = useLocation()
   const [reportsData, SetReportsData] = useState({})
   // fetching data from data analysis service for reports
   const getReports = () => {
@@ -90,7 +91,6 @@ const LatestReports = () => {
       .then((res) => res.json())
       .then((data) => {
         SetReportsData(data)
-        // openModalReport()
       })
     console.log('in function')
   }
@@ -120,14 +120,15 @@ const LatestReports = () => {
     })
   }
   const history = useHistory()
-  var isVulnerability = true
-  var isMalware = true
-  var isLocation = true
-  var isThreatActor = true
-  var isIdentitites = true
-  var isTools = true
-  var isInfra = true
-  var isCampaign = true
+  var isVulnerability = false
+  var isMalware = false
+  var isLocation = false
+  var isThreatActor = false
+  var isIdentitites = false
+  var isTools = false
+  var isInfra = false
+  var isCampaign = false
+
   function setTags(
     malwares,
     vulnerabilities,
@@ -138,34 +139,40 @@ const LatestReports = () => {
     infrastructure,
     campaigns,
   ) {
-    if (malwares.length == 0) {
-      isMalware = false
+    if (malwares) {
+      isMalware = true
     }
-    if (vulnerabilities.length == 0) {
-      isVulnerability = false
+    if (vulnerabilities) {
+      isVulnerability = true
     }
-    if (threatActors.length == 0) {
-      isThreatActor = false
+    if (threatActors) {
+      isThreatActor = true
     }
-    if (locations.length == 0) {
-      isLocation = false
+    if (locations) {
+      isLocation = true
     }
-    if (identities.length == 0) {
-      isIdentitites = false
+    if (identities) {
+      isIdentitites = true
     }
-    if (tools.length == 0) {
-      isTools = false
+    if (tools) {
+      isTools = true
     }
-    if (infrastructure.length == 0) {
-      isInfra = false
+    if (infrastructure) {
+      isInfra = true
     }
-    if (campaigns.length == 0) {
-      isCampaign = false
+    if (campaigns) {
+      isCampaign = true
     }
   }
+  useEffect(() => {
+    getReports()
+    return () => {
+      console.log('returning -xyzzz')
+    }
+  }, [location])
   return (
     <>
-      {getReports()}
+      {/* {getReports()} */}
       <CCard className="mb-4">
         <CCardHeader>ThreatGator&apos;s Latest Reports</CCardHeader>
 
@@ -190,6 +197,14 @@ const LatestReports = () => {
                     <div className="rawText">{el.rawText}</div>
                   </CTableDataCell>
                   <CTableDataCell className="tags">
+                    {(isVulnerability = false)}
+                    {(isMalware = false)}
+                    {(isLocation = false)}
+                    {(isThreatActor = false)}
+                    {(isIdentitites = false)}
+                    {(isTools = false)}
+                    {(isInfra = false)}
+                    {(isCampaign = false)}
                     {setTags(
                       el.malwares,
                       el.vulnerabilities,
@@ -206,7 +221,7 @@ const LatestReports = () => {
                         className="rounded-pill"
                         style={{ margin: '1%', backgroundColor: '#85BFC5' }}
                       >
-                        Vulnerability
+                        vulnerability
                       </CBadge>
                     ) : (
                       <div></div>
@@ -292,7 +307,20 @@ const LatestReports = () => {
                   <CTableDataCell className="text-center">
                     <CButton
                       style={{ backgroundColor: 'blue', margin: '1%' }}
-                      onClick={goToDetails}
+                      onClick={() =>
+                        goToDetails(
+                          el.source,
+                          el.rawText,
+                          el.malwares,
+                          el.vulnerabilities,
+                          el.locations,
+                          el.threatActors,
+                          el.identities,
+                          el.tools,
+                          el.infrastructure,
+                          el.campaigns,
+                        )
+                      }
                     >
                       Details
                     </CButton>

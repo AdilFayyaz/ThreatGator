@@ -82,39 +82,19 @@ ThemeColor.propTypes = {
 const Reports = () => {
   const [reportsData, SetReportsData] = useState({})
   // fetching data from data analysis service for reports
-  const getReports = () => {
-    // event.preventDefault()
-
-    fetch('http://127.0.0.1:8082/dataAnalysis/getReports')
-      .then((res) => res.json())
-      .then((data) => {
-        SetReportsData(data)
-        // openModalReport()
-      })
-    console.log('in function2')
-  }
-  function goToDetails() {
-    // history.push('/Report', {
-    //   rawText: 'el.rawText',
-    //   identities: 'el.identities',
-    //   tools: 'el.tools',
-    //   infrastructure: 'el.infrastructure',
-    //   campaigns: 'el.campaigns',
-    // })
-  }
   const location = useLocation()
-  console.log(location.state.rawText)
   return (
     <>
-      {/*{getReports()}*/}
       <CCard className="mb-4">
         <CCardHeader>
-          Reports Details on {location.state.rawText}
+          Report Details
           <CButton href="/latestReports" style={{ float: 'right' }}>
             Return
           </CButton>
         </CCardHeader>
         <CCardBody>
+          {<b>{location.state.rawText}</b>}
+          {<br></br>}
           <CTable align="middle" className="mb-0 border" hover responsive>
             <CTableHead color="light">
               <CTableRow>
