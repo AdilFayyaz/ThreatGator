@@ -1,24 +1,33 @@
 package com.threatgator.dataanalysis.model;
 import org.apache.http.HttpHost;
+import org.elasticsearch.action.DocWriteResponse;
+import org.elasticsearch.action.delete.DeleteRequest;
+import org.elasticsearch.action.delete.DeleteResponse;
+import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.client.HttpAsyncResponseConsumerFactory;
+import org.elasticsearch.action.update.UpdateRequest;
+import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 
+import org.elasticsearch.client.tasks.ElasticsearchException;
+import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.TermQueryBuilder;
+import org.elasticsearch.index.reindex.UpdateByQueryRequest;
+import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHit;
-import org.elasticsearch.search.aggregations.metrics.InternalHDRPercentiles;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.fetch.subphase.FetchSourceContext;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.lang.reflect.Field;
 import java.util.*;
 // Accesses the elastic search data store
 public class elasticMapper {
@@ -479,6 +488,32 @@ public class elasticMapper {
                     riskFactor, ipv4,dataSources));
         }
         return tex;
+    }
+
+    // remove document from elastic search
+    public String removeFromElastic(int hash) throws  IOException, JSONException {
+        try {
+            DeleteRequest del_req = new DeleteRequest("tagged_bundle_data", String.valueOf(hash));
+            DeleteResponse deleteResponse = client.delete(
+                    del_req, RequestOptions.DEFAULT);
+            if (deleteResponse.getResult() == DocWriteResponse.Result.NOT_FOUND) {
+                return "false";
+            }
+            return "true";
+        }catch (HttpClientErrorException.BadRequest e){
+            return "false";
+        }
+    }
+
+    // update an elastic document
+    public String updateDocument(String jsonInfo) throws JSONException, IOException {
+        JSONObject document = new JSONObject(jsonInfo);
+        String hash = document.getString("hash");
+        UpdateRequest request = new UpdateRequest("tagged_bundle_data", hash);
+        request.doc(jsonInfo,XContentType.JSON);
+        UpdateResponse updateResponse = client.update(
+                request, RequestOptions.DEFAULT);
+        return "true";
     }
 
     public static void main(String[] args) throws IOException, JSONException {
