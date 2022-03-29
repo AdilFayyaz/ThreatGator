@@ -139,7 +139,7 @@ def fixLocationAdjectives(prediction):
         loc_found = 1
         locs.append(e[1])
         new_country = convertLocation(e[1])
-        if new_country!=e[1]:
+        if new_country!=e[1] and new_country:
           add_list = [e[0],new_country,e[2]]
           prediction["entity tags"][0][i] = add_list
   
@@ -148,13 +148,13 @@ def fixLocationAdjectives(prediction):
     for i, val in enumerate(relations):
       if val["entities"][0] in locs:
         new_country = convertLocation(val["entities"][0])
-        if new_country!=val["entities"][0]:     
+        if new_country!=val["entities"][0] and new_country:     
           add_list = [new_country,val["entities"][1]]
           prediction["relationships"][i]["entities"] = add_list
       
       if val["entities"][1] in locs:
         new_country = convertLocation(val["entities"][1])
-        if new_country!=val["entities"][1]:     
+        if new_country!=val["entities"][1] and new_country:     
           add_list = [val["entities"][0], new_country]
           prediction["relationships"][i]["entities"] = add_list
 
