@@ -1,6 +1,5 @@
 package com.threatgator.dataanalysis.controller;
 import com.threatgator.dataanalysis.model.*;
-import org.elasticsearch.client.tasks.ElasticsearchException;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
@@ -29,13 +28,6 @@ public class analysisController {
     public String getTopMalwares(@PathVariable int value) throws JSONException, IOException {
         return mal.getTopMalwares(value).toString();
     }
-    // Delete an element from elasticsearch
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
-    @GetMapping("/deleteFromElastic/{hash}")
-    public String deleteFromElastic(@PathVariable int hash) throws JSONException, IOException{
-        return connect.removeFromElastic(hash);
-    }
-
     // Get top notification values from elastic search
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/getNotifications/{value}")
@@ -50,12 +42,6 @@ public class analysisController {
         connect.GetSearchResult(search, keyword);
         String r = search.getSearchResults().toString();
         return r;
-    }
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
-    @PostMapping("/updateElasticDocument")
-    public String updateElasticDocument(@RequestBody String json_info) throws JSONException, IOException {
-        connect.updateDocument(json_info);
-        return json_info;
     }
     // helper function that fetches result given the hash of a document from elastic store
     @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -122,7 +108,27 @@ public class analysisController {
         return exJson.toString();
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @GetMapping("/getLocations")
+    public String getLocations() throws JSONException, IOException {
+        geo loc = new geo();
+        connect.SearchLocations(loc);
+        String r = loc.getJSONLocations().toString();
+        System.out.println(r);
+        return r;
+    }
 
-
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PostMapping("/updateElasticDocument")
+    public String updateElasticDocument(@RequestBody String json_info) throws JSONException, IOException {
+        connect.updateDocument(json_info);
+        return json_info;
+    }
+    // Delete an element from elasticsearch
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @GetMapping("/deleteFromElastic/{hash}")
+    public String deleteFromElastic(@PathVariable int hash) throws JSONException, IOException{
+        return connect.removeFromElastic(hash);
+    }
 
 }

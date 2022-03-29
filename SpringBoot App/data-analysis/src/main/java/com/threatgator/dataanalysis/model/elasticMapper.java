@@ -490,7 +490,53 @@ public class elasticMapper {
         return tex;
     }
 
-    // remove document from elastic search
+    public static void main(String[] args) throws IOException, JSONException {
+        elasticMapper connect= new elasticMapper();
+        malwares mal = new malwares();
+        vulnerabilities vuln = new vulnerabilities();
+        connect.SearchMalwares(mal);
+        connect.SearchVulnerabilities(vuln);
+
+        System.out.println("***************************************************");
+        System.out.println(mal.getMalwaresMap());
+        System.out.println(vuln.getVulnerabilitiesMap());
+        System.out.println(mal.getTopMalwares(3));
+        return;
+
+    }
+    public void SearchLocations(geo loc) throws IOException, JSONException {
+        SearchRequest request= new SearchRequest("tagged_bundle_data");
+        SearchSourceBuilder searchSourceBuilder=new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.matchAllQuery());
+        request.source(searchSourceBuilder);
+
+        SearchResponse response=client.search(request, COMMON_OPTIONS);
+
+        SearchHit[] hits=response.getHits().getHits();
+
+        for(SearchHit hit: hits){
+            String sourceAsString=hit.getSourceAsString();
+            JSONObject jsonComplete = new JSONObject(sourceAsString);
+            try {
+
+                JSONArray element = jsonComplete.getJSONArray("locations");
+                for(int i=0; i<element.length(); i++){
+                    JSONObject e = element.getJSONObject(i);
+                    String name = e.getString("name");
+
+                    // Do not insert empty values here
+                    if(!name.isEmpty()) {
+                        loc.addLocation(name);
+                    }
+                }
+            }
+            catch (JSONException e){
+                System.out.println("--");
+            }
+        }
+    }
+    
+     // remove document from elastic search
     public String removeFromElastic(int hash) throws  IOException, JSONException {
         try {
             DeleteRequest del_req = new DeleteRequest("tagged_bundle_data", String.valueOf(hash));
@@ -516,19 +562,5 @@ public class elasticMapper {
         return "true";
     }
 
-    public static void main(String[] args) throws IOException, JSONException {
-        elasticMapper connect= new elasticMapper();
-        malwares mal = new malwares();
-        vulnerabilities vuln = new vulnerabilities();
-        connect.SearchMalwares(mal);
-        connect.SearchVulnerabilities(vuln);
-
-        System.out.println("***************************************************");
-        System.out.println(mal.getMalwaresMap());
-        System.out.println(vuln.getVulnerabilitiesMap());
-        System.out.println(mal.getTopMalwares(3));
-        return;
-
-    }
 
 }

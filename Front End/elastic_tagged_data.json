@@ -1,0 +1,319 @@
+{
+  "took" : 4,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 1,
+    "successful" : 1,
+    "skipped" : 0,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : {
+      "value" : 141,
+      "relation" : "eq"
+    },
+    "max_score" : 1.0,
+    "hits" : [
+      {
+        "_index" : "tagged_data",
+        "_type" : "_doc",
+        "_id" : "-2114901603",
+        "_score" : 1.0,
+        "_source" : {
+          "hash" : -2114901603,
+          "source" : "Reddit",
+          "rawText" : "Guess what folks are suspicious of Zuck 72 mistrust Facebook\n\nhttpswwwwashingtonpostcomtechnology20211222techtrustsurveyhttpswwwwashingtonpostcomtechnology20211222techtrustsurvey",
+          "time" : 1640192093374,
+          "malwares" : [
+            {
+              "name" : " Zuck 72"
+            },
+            {
+              "name" : ""
+            }
+          ],
+          "threatActors" : [ ],
+          "identities" : [ ],
+          "locations" : [ ],
+          "tools" : [ ],
+          "vulnerabilities" : [ ],
+          "infrastructures" : [ ],
+          "indicators" : [ ],
+          "campaigns" : [ ]
+        }
+      },
+      {
+        "_index" : "tagged_data",
+        "_type" : "_doc",
+        "_id" : "-890268023",
+        "_score" : 1.0,
+        "_source" : {
+          "hash" : -890268023,
+          "source" : "Reddit",
+          "rawText" : "Just graduated with cis degree how do I become cyber security analyst So I just graduated college with computer information systems and i really want to get into cybersecurity without paying for a bootcamp or college does anyone know any resources I could get some hands on experience of what security analyst do on a day to day basis",
+          "time" : 1640192094280,
+          "malwares" : [ ],
+          "threatActors" : [ ],
+          "identities" : [
+            {
+              "name" : " cis"
+            }
+          ],
+          "locations" : [ ],
+          "tools" : [ ],
+          "vulnerabilities" : [
+            {
+              "name" : " computer information systems"
+            },
+            {
+              "name" : ""
+            }
+          ],
+          "infrastructures" : [ ],
+          "indicators" : [ ],
+          "campaigns" : [ ]
+        }
+      },
+      {
+        "_index" : "tagged_data",
+        "_type" : "_doc",
+        "_id" : "-979175158",
+        "_score" : 1.0,
+        "_source" : {
+          "hash" : -979175158,
+          "source" : "Reddit",
+          "rawText" : "Hidden Networks in TPLink Routers ",
+          "time" : 1640192096832,
+          "malwares" : [ ],
+          "threatActors" : [ ],
+          "identities" : [
+            {
+              "name" : " TPLink Routers"
+            }
+          ],
+          "locations" : [ ],
+          "tools" : [ ],
+          "vulnerabilities" : [ ],
+          "infrastructures" : [ ],
+          "indicators" : [ ],
+          "campaigns" : [ ]
+        }
+      },
+      {
+        "_index" : "tagged_data",
+        "_type" : "_doc",
+        "_id" : "590175899",
+        "_score" : 1.0,
+        "_source" : {
+          "hash" : 590175899,
+          "source" : "Reddit",
+          "rawText" : "Two Active Directory Bugs Lead to Easy Windows Domain Takeover ",
+          "time" : 1640192097657,
+          "malwares" : [ ],
+          "threatActors" : [ ],
+          "identities" : [ ],
+          "locations" : [ ],
+          "tools" : [ ],
+          "vulnerabilities" : [ ],
+          "infrastructures" : [
+            {
+              "name" : " Directory Bugs Windows Domain"
+            },
+            {
+              "name" : ""
+            }
+          ],
+          "indicators" : [ ],
+          "campaigns" : [ ]
+        }
+      },
+      {
+        "_index" : "tagged_data",
+        "_type" : "_doc",
+        "_id" : "-1784585052",
+        "_score" : 1.0,
+        "_source" : {
+          "hash" : -1784585052,
+          "source" : "Reddit",
+          "rawText" : "Java Code Repository Riddled with Hidden Log4j Bugs Heres Where to Look ",
+          "time" : 1640192098888,
+          "malwares" : [ ],
+          "threatActors" : [ ],
+          "identities" : [
+            {
+              "name" : " Java Code"
+            }
+          ],
+          "locations" : [ ],
+          "tools" : [ ],
+          "vulnerabilities" : [
+            {
+              "name" : " Log4j Bugs"
+            },
+            {
+              "name" : ""
+            }
+          ],
+          "infrastructures" : [ ],
+          "indicators" : [ ],
+          "campaigns" : [ ]
+        }
+      },
+      {
+        "_index" : "tagged_data",
+        "_type" : "_doc",
+        "_id" : "560262935",
+        "_score" : 1.0,
+        "_source" : {
+          "hash" : 560262935,
+          "source" : "Reddit",
+          "rawText" : "Four Bugs in Microsoft Teams Left Platform Vulnerable Since March ",
+          "time" : 1640192099946,
+          "malwares" : [ ],
+          "threatActors" : [ ],
+          "identities" : [ ],
+          "locations" : [ ],
+          "tools" : [ ],
+          "vulnerabilities" : [ ],
+          "infrastructures" : [
+            {
+              "name" : " Microsoft Teams"
+            },
+            {
+              "name" : ""
+            }
+          ],
+          "indicators" : [ ],
+          "campaigns" : [ ]
+        }
+      },
+      {
+        "_index" : "tagged_data",
+        "_type" : "_doc",
+        "_id" : "688038545",
+        "_score" : 1.0,
+        "_source" : {
+          "hash" : 688038545,
+          "source" : "Reddit",
+          "rawText" : "Multiple vulnerabilities in Microsoft Teams could spoof URLs leak IP addresses httpsportswiggernetdailyswigmultiplevulnerabilitiesinmicrosoftteamscouldspoofurlsleakipaddresseshttpsportswiggernetdailyswigmultiplevulnerabilitiesinmicrosoftteamscouldspoofurlsleakipaddresses",
+          "time" : 1640192101203,
+          "malwares" : [ ],
+          "threatActors" : [ ],
+          "identities" : [ ],
+          "locations" : [ ],
+          "tools" : [ ],
+          "vulnerabilities" : [ ],
+          "infrastructures" : [
+            {
+              "name" : " Microsoft"
+            },
+            {
+              "name" : ""
+            }
+          ],
+          "indicators" : [ ],
+          "campaigns" : [ ]
+        }
+      },
+      {
+        "_index" : "tagged_data",
+        "_type" : "_doc",
+        "_id" : "-1514344390",
+        "_score" : 1.0,
+        "_source" : {
+          "hash" : -1514344390,
+          "source" : "Reddit",
+          "rawText" : "IMF 10 countries simulate cyber attack on global financial system ",
+          "time" : 1640192102165,
+          "malwares" : [ ],
+          "threatActors" : [ ],
+          "identities" : [
+            {
+              "name" : " IMF"
+            },
+            {
+              "name" : " global financial system"
+            }
+          ],
+          "locations" : [ ],
+          "tools" : [ ],
+          "vulnerabilities" : [ ],
+          "infrastructures" : [ ],
+          "indicators" : [ ],
+          "campaigns" : [ ]
+        }
+      },
+      {
+        "_index" : "tagged_data",
+        "_type" : "_doc",
+        "_id" : "139784668",
+        "_score" : 1.0,
+        "_source" : {
+          "hash" : 139784668,
+          "source" : "Reddit",
+          "rawText" : "Which Course Hey guys Im looking for some advice\n\nIve just graduated with a Postgraduate in Cyber Security and justed started working as a Systems Admin \n\nI plan to do my Masters next month also in Cyber Security I have a small bit of AWS experience but Im not sure which certification I should go for \nCan I get some advice perhaps as Im torn\n\nThanks so much \uD83D\uDE01",
+          "time" : 1640192103155,
+          "malwares" : [ ],
+          "threatActors" : [ ],
+          "identities" : [
+            {
+              "name" : " AWS"
+            },
+            {
+              "name" : ""
+            }
+          ],
+          "locations" : [ ],
+          "tools" : [ ],
+          "vulnerabilities" : [
+            {
+              "name" : " Systems Admin"
+            }
+          ],
+          "infrastructures" : [ ],
+          "indicators" : [ ],
+          "campaigns" : [ ]
+        }
+      },
+      {
+        "_index" : "tagged_data",
+        "_type" : "_doc",
+        "_id" : "582044283",
+        "_score" : 1.0,
+        "_source" : {
+          "hash" : 582044283,
+          "source" : "Reddit",
+          "rawText" : "Question about security protocol Hi guys\n\nonly one question about this security protocol CgtS EkYES\n\nI have C that sends to S this encrypted string YES k is the key generated before and its safe after a prove of identification from C to S\n\nMy question is how an attacker could discover k only by using this message above Considering that He knows that the yes string must be encrypted so he has the couple\n\n1 passphrase yes string and \n2 the cyphertext of the passphrase encrypted with the k key\n\nbut doesnt know k at first can he discover it in some way Maybe comparing the passphrase with cyphertext",
+          "time" : 1640192104113,
+          "malwares" : [
+            {
+              "name" : " SMy"
+            }
+          ],
+          "threatActors" : [ ],
+          "identities" : [
+            {
+              "name" : " guysonly"
+            },
+            {
+              "name" : " EkYESI"
+            }
+          ],
+          "locations" : [ ],
+          "tools" : [ ],
+          "vulnerabilities" : [
+            {
+              "name" : " yes"
+            },
+            {
+              "name" : " string keybut"
+            }
+          ],
+          "infrastructures" : [ ],
+          "indicators" : [ ],
+          "campaigns" : [ ]
+        }
+      }
+    ]
+  }
+}
