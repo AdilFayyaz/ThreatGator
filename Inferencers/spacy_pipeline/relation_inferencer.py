@@ -135,12 +135,13 @@ def fixLocationAdjectives(prediction):
   loc_found = 0
   for i,e in enumerate(entities[0]):
     if e[2]=="L":
-      loc_found = 1
-      locs.append(e[1])
-      new_country = convertLocation(e[1])
-      if new_country!=e[1]:
-        add_list = [e[0],new_country,e[2]]
-        prediction["entity tags"][0][i] = add_list
+      if e[1] not in countries:
+        loc_found = 1
+        locs.append(e[1])
+        new_country = convertLocation(e[1])
+        if new_country!=e[1]:
+          add_list = [e[0],new_country,e[2]]
+          prediction["entity tags"][0][i] = add_list
   
   # Fix relationships
   if loc_found:
@@ -191,7 +192,7 @@ async def get_stix_bundle(req: Request):
   return makeStixBundle(prediction)
 
 
-def makeStixBundle(finalBundle):
+def makeStixBundle2(finalBundle):
   entities = finalBundle["entities"]
   relations = finalBundle["relationships"]
   
@@ -252,4 +253,4 @@ def makeStixBundle(finalBundle):
 @app.post("/makeStix")
 async def make_stix_bundle(req: Request):
 	finalBundle = await req.json()
-	return makeStixBundle(finalBundle)
+	return makeStixBundle2(finalBundle)
