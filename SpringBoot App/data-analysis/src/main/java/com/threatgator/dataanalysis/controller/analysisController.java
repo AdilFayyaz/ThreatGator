@@ -131,4 +131,12 @@ public class analysisController {
         return connect.removeFromElastic(hash);
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @GetMapping("/getStixBundle/{hash}")
+    public String getStixBundle(@PathVariable int hash) throws JSONException, IOException{
+//        System.out.println("INSIDE****************************");
+        return connect.getStix(hash);
+    }
+
+
 }

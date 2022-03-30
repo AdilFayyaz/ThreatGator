@@ -1,9 +1,12 @@
 package com.threatgator.dataanalysis.model;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.http.HttpHost;
+import com.threatgator.dataanalysis.model.geo;
 import org.elasticsearch.action.DocWriteResponse;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.get.GetRequest;
+import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.update.UpdateRequest;
@@ -560,6 +563,25 @@ public class elasticMapper {
         UpdateResponse updateResponse = client.update(
                 request, RequestOptions.DEFAULT);
         return "true";
+    }
+
+    //returns the bundle as a jsonString
+    public String getStix(int hash) throws JSONException, IOException{
+
+        GetRequest request= new GetRequest("tagged_bundle_data", String.valueOf(hash));
+        GetResponse response = client.get(request, RequestOptions.DEFAULT);
+
+        String stixBundle="";
+        if (response.isExists()){
+            String sourceAsString = response.getSourceAsString();
+            JSONObject jsonComplete = new JSONObject(sourceAsString);
+            stixBundle=jsonComplete.getString("bundleJson");
+            stixBundle= StringEscapeUtils.unescapeJava(stixBundle);
+            if (stixBundle.charAt(0) == '"')
+                stixBundle=stixBundle.substring(1, stixBundle.length()-1);
+            JSONObject bundle = new JSONObject(stixBundle);
+        }
+        return stixBundle;
     }
 
 

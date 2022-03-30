@@ -1,9 +1,9 @@
 package com.threatgator.usermanagement.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+
 // Admin class - table in the DB
 @Entity
 public class Admin {
@@ -14,6 +14,9 @@ public class Admin {
     private String name;
     private String email;
     private String password;
+
+//    @OneToMany(mappedBy = "admin", cascade = CascadeType.ALL)
+//    Set<Users> user= new HashSet<Users>();
 
     // Constructor
     public Admin(String name, String email, String password) {

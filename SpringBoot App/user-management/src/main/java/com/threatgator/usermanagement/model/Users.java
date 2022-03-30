@@ -1,9 +1,6 @@
 package com.threatgator.usermanagement.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 // Users class  -table
 @Entity
@@ -15,6 +12,18 @@ public class Users {
     private String name;
     private String email;
     private String password;
+//    @ManyToOne
+//    @JoinColumn(name = "AdminID", referencedColumnName="")
+//    private Admin admin;
+
+
+//    public Users(String name, String email, String password, Admin admin) {
+//        this.id = id;
+//        this.name = name;
+//        this.email = email;
+//        this.password = password;
+////        this.admin = admin;
+//    }
 
     // Constructor
     public Users(String name, String email, String password) {
