@@ -1,9 +1,10 @@
-package com.model;
+package com.threatgator.dataanalysis.utils;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 
 import java.util.ArrayList;
 
@@ -101,9 +102,17 @@ public class StixBundle {
         }
     }
 
+    public Integer getIndex(String name){
+        for(int i=0; i< entities.size(); i++){
+            if (entities.get(i).name.equals(name)){
+                return i;
+            }
+        }
+        return -1;
+    }
 
 
-    boolean exists(String name){
+    public boolean exists(String name){
         for(int i=0; i< entities.size(); i++){
             if (entities.get(i).name.equals(name)){
                 return true;
@@ -112,7 +121,7 @@ public class StixBundle {
         return false;
     }
 
-    boolean exists(String src, String dest){
+    public boolean exists(String src, String dest){
         for (int i=0; i< relationships.size(); i++){
 
             if (getName(src).equals(relationships.get(i).source) && getName(dest).equals(relationships.get(i).target)  )

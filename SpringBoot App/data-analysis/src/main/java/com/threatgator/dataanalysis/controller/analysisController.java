@@ -120,7 +120,7 @@ public class analysisController {
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/updateElasticDocument")
-    public String updateElasticDocument(@RequestBody String json_info) throws JSONException, IOException {
+    public String updateElasticDocument(@RequestBody String json_info) throws JSONException, IOException, org.json.JSONException {
         connect.updateDocument(json_info);
         return json_info;
     }

@@ -218,176 +218,10 @@ public class KafkaService {
             }
         }
 
-//        // Insert the Relationships between entities
-//        for(int i=0;i<jsonArrayRelations.length();i++){
-//            insertRelation(jsonArrayRelations.getJSONObject(i).getJSONArray("entities").getString(0),
-//                    jsonArrayRelations.getJSONObject(i).getJSONArray("entities").getString(1),
-//                    jsonArrayRelations.getJSONObject(i).getString("predicted_relations"),
-//                    Obj);
-//        }
-//        System.out.println(Obj.toString());
         Obj.bundleJson = bundle;
         finalObjects.add(Obj);
 
-        return h; //This is the tagged data, empty right now - not required technically
-//        JSONArray a  = new JSONArray(jsonObject.getJSONObject("entity tags"));
-//        System.out.println(a);
-//        JSONArray x = a.getJSONArray(0);
-//        System.out.println(x);
-//        JSONArray Words= a.getJSONArray(0);
-//        System.out.println(Words.length());
-//        for(int i=0; i< Words.length();i++){
-//            System.out.println(Words.getString(i));
-//        }
-
-//        JSONArray Tags= a.getJSONArray(1);
-//        System.out.println(Tags.length());
-//        for(int i=0; i< Tags.length();i++){
-//            System.out.println(Tags.getString(i));
-//        }
-//        String[] arrays = s.split("],");
-//        arrays[0] = arrays[0].substring(2);
-//        arrays[1] = arrays[1].substring(1, arrays[1].length() - 2);
-
-
-
-        // OLD CODE - FYP-1 (Below)
-//        String[] words= new String[Words.length()];
-//        String[] tags = new String[Tags.length()];
-//        for (int i=0; i< Words.length(); i++){
-//            words[i]=Words.getString(i);
-//            tags[i]= Tags.getString(i);
-//        }
-//        for (int i = 0; i < words.length; i++) {
-//            h.put(words[i], tags[i]);
-//        }
-//        System.out.println("The tagged data is " + h.toString());
-//        //create a new object of type elastic model
-//        ElasticModel Obj = new ElasticModel();
-//        Obj.time = System.currentTimeMillis();
-//        Obj.source=source;
-//        Obj.rawText=text;
-//        Obj.hash=Obj.rawText.hashCode();
-//        boolean wordStarted = false;
-//        String temp = "";
-//        String current = "";
-//        //after this a loop will run over the tagged data
-//        for (int i = 0; i < words.length; i++) {
-////            tags[i]=tags[i].substring(1,tags[i].length()-1);
-////            words[i]=words[i].substring(1, words[i].length()-1);
-//            if (Objects.equals(tags[i], "B-M")) {
-//                if (wordStarted && i > 0) { //a word was ending just before
-//                    insertEntity(current, temp, Obj);
-//                    temp = "";
-//                    wordStarted = false;
-//                }
-//                temp += " " + words[i];
-//                current = "malware";
-//                wordStarted = true;
-//            } else if (Objects.equals(tags[i], "I-M")) {
-//                temp += " " + words[i];
-//            } else if (Objects.equals(tags[i], "B-ID")) {
-//                if (wordStarted && i > 0) { //a word was ending just before
-//                    insertEntity(current, temp, Obj);
-//                    temp = "";
-//                    wordStarted = false;
-//                }
-//                temp += " " + words[i];
-//                current = "identity";
-//                wordStarted = true;
-//            } else if (Objects.equals(tags[i], "I-ID")) {
-//                temp += " " + words[i];
-//            } else if (Objects.equals(tags[i], "B-IND")) {
-//                if (wordStarted && i > 0) { //a word was ending just before
-//                    insertEntity(current, temp, Obj);
-//                    temp = "";
-//                    wordStarted = false;
-//                }
-//                temp += " " + words[i];
-//                current = "indicator";
-//                wordStarted = true;
-//            } else if (Objects.equals(tags[i], "I-IND")) {
-//                temp += " " + words[i];
-//            } else if (Objects.equals(tags[i], "B-INF")) {
-//                if (wordStarted && i > 0) { //a word was ending just before
-//                    insertEntity(current, temp, Obj);
-//                    temp = "";
-//                    wordStarted = false;
-//                }
-//                temp += " " + words[i];
-//                current = "infrastructure";
-//                wordStarted = true;
-//            } else if (Objects.equals(tags[i], "I-INF")) {
-//                temp += " " + words[i];
-//            } else if (Objects.equals(tags[i], "B-TA")) {
-//                if (wordStarted && i > 0) { //a word was ending just before
-//                    insertEntity(current, temp, Obj);
-//                    temp = "";
-//                    wordStarted = false;
-//                }
-//                temp += " " + words[i];
-//                current = "threatactor";
-//                wordStarted = true;
-//            } else if (Objects.equals(tags[i], "I-TA")) {
-//                temp += " " + words[i];
-//            } else if (Objects.equals(tags[i], "B-T")) {
-//                if (wordStarted && i > 0) { //a word was ending just before
-//                    insertEntity(current, temp, Obj);
-//                    temp = "";
-//                    wordStarted = false;
-//                }
-//                temp += " " + words[i];
-//                current = "tool";
-//                wordStarted = true;
-//            } else if (Objects.equals(tags[i], "I-T")) {
-//                temp += " " + words[i];
-//            } else if (Objects.equals(tags[i], "B-V")) {
-//                if (wordStarted && i > 0) { //a word was ending just before
-//                    insertEntity(current, temp, Obj);
-//                    temp = "";
-//                    wordStarted = false;
-//                }
-//                temp += " " + words[i];
-//                current = "vulnerability";
-//                wordStarted = true;
-//            } else if (Objects.equals(tags[i], "I-V")) {
-//                temp += " " + words[i];
-//            } else if (Objects.equals(tags[i], "B-L")) {
-//                if (wordStarted && i > 0) { //a word was ending just before
-//                    insertEntity(current, temp, Obj);
-//                    temp = "";
-//                    wordStarted = false;
-//                }
-//                temp += " " + words[i];
-//                current = "location";
-//                wordStarted = true;
-//            } else if (Objects.equals(tags[i], "I-L")) {
-//                temp += " " + words[i];
-//            } else if (Objects.equals(tags[i], "B-C")) {
-//                if (wordStarted && i > 0) { //a word was ending just before
-//                    insertEntity(current, temp, Obj);
-//                    temp = "";
-//                    wordStarted = false;
-//                }
-//                temp += " " + words[i];
-//                current = "campaign";
-//                wordStarted = true;
-//            } else if (Objects.equals(tags[i], "I-C")) {
-//                temp += " " + words[i];
-//            } else if (Objects.equals(tags[i], "O") && wordStarted) {
-//                insertEntity(current, temp, Obj);
-//                temp = "";
-//                wordStarted = false;
-//            }
-//        }
-//        insertEntity(current, temp, Obj);
-//        // it will concatenate whole entities as needed
-//
-//        //the entities will be added to their respective arrays inside that object
-//        //this object will be added to the ArrayList declared above called finalobjects
-//        System.out.println(Obj.toString());
-//        finalObjects.add(Obj);
-//        return h;
+        return h;
     }
 
     public void insertRelation(String a, String b, String relation,ElasticModel Obj){
@@ -478,7 +312,7 @@ public class KafkaService {
         // clean the bundles
         ArrayList<StixBundle> initials = new ArrayList<>();
         for (int i=0; i< unMerged.size(); i++){
-            initials.add(new StixBundle(unMerged.get(i).bundleJson));
+            initials.add(new StixBundle(unMerged.get(i).bundleJson, unMerged.get(i).hash));
             //initials.get(i).print();
         }
         // now get all the existing merged bundles, if any
@@ -499,7 +333,7 @@ public class KafkaService {
 
             for (SearchHit hit : response2.getHits().getHits()) {
                 JSONObject j = new JSONObject(hit.getSourceAsString());
-                finals.add(new StixBundle(j.getString("bundle")));
+                finals.add(new StixBundle(j.getString("bundle"), 0));
             }
         }
         // now initials has just the new bundles and finals has old + new bundles
@@ -516,9 +350,9 @@ public class KafkaService {
                             if (ent1.name.equals(ent2.name)) { //use levenshtein distance here
                                 // add all entities and relationships of initialBundle to finalBundle
                                 for (SDO ent : initial.entities)
-                                    aFinal.addEntity(ent);
+                                    aFinal.addEntity(ent, initial.hash);
                                 for (SRO rel : initial.relationships)
-                                    aFinal.addRelationship(rel);
+                                    aFinal.addRelationship(rel, initial.hash);
                             }
                         }
                     }

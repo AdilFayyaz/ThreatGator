@@ -1,4 +1,3 @@
-package com.model;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.json.JSONArray;
@@ -8,19 +7,17 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class StixBundle {
-    public Integer hash;
     public ArrayList<SDO> entities = new ArrayList<>();
     public ArrayList<SRO> relationships = new ArrayList<>();
-    public ArrayList<Integer> mergedReports= new ArrayList<>();
 
-    public StixBundle(String b, Integer hash) throws JSONException {
+    public StixBundle(String b) throws JSONException {
 
-        this.hash=hash;
+
         b=StringEscapeUtils.unescapeJava(b);
         if (b.charAt(0) == '"')
             b=b.substring(1, b.length()-1);
 
-       // System.out.println(b);
+        // System.out.println(b);
 
         JSONObject bundle = new JSONObject(b);
         if (bundle.has("objects")) {
@@ -39,7 +36,7 @@ public class StixBundle {
                     if (!exists(objects.getJSONObject(i).getString("source_ref"), objects.getJSONObject(i).getString("target_ref"))) {
                         relationships.add(new SRO(objects.getJSONObject(i).getString("relationship_type"), getName(objects.getJSONObject(i).getString("source_ref")),
                                 getName(objects.getJSONObject(i).getString("target_ref"))
-                                ));
+                        ));
                     }
                 }
             }
@@ -54,54 +51,11 @@ public class StixBundle {
         }
     }
 
-    public void addEntity(SDO s, Integer hash){
-        if (!exists(s.name)) { //if not already added
-            entities.add(s);
-        } else { //exists but has a different id
-            entities.get(get(s.name)).ids.addAll(s.ids); // add id to that object
-        }
-        if (!mergedReports.contains(hash)){
-            mergedReports.add(hash);
-        }
-    }
-    public void deleteEntity(String name){
-        for (int i=0; i< entities.size(); i++){
-            if (entities.get(i).name.equals(name)){
-                entities.remove(i);
-            }
-        }
-
-        for (int i=0; i< relationships.size(); i++){
-            if (relationships.get(i).target.equals(name) || relationships.get(i).source.equals(name)){
-                relationships.remove(i);
-            }
-        }
-    }
-
-    public void editEntity(String name, String newType){
-        for (int i=0; i< entities.size(); i++){
-            if (entities.get(i).name.equals(name)){
-                entities.get(i).type=newType;
-            }
-        }
-    }
-
     public void addRelationship(SRO s){
         if (!existsN(s.source, s.target)) {
             relationships.add(s);
-
         }
     }
-
-    public void addRelationship(SRO s, Integer hash){
-        if (!existsN(s.source, s.target)) {
-            relationships.add(s);
-            if (!mergedReports.contains(hash))
-                mergedReports.add(hash);
-        }
-    }
-
-
 
     boolean exists(String name){
         for(int i=0; i< entities.size(); i++){
@@ -153,6 +107,6 @@ public class StixBundle {
 
         for (int i=0; i<relationships.size(); i++)
             System.out.println(relationships.get(i).source + " " + relationships.get(i).target+" "
-            + relationships.get(i).name);
+                    + relationships.get(i).name);
     }
 }
