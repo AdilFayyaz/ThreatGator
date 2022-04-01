@@ -380,6 +380,7 @@ public class KafkaService {
                 System.out.println(s);
                 Stix toUpload = new Stix();
                 toUpload.bundle=s;
+                toUpload.ids.addAll(finalBundle.mergedReports);
                 String jsonstring = Nmapper.writeValueAsString(toUpload);
                 IndexRequest rQ = new IndexRequest("stix")
                         .id(String.valueOf(i))

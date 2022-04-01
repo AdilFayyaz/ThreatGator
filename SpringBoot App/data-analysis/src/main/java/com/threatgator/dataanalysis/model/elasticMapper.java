@@ -587,155 +587,192 @@ public class elasticMapper {
             stixBundle = jsonComplete.getString("bundleJson");
             // convert to StixBundle class
             StixBundle object = new StixBundle(stixBundle, Integer.parseInt(hash));
-
+            System.out.println(object.relationships.size());
 
             // compare what has changed
             // apply changes
-            JSONArray malwares= document.getJSONArray("malwares");
-            for (int i=0; i< malwares.length(); i++){
-                JSONObject malware = malwares.getJSONObject(i);
-                if (object.exists(malware.getString("name"))){
-                    Integer index= object.getIndex(malware.getString("name"));
-                    if (!object.entities.get(index).type.equals("malware")){
-                        object.editEntity(malware.getString("name"), "malware");
+            JSONArray malwares = null;
+            if(document.has("malwares")) {
+                malwares = document.getJSONArray("malwares");
+                for (int i = 0; i < malwares.length(); i++) {
+                    JSONObject malware = malwares.getJSONObject(i);
+                    if (object.exists(malware.getString("name"))) {
+                        Integer index = object.getIndex(malware.getString("name"));
+                        if (!object.entities.get(index).type.equals("malware")) {
+                            object.editEntity(malware.getString("name"), "malware");
+                        }
+                    } else {
+                        object.addEntity(new SDO("", malware.getString("name"), "malware"));
                     }
-                }
-                else{
-                    object.addEntity(new SDO("", malware.getString("name"), "malware"));
                 }
             }
 
-            JSONArray threatActors= document.getJSONArray("threatActors");
-            for (int i=0; i< threatActors.length(); i++){
-                JSONObject m = threatActors.getJSONObject(i);
-                if (object.exists(m.getString("name"))){
-                    Integer index= object.getIndex(m.getString("name"));
-                    if (!object.entities.get(index).type.equals("threat-actor")){
-                        object.editEntity(m.getString("name"), "threat-actor");
+            JSONArray threatActors = null;
+            if(document.has("threatActors")) {
+                threatActors = document.getJSONArray("threatActors");
+                for (int i = 0; i < threatActors.length(); i++) {
+                    JSONObject m = threatActors.getJSONObject(i);
+                    if (object.exists(m.getString("name"))) {
+                        Integer index = object.getIndex(m.getString("name"));
+                        if (!object.entities.get(index).type.equals("threat-actor")) {
+                            object.editEntity(m.getString("name"), "threat-actor");
+                        }
+                    } else {
+                        object.addEntity(new SDO("", m.getString("name"), "threat-actor"));
                     }
-                }
-                else{
-                    object.addEntity(new SDO("", m.getString("name"), "threat-actor"));
-                }
-            }
-            JSONArray identities= document.getJSONArray("identities");
-            for (int i=0; i< identities.length(); i++){
-                JSONObject m = identities.getJSONObject(i);
-                if (object.exists(m.getString("name"))){
-                    Integer index= object.getIndex(m.getString("name"));
-                    if (!object.entities.get(index).type.equals("identity")){
-                        object.editEntity(m.getString("name"), "identity");
-                    }
-                }
-                else{
-                    object.addEntity(new SDO("", m.getString("name"), "identity"));
-                }
-            }
-            JSONArray vulnerabilities= document.getJSONArray("vulnerabilities");
-            for (int i=0; i< vulnerabilities.length(); i++){
-                JSONObject m = vulnerabilities.getJSONObject(i);
-                if (object.exists(m.getString("name"))){
-                    Integer index= object.getIndex(m.getString("name"));
-                    if (!object.entities.get(index).type.equals("vulnerability")){
-                        object.editEntity(m.getString("name"), "vulnerability");
-                    }
-                }
-                else{
-                    object.addEntity(new SDO("", m.getString("name"), "vulnerability"));
-                }
-            }
-            JSONArray campaigns= document.getJSONArray("campaigns");
-            for (int i=0; i< campaigns.length(); i++){
-                JSONObject m = campaigns.getJSONObject(i);
-                if (object.exists(m.getString("name"))){
-                    Integer index= object.getIndex(m.getString("name"));
-                    if (!object.entities.get(index).type.equals("campaign")){
-                        object.editEntity(m.getString("name"), "campaign");
-                    }
-                }
-                else{
-                    object.addEntity(new SDO("", m.getString("name"), "campaign"));
-                }
-            }
-            JSONArray infrastructures= document.getJSONArray("infrastructures");
-            for (int i=0; i< infrastructures.length(); i++){
-                JSONObject m= infrastructures.getJSONObject(i);
-                if (object.exists(m.getString("name"))){
-                    Integer index= object.getIndex(m.getString("name"));
-                    if (!object.entities.get(index).type.equals("infrastructure")){
-                        object.editEntity(m.getString("name"), "infrastructure");
-                    }
-                }
-                else{
-                    object.addEntity(new SDO("", m.getString("name"), "infrastructure"));
-                }
-            }
-            JSONArray locations= document.getJSONArray("locations");
-            for (int i=0; i< locations.length(); i++){
-                JSONObject l = locations.getJSONObject(i);
-                if (object.exists(l.getString("name"))){
-                    Integer index= object.getIndex(l.getString("name"));
-                    if (!object.entities.get(index).type.equals("location")){
-                        object.editEntity(l.getString("name"), "location");
-                    }
-                }
-                else{
-                    object.addEntity(new SDO("", l.getString("name"), "location"));
-                }
-            }
-            JSONArray tools= document.getJSONArray("tools");
-            for (int i=0; i< tools.length(); i++){
-                JSONObject t = tools.getJSONObject(i);
-                if (object.exists(t.getString("name"))){
-                    Integer index= object.getIndex(t.getString("name"));
-                    if (!object.entities.get(index).type.equals("tool")){
-                        object.editEntity(t.getString("name"), "tool");
-                    }
-                }
-                else{
-                    object.addEntity(new SDO("", t.getString("name"), "tool"));
-                }
-            }
-            JSONArray indicators= document.getJSONArray("indicators");
-            for (int i=0; i< indicators.length(); i++){
-                JSONObject ind = indicators.getJSONObject(i);
-                if (object.exists(ind.getString("name"))){
-                    Integer index= object.getIndex(ind.getString("name"));
-                    if (!object.entities.get(index).type.equals("indicator")){
-                        object.editEntity(ind.getString("name"), "indicator");
-                    }
-                }
-                else{
-                    object.addEntity(new SDO("", ind.getString("name"), "indicator"));
                 }
             }
 
+            JSONArray identities = null;
+            if(document.has("identities")) {
+                identities = document.getJSONArray("identities");
+                for (int i = 0; i < identities.length(); i++) {
+                    JSONObject m = identities.getJSONObject(i);
+                    if (object.exists(m.getString("name"))) {
+                        Integer index = object.getIndex(m.getString("name"));
+                        if (!object.entities.get(index).type.equals("identity")) {
+                            object.editEntity(m.getString("name"), "identity");
+                        }
+                    } else {
+                        object.addEntity(new SDO("", m.getString("name"), "identity"));
+                    }
+                }
+            }
+
+            JSONArray vulnerabilities = null;
+            if(document.has("vulnerabilities")) {
+                vulnerabilities = document.getJSONArray("vulnerabilities");
+                for (int i = 0; i < vulnerabilities.length(); i++) {
+                    JSONObject m = vulnerabilities.getJSONObject(i);
+                    if (object.exists(m.getString("name"))) {
+                        Integer index = object.getIndex(m.getString("name"));
+                        if (!object.entities.get(index).type.equals("vulnerability")) {
+                            object.editEntity(m.getString("name"), "vulnerability");
+                        }
+                    } else {
+                        object.addEntity(new SDO("", m.getString("name"), "vulnerability"));
+                    }
+                }
+            }
+
+            JSONArray campaigns = null;
+            if(document.has("campaigns")) {
+                campaigns = document.getJSONArray("campaigns");
+                for (int i = 0; i < campaigns.length(); i++) {
+                    JSONObject m = campaigns.getJSONObject(i);
+                    if (object.exists(m.getString("name"))) {
+                        Integer index = object.getIndex(m.getString("name"));
+                        if (!object.entities.get(index).type.equals("campaign")) {
+                            object.editEntity(m.getString("name"), "campaign");
+                        }
+                    } else {
+                        object.addEntity(new SDO("", m.getString("name"), "campaign"));
+                    }
+                }
+            }
+
+            JSONArray infrastructures = null;
+            if(document.has("infrastructures")) {
+                infrastructures = document.getJSONArray("infrastructures");
+                for (int i = 0; i < infrastructures.length(); i++) {
+                    JSONObject m = infrastructures.getJSONObject(i);
+                    if (object.exists(m.getString("name"))) {
+                        Integer index = object.getIndex(m.getString("name"));
+                        if (!object.entities.get(index).type.equals("infrastructure")) {
+                            object.editEntity(m.getString("name"), "infrastructure");
+                        }
+                    } else {
+                        object.addEntity(new SDO("", m.getString("name"), "infrastructure"));
+                    }
+                }
+            }
+
+            JSONArray locations = null;
+            if(document.has("locations")) {
+                locations = document.getJSONArray("locations");
+                for (int i = 0; i < locations.length(); i++) {
+                    JSONObject l = locations.getJSONObject(i);
+                    if (object.exists(l.getString("name"))) {
+                        Integer index = object.getIndex(l.getString("name"));
+                        if (!object.entities.get(index).type.equals("location")) {
+                            object.editEntity(l.getString("name"), "location");
+                        }
+                    } else {
+                        object.addEntity(new SDO("", l.getString("name"), "location"));
+                    }
+                }
+            }
+
+            JSONArray tools = null;
+            if(document.has("tools")) {
+                tools = document.getJSONArray("tools");
+                for (int i = 0; i < tools.length(); i++) {
+                    JSONObject t = tools.getJSONObject(i);
+                    if (object.exists(t.getString("name"))) {
+                        Integer index = object.getIndex(t.getString("name"));
+                        if (!object.entities.get(index).type.equals("tool")) {
+                            object.editEntity(t.getString("name"), "tool");
+                        }
+                    } else {
+                        object.addEntity(new SDO("", t.getString("name"), "tool"));
+                    }
+                }
+            }
+
+            JSONArray indicators = null;
+            if(document.has("indicators")) {
+                indicators = document.getJSONArray("indicators");
+                for (int i = 0; i < indicators.length(); i++) {
+                    JSONObject ind = indicators.getJSONObject(i);
+                    if (object.exists(ind.getString("name"))) {
+                        Integer index = object.getIndex(ind.getString("name"));
+                        if (!object.entities.get(index).type.equals("indicator")) {
+                            object.editEntity(ind.getString("name"), "indicator");
+                        }
+                    } else {
+                        object.addEntity(new SDO("", ind.getString("name"), "indicator"));
+                    }
+                }
+            }
+
+            System.out.println(object.entities.toString());
+            System.out.println("$$$$$$$$$$$");
             //checking for deletion of entity
 
-            for (int i=0; i<object.entities.size(); i++){
-                boolean ex=false;
-                ex=exists(malwares, object.entities.get(i).name);
-                ex=exists(threatActors, object.entities.get(i).name);
-                ex=exists(infrastructures, object.entities.get(i).name);
-                ex=exists(campaigns, object.entities.get(i).name);
-                ex=exists(vulnerabilities, object.entities.get(i).name);
-                ex=exists(tools, object.entities.get(i).name);
-                ex=exists(locations, object.entities.get(i).name);
-                ex=exists(indicators, object.entities.get(i).name);
-                ex=exists(identities, object.entities.get(i).name);
-
-                if (!ex){
-                    object.deleteEntity(object.entities.get(i).name);
-                }
-
-
-            }
-
+//            for (int i=0; i<object.entities.size(); i++){
+//                boolean ex=false;
+//                if (malwares!=null)
+//                    ex=exists(malwares, object.entities.get(i).name);
+//                if (threatActors!=null)
+//                    ex=exists(threatActors, object.entities.get(i).name);
+//                if (infrastructures!=null)
+//                    ex=exists(infrastructures, object.entities.get(i).name);
+//                if (campaigns!=null)
+//                    ex=exists(campaigns, object.entities.get(i).name);
+//                if (vulnerabilities!=null)
+//                    ex=exists(vulnerabilities, object.entities.get(i).name);
+//                if (tools!=null)
+//                    ex=exists(tools, object.entities.get(i).name);
+//                if (locations!=null)
+//                    ex=exists(locations, object.entities.get(i).name);
+//                if (indicators!=null)
+//                    ex=exists(indicators, object.entities.get(i).name);
+//                if (identities!=null)
+//                    ex=exists(identities, object.entities.get(i).name);
+//
+//                if (!ex){
+//                    object.deleteEntity(object.entities.get(i).name);
+//                }
+//
+//
+//            }
+            System.out.println(object.entities.size());
             //get stix from python
-            String makeStix = "http://127.0.0.1:5001/makeStix";
+            String makeStix = "http://127.0.0.1:5000/makeStix";
             RestTemplate restTemplate = new RestTemplate();
             ObjectMapper Nmapper = new ObjectMapper();
             String r = Nmapper.writeValueAsString(object);
+            System.out.println(r);
             try {
                 String s = restTemplate.postForObject(makeStix, new HttpEntity<>(r.toString()), String.class);
                 System.out.println("*******************");
@@ -745,7 +782,7 @@ public class elasticMapper {
                 System.out.println("Error Occurred in Making Stix");
             }
 
-            String finaljsonstring = Nmapper.writeValueAsString(document);
+            String finaljsonstring = document.toString();
             UpdateRequest request = new UpdateRequest("tagged_bundle_data", hash);
             request.doc(finaljsonstring,XContentType.JSON);
             UpdateResponse updateResponse = client.update(
