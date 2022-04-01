@@ -73,6 +73,9 @@ def makeStixBundle(prediction):
   a= None 
   global b
   b= None 
+  for e in entities_list:
+    a_list.append(e)
+
   for val in relations:
     for ent in entities_list:
         # Find the entity match
@@ -86,10 +89,7 @@ def makeStixBundle(prediction):
           relationship = Relationship(relationship_type=val["predicted_relations"],
           source_ref=a,
           target_ref=b)
-          if a not in a_list:
-            a_list.append(a)
-          if b not in a_list:
-            a_list.append(b)
+          
           a_list.append(relationship)
           a= None
           b=None
@@ -224,6 +224,12 @@ def makeStixBundle2(finalBundle):
   a= None 
   global b
   b= None 
+
+  #  ADDRESS DUPLICATION!!
+  for e in entities_list:
+    a_list.append(e)
+
+
   for val in relations:
     for ent in entities_list:
         # Find the entity match
@@ -231,16 +237,12 @@ def makeStixBundle2(finalBundle):
           a = ent
         if (val["target"] == ent["name"]):
           b = ent
-          
+
         # Found both entities
         if a and b:
           relationship = Relationship(relationship_type=val["name"],
           source_ref=a,
           target_ref=b)
-          if a not in a_list:
-            a_list.append(a)
-          if b not in a_list:
-            a_list.append(b)
           a_list.append(relationship)
           a= None
           b=None
