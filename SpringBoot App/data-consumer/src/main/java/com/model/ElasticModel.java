@@ -22,6 +22,7 @@ public class ElasticModel {
     public ArrayList<Entity> infrastructures=new ArrayList<>();
     public ArrayList<Entity> indicators=new ArrayList<>();
     public ArrayList<Entity> campaigns=new ArrayList<>();
+    public ArrayList<Entity> attackPatterns = new ArrayList<>();
     public HashMap<List<Entity>, String> relation = new HashMap<>();
     public String bundleJson = new String();
 

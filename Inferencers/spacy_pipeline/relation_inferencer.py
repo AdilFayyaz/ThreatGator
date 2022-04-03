@@ -41,7 +41,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+def exists(entities_list, entity_name):
+  for e in entities_list:
+    if (e["name"]==entity_name):
+      print("EXISTS="+e["name"])
+      return True
+  return False
+
+
 def makeStixBundle(prediction):
+
   entities = prediction["entity tags"]
   relations = prediction["relationships"]
   
@@ -49,24 +58,27 @@ def makeStixBundle(prediction):
 
 
   for e in entities[0]:
-    if(e[2] == "TA"):
-      entities_list.append(ThreatActor(name=e[1]))
-    elif(e[2] == "M"):
-      entities_list.append(Malware(name=e[1], is_family = False))
-    elif(e[2] == "IND"):
-      entities_list.append(Indicator(name=e[1],pattern="[user-account:value = 'none']", pattern_type="stix"))
-    elif(e[2] == "ID"):
-      entities_list.append(Identity(name=e[1]))
-    elif(e[2] == "T"):
-      entities_list.append(Tool(name=e[1]))
-    elif(e[2] == "V"):
-      entities_list.append(Vulnerability(name=e[1]))
-    elif(e[2] == "L"):
-      entities_list.append(Location(name=e[1], longitude=0.0, latitude=0.0,region="", country=""))
-    elif(e[2]=="INF"):
-      entities_list.append(Infrastructure(name=e[1]))
-    elif(e[2]=="C"):
-      entities_list.append(Campaign(name=e[1]))
+    if exists(entities_list, e[1])==False:
+      if(e[2] == "TA"):
+        entities_list.append(ThreatActor(name=e[1]))
+      elif(e[2] == "M"):
+        entities_list.append(Malware(name=e[1], is_family = False))
+      elif(e[2] == "IND"):
+        entities_list.append(Indicator(name=e[1],pattern="[user-account:value = 'none']", pattern_type="stix"))
+      elif(e[2] == "ID"):
+        entities_list.append(Identity(name=e[1]))
+      elif(e[2] == "T"):
+        entities_list.append(Tool(name=e[1]))
+      elif(e[2] == "V"):
+        entities_list.append(Vulnerability(name=e[1]))
+      elif(e[2] == "L"):
+        entities_list.append(Location(name=e[1], longitude=0.0, latitude=0.0,region="", country=""))
+      elif(e[2]=="INF"):
+        entities_list.append(Infrastructure(name=e[1]))
+      elif(e[2]=="C"):
+        entities_list.append(Campaign(name=e[1]))
+      elif(e[2]=="AP"):
+        entities_list.append(AttackPattern(name=e[1]))
 
   a_list = []
   global a
@@ -75,6 +87,8 @@ def makeStixBundle(prediction):
   b= None 
   for e in entities_list:
     a_list.append(e)
+
+  print(a_list)
 
   for val in relations:
     for ent in entities_list:
@@ -86,6 +100,7 @@ def makeStixBundle(prediction):
           
         # Found both entities
         if a and b:
+          print(val["predicted_relations"]+" "+ a["name"]+" "+ b["name"])
           relationship = Relationship(relationship_type=val["predicted_relations"],
           source_ref=a,
           target_ref=b)
@@ -95,12 +110,9 @@ def makeStixBundle(prediction):
           b=None
           
   bundle = Bundle(a_list)
-  # Add to Elastic Search
-  #es = Elasticsearch("http://localhost:9200")
-  # Send the data into es
-  #es.index(index='bundle', ignore=400, doc_type='doc', body=json.loads(bundle.serialize(pretty=True)))
 
   return bundle.serialize(pretty=True)
+
   
 
 def convertLocation(word):
@@ -224,6 +236,8 @@ def makeStixBundle2(finalBundle):
       entities_list.append(Infrastructure(name=e["name"]))
     elif(e["type"]=="campaign"):
       entities_list.append(Campaign(name=e["name"]))
+    elif(e["type"]=="attack-pattern"):
+      entities_list.append(AttackPattern(name=e[1]))
 
   a_list = []
   global a

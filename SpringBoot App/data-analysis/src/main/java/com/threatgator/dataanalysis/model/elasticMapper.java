@@ -561,7 +561,7 @@ public class elasticMapper {
             return "false";
         }
     }
-    public boolean exists(JSONArray array, String name) throws JSONException {
+    public boolean foundEntity(JSONArray array, String name) throws JSONException {
         for (int i=0; i< array.length(); i++){
             JSONObject temp = array.getJSONObject(i);
             if (temp.getString("name").equals(name)){
@@ -734,38 +734,43 @@ public class elasticMapper {
                     }
                 }
             }
+            JSONArray attackPatterns= null;
+            if(document.has("attackPatterns")) {
+                attackPatterns = document.getJSONArray("attackPatterns");
+                for (int i = 0; i < attackPatterns.length(); i++) {
+                    JSONObject att = attackPatterns.getJSONObject(i);
+                    if (object.exists(att.getString("name"))) {
+                        Integer index = object.getIndex(att.getString("name"));
+                        if (!object.entities.get(index).type.equals("attack-pattern")) {
+                            object.editEntity(att.getString("name"), "attack-pattern");
+                        }
+                    } else {
+                        object.addEntity(new SDO("", att.getString("name"), "attack-pattern"));
+                    }
+                }
+            }
 
-            System.out.println(object.entities.toString());
-            System.out.println("$$$$$$$$$$$");
-            //checking for deletion of entity
 
-//            for (int i=0; i<object.entities.size(); i++){
-//                boolean ex=false;
-//                if (malwares!=null)
-//                    ex=exists(malwares, object.entities.get(i).name);
-//                if (threatActors!=null)
-//                    ex=exists(threatActors, object.entities.get(i).name);
-//                if (infrastructures!=null)
-//                    ex=exists(infrastructures, object.entities.get(i).name);
-//                if (campaigns!=null)
-//                    ex=exists(campaigns, object.entities.get(i).name);
-//                if (vulnerabilities!=null)
-//                    ex=exists(vulnerabilities, object.entities.get(i).name);
-//                if (tools!=null)
-//                    ex=exists(tools, object.entities.get(i).name);
-//                if (locations!=null)
-//                    ex=exists(locations, object.entities.get(i).name);
-//                if (indicators!=null)
-//                    ex=exists(indicators, object.entities.get(i).name);
-//                if (identities!=null)
-//                    ex=exists(identities, object.entities.get(i).name);
-//
-//                if (!ex){
-//                    object.deleteEntity(object.entities.get(i).name);
-//                }
-//
-//
-//            }
+            //checking for deletion of entity, assuming that the jsonString being sent
+            // will contain all arrays, so no array will be null
+
+            for (int i=0; i<object.entities.size(); i++){
+                if (!foundEntity(malwares, object.entities.get(i).name) &&
+                        !foundEntity(threatActors, object.entities.get(i).name) &&
+                        !foundEntity(identities, object.entities.get(i).name) &&
+                        !foundEntity(indicators, object.entities.get(i).name) &&
+                        !foundEntity(vulnerabilities, object.entities.get(i).name) &&
+                        !foundEntity(campaigns, object.entities.get(i).name) &&
+                        !foundEntity(tools, object.entities.get(i).name) &&
+                        !foundEntity(locations, object.entities.get(i).name) &&
+                        !foundEntity(attackPatterns, object.entities.get(i).name) &&
+                        !foundEntity(infrastructures, object.entities.get(i).name)){
+                    System.out.println("Object "+object.entities.get(i).name+ " needs to be deleted");
+                    object.deleteEntity(object.entities.get(i).name);
+                }
+
+            }
+            System.out.println("************THE NUMBER OF ENTITIES**************");
             System.out.println(object.entities.size());
             //get stix from python
             String makeStix = "http://127.0.0.1:5000/makeStix";

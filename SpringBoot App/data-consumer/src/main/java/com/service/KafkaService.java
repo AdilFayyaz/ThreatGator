@@ -66,7 +66,7 @@ public class KafkaService {
 
     String inferencer="http://127.0.0.1:5000/getInference";
     String getBundle ="http://127.0.0.1:5000/getBundle";
-    String makeStix = "http://127.0.0.1:5001/makeStix";
+    String makeStix = "http://127.0.0.1:5000/makeStix";
     // Annotation required to listen
     // the message from Kafka server
     @KafkaListener(topics = "reddit-threads",
@@ -291,8 +291,14 @@ public class KafkaService {
 //        System.out.println(taggedData.toString());
 //    }
 
-
-
+    public boolean found(ArrayList<Entity> array, String x){
+        for (Entity entity : array) {
+            if (entity.name.equals(x)) {
+                return true;
+            }
+        }
+        return false;
+    }
     public LinkedHashMap<String, String> convertString(String s, String source, String text, String bundle) throws JSONException {
         LinkedHashMap<String, String> h = new LinkedHashMap<>();
         JSONObject jsonObject = new JSONObject(s);
@@ -353,6 +359,10 @@ public class KafkaService {
                 insertEntity("location", jsonArrayObjects.getJSONArray(i).getString(1), Obj);
                 locations.add(jsonArrayObjects.getJSONArray(i).getString(1));
             }
+            else if(Objects.equals(jsonArrayObjects.getJSONArray(i).getString(2), "AP")) {
+                insertEntity("attackPattern", jsonArrayObjects.getJSONArray(i).getString(1), Obj);
+                locations.add(jsonArrayObjects.getJSONArray(i).getString(1));
+            }
         }
 
         Obj.bundleJson = bundle;
@@ -368,24 +378,26 @@ public class KafkaService {
     }
 
     public void insertEntity(String current, String temp, ElasticModel Obj){
-        if (Objects.equals(current, "malware"))
+        if (Objects.equals(current, "malware") && !found(Obj.malwares, temp))
             Obj.malwares.add(new Entity(temp));
-        else if (Objects.equals(current, "indicator"))
-            Obj.indicators.add(new Entity(temp));
-        else if (Objects.equals(current, "infrastructure"))
+        else if (Objects.equals(current, "indicator") && !found(Obj.indicators, temp))
+            Obj.indicators.add(new Entity(temp) );
+        else if (Objects.equals(current, "infrastructure") && !found(Obj.infrastructures, temp))
             Obj.infrastructures.add(new Entity(temp));
-        else if (Objects.equals(current, "identity"))
+        else if (Objects.equals(current, "identity") && !found(Obj.identities, temp))
             Obj.identities.add(new Entity(temp));
-        else if (Objects.equals(current, "location"))
+        else if (Objects.equals(current, "location") && !found(Obj.locations, temp))
             Obj.locations.add(new Entity(temp));
-        else if (Objects.equals(current, "threatactor"))
+        else if (Objects.equals(current, "threatactor") && !found(Obj.threatActors, temp))
             Obj.threatActors.add(new Entity(temp));
-        else if (Objects.equals(current, "tool"))
+        else if (Objects.equals(current, "tool") && !found(Obj.tools, temp))
             Obj.tools.add(new Entity(temp));
-        else if (Objects.equals(current, "vulnerability"))
+        else if (Objects.equals(current, "vulnerability") && !found(Obj.vulnerabilities, temp))
             Obj.vulnerabilities.add(new Entity(temp));
-        else if (Objects.equals(current, "campaign"))
+        else if (Objects.equals(current, "campaign") && !found(Obj.campaigns, temp))
             Obj.campaigns.add(new Entity(temp));
+        else if (Objects.equals(current, "attackPattern") && !found(Obj.attackPatterns, temp))
+            Obj.attackPatterns.add(new Entity(temp));
     }
 
     public Boolean checkIfEmpty(ElasticModel obj){
