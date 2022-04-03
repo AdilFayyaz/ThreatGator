@@ -359,6 +359,7 @@ public class KafkaService {
                 insertEntity("location", jsonArrayObjects.getJSONArray(i).getString(1), Obj);
                 locations.add(jsonArrayObjects.getJSONArray(i).getString(1));
             }
+            
             else if(Objects.equals(jsonArrayObjects.getJSONArray(i).getString(2), "AP")) {
                 insertEntity("attackPattern", jsonArrayObjects.getJSONArray(i).getString(1), Obj);
                 locations.add(jsonArrayObjects.getJSONArray(i).getString(1));
