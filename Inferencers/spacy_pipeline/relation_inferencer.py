@@ -17,6 +17,13 @@ import re
 import nltk
 import pycountry
 
+def exists(entities_list, entity_name):
+  for e in entities_list:
+    if (e["name"]==entity_name):
+      print("EXISTS="+e["name"])
+      return True
+  return False
+
 countries = [country.name for country in pycountry.countries]
 countries = [x.lower() for x in countries]
 countries.append('russia') # Russia is properly known as russian frederation.
@@ -41,12 +48,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-def exists(entities_list, entity_name):
-  for e in entities_list:
-    if (e["name"]==entity_name):
-      print("EXISTS="+e["name"])
-      return True
-  return False
+
 
 
 def makeStixBundle(prediction):
@@ -58,7 +60,7 @@ def makeStixBundle(prediction):
 
 
   for e in entities[0]:
-    if exists(entities_list, e[1])==False:
+    if (exists(entities_list, e[1])==False):
       if(e[2] == "TA"):
         entities_list.append(ThreatActor(name=e[1]))
       elif(e[2] == "M"):
@@ -75,10 +77,11 @@ def makeStixBundle(prediction):
         entities_list.append(Location(name=e[1], longitude=0.0, latitude=0.0,region="", country=""))
       elif(e[2]=="INF"):
         entities_list.append(Infrastructure(name=e[1]))
+	 elif(e[2]=="AP"):
+	    entities_list.append(AttackPattern(name=e[1]))
       elif(e[2]=="C"):
         entities_list.append(Campaign(name=e[1]))
-      elif(e[2]=="AP"):
-        entities_list.append(AttackPattern(name=e[1]))
+     
 
   a_list = []
   global a
