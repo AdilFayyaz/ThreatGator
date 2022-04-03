@@ -21,6 +21,7 @@ from reddit_crawler import *
 from discord_crawler import *
 from twitter_crawler import *
 from alienVault import *
+from securelist_crawler import *
 from pandas.io.json import json_normalize
 from fastapi import FastAPI, Query, Request, Response
 from typing import List
@@ -65,8 +66,8 @@ async def get_tweets(req: Request):
     del tweets[requestData["handle"]]
     # tweets['source'] = "twitter"
 
-    json_tweets = json.dumps(tweets) # convert to json
-    producer.send('tweets', value=json_tweets) # push onto kafka to 'tweets'
+    json_tweets = json.dumps(tweets)
+    producer.send('tweets', value=json_tweets)
     return tweets
 
 
@@ -79,7 +80,7 @@ async def get_reddit_mp_mr(req: Request):
         _, data = rCrawler.fetch_most_popular_data(requestData["subreddit"], rCrawler.headers, {'limit': 50}, 1)
     elif requestData["type"] == "mr":
         _, data = rCrawler.fetch_most_recent_data(requestData["subreddit"], rCrawler.headers, {'limit': 50}, 1)
-    d2 = data.to_json(orient="records"); # convert to json
+    d2 = data.to_json(orient="records");
     producer.send('reddit-threads', value=d2)  # sending the fetched threads to the topic called reddit-threads
     returnDic = {}
     returnDic["title"] = data["title"]
@@ -97,8 +98,8 @@ async def get_reddit_user(req: Request):
 
     if requestData["type"] == 1:
         _, data = rCrawler.fetch_comments_by_user(requestData["username"], rCrawler.headers, {'limit': 50}, 1)
-    d2 = data.to_json(orient="records"); # convert to json
-    producer.send('reddit-comments', value=d2)  # sending the fetched threads to the topic called reddit-comments
+    d2 = data.to_json(orient="records");
+    producer.send('reddit-comments', value=d2)
     returnDic = {}
     returnDic['body'] = data['body']
     # data["source"] = "reddit_user"
@@ -115,7 +116,7 @@ async def get_reddit_user_submit(req: Request):
     #     import webbrowser
     #     webbrowser.open('https://stackoverflow.com/questions/4302027/how-to-open-a-url-in-python')
     _, data = rCrawler.fetch_submitted_by_user(requestData["username"], rCrawler.headers, {'limit': 50}, 1)
-    d2 = data.to_json(orient="records"); # convert to json
+    d2 = data.to_json(orient="records");
     producer.send('reddit-threads', value=d2)  # sending the fetched threads to the topic called reddit-threads
     returnDic = {}
     returnDic["title"] = data["title"]
@@ -131,7 +132,7 @@ async def recent_reddit_data(req: Request):
     _, data = rCrawler.fetch_most_recent_data(requestData["username"], rCrawler.headers, {'limit': 1000}, 1)
     #data["selftext"] = data["selftext"].encode().decode('utf-8', 'replace')
     #data["title"] = data["title"].encode().decode('utf-8', 'replace')
-    d2 = data.to_json(orient="records"); # convert to json
+    d2 = data.to_json(orient="records");
     producer.send('reddit-threads', value=d2)  # sending the fetched threads to the topic called reddit-threads
     returnDic = {}
     returnDic["title"] = data["title"]
@@ -168,3 +169,64 @@ async def get_alien_vault(req: Request):
         threats = []
 
     return returnDict
+
+@app.get('/source/securelist/apt')
+async def get_apt_data():
+    # APT Reports
+    APTReports = SecureListScrapper("https://securelist.com/category/apt-reports/")
+    APTbody = APTReports.getAllLinks("apt.txt")
+    APTReports.writeLinksToFiles("apt.txt", APTbody)
+    reports = APTReports.getReports(APTbody)
+
+    returnDic = {}
+    returnDic["title"] = "APT-Reports"
+    returnDic["data"] = reports
+
+    json_apt = json.dumps(returnDic)
+    producer.send('securelist', value=json_apt)
+    return returnDic
+
+@app.get('/source/securelist/malwares')
+async def get_malwares_data():
+    # Malware Reports
+    malwareReports = SecureListScrapper("https://securelist.com/category/malware-reports/")
+    malwareBody = malwareReports.getAllLinks("malware.txt")
+    malwareReports.writeLinksToFiles("malware.txt", malwareBody)
+    reports = malwareReports.getReports(malwareBody)
+    returnDic = {}
+    returnDic["title"] = "Malware-Reports"
+    returnDic["data"] = reports
+
+    json_mal = json.dumps(returnDic)
+    producer.send('securelist', value=json_mal)
+    return returnDic
+
+@app.get('/source/securelist/spams')
+async def get_spams_data():
+    # Spam Reports
+    spamReports = SecureListScrapper("https://securelist.com/category/spam-and-phishing-reports/")
+    spamBody = spamReports.getAllLinks("spam.txt")
+    spamReports.writeLinksToFiles("spam.txt", spamBody)
+    reports = spamReports.getReports(spamBody)
+    returnDic = {}
+    returnDic["title"] = "Spam-Reports"
+    returnDic["data"] = reports
+
+    json_spam = json.dumps(returnDic)
+    producer.send('securelist', value=json_spam)
+    return returnDic
+
+@app.get('/source/securelist/incidents')
+async def get_incidents_data():
+    # Incident Reports
+    incidentReports = SecureListScrapper("https://securelist.com/category/incidents/")
+    incidentBody = incidentReports.getAllLinks("incident.txt")
+    incidentReports.writeLinksToFiles("incident.txt", incidentBody)
+    reports = incidentReports.getReports(incidentBody)
+    returnDic = {}
+    returnDic["title"] = "Spam-Reports"
+    returnDic["data"] = reports
+
+    json_inc = json.dumps(returnDic)
+    producer.send('securelist', value=json_inc)
+    return returnDic

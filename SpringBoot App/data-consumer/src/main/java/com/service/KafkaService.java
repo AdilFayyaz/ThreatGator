@@ -55,6 +55,10 @@ public class KafkaService {
     private ArrayList<RedditThread> threads= new ArrayList<>();
     private ArrayList<RedditComment> comments = new ArrayList<>();
     private ArrayList<Tweet> tweets = new ArrayList<>();
+    private ArrayList<APTSecureList> aptSecureLists = new ArrayList<>();
+    private ArrayList<MalwareSecureList> malSecureLists = new ArrayList<>();
+    private ArrayList<SpamSecureList> spamSecureLists = new ArrayList<>();
+    private ArrayList<IncidentSecureList> incSecureLists = new ArrayList<>();
     private ArrayList<LinkedHashMap<String, String>> taggedData= new ArrayList<>();
     private ArrayList<ElasticModel> finalObjects=new ArrayList<ElasticModel>();
     public RestTemplate restTemplate = new RestTemplate();
@@ -125,6 +129,7 @@ public class KafkaService {
             JSONObject r = new JSONObject();
             String addTweet = tweet.tweetList.get(i).getBody();
             r.put("sentence", addTweet);
+
             String[] words = addTweet.split("\\s+");
             if(words.length < 300) {
                 try {
@@ -138,6 +143,138 @@ public class KafkaService {
             }
         }
     }
+
+    @KafkaListener(topics= "securelist", groupId = "id",
+            containerFactory = "APTSecureListListener")
+    public void publish(APTSecureListKafka apt) throws JSONException{
+        for(int i=0; i<apt.APTList.size();i++){
+            aptSecureLists.add(apt.APTList.get(i));
+            JSONObject r = new JSONObject();
+            String addAPT = apt.APTList.get(i).getBody();
+            byte[] bytes = addAPT.getBytes(StandardCharsets.UTF_8);
+            String utf8String = new String(bytes);
+            String normalized;
+            normalized = utf8String.replace("\\","");
+            normalized = normalized.replaceAll("0x*", "");
+            normalized = normalized.replaceAll("[^a-zA-Z0-9_ !@#$%^&*()-<>:;.~=]+", "");
+            r.put("sentence", normalized);
+
+            System.out.println(r);
+            String[] words = addAPT.split("\\s+");
+//            System.out.println(addAPT);
+            if (words.length < 512){
+                try{
+                    String s = restTemplate.postForObject(inferencer, new HttpEntity<>(r.toString()), String.class);
+                    System.out.println(s);
+                    String bundle = restTemplate.postForObject(getBundle, new HttpEntity<>(s), String.class);
+                    taggedData.add(convertString(s, "APTSecureList", normalized, bundle));
+                }
+                catch (HttpStatusCodeException e) {
+                    System.out.println("Error Found");
+                }
+            }
+        }
+    }
+
+
+    @KafkaListener(topics= "securelist", groupId = "id",
+            containerFactory = "MalwareSecureListListener")
+    public void publish(MalwareSecureListKafka mal) throws JSONException{
+        for(int i=0; i<mal.MalwareList.size();i++){
+            malSecureLists.add(mal.MalwareList.get(i));
+            JSONObject r = new JSONObject();
+            String addMalware = mal.MalwareList.get(i).getBody();
+            byte[] bytes = addMalware.getBytes(StandardCharsets.UTF_8);
+            String utf8String = new String(bytes);
+            String normalized;
+            normalized = utf8String.replace("\\","");
+            normalized = normalized.replaceAll("0x*", "");
+            normalized = normalized.replaceAll("[^a-zA-Z0-9_ !@#$%^&*()-<>:;.~=]+", "");
+            r.put("sentence", normalized);
+
+            System.out.println(r);
+            String[] words = addMalware.split("\\s+");
+//            System.out.println(addAPT);
+            if (words.length < 512){
+                try{
+                    String s = restTemplate.postForObject(inferencer, new HttpEntity<>(r.toString()), String.class);
+                    System.out.println(s);
+                    String bundle = restTemplate.postForObject(getBundle, new HttpEntity<>(s), String.class);
+                    taggedData.add(convertString(s, "MalwareSecureList", normalized, bundle));
+                }
+                catch (HttpStatusCodeException e) {
+                    System.out.println("Error Found");
+                }
+            }
+        }
+    }
+
+    @KafkaListener(topics= "securelist", groupId = "id",
+            containerFactory = "SpamSecureListListener")
+    public void publish(SpamSecureListKafka spam) throws JSONException{
+        for(int i=0; i<spam.SpamList.size();i++){
+            spamSecureLists.add(spam.SpamList.get(i));
+            JSONObject r = new JSONObject();
+            String addSpam = spam.SpamList.get(i).getBody();
+            byte[] bytes = addSpam.getBytes(StandardCharsets.UTF_8);
+            String utf8String = new String(bytes);
+            String normalized;
+            normalized = utf8String.replace("\\","");
+            normalized = normalized.replaceAll("0x*", "");
+            normalized = normalized.replaceAll("[^a-zA-Z0-9_ !@#$%^&*()-<>:;.~=]+", "");
+            r.put("sentence", normalized);
+
+            System.out.println(r);
+            String[] words = addSpam.split("\\s+");
+//            System.out.println(addAPT);
+            if (words.length < 512){
+                try{
+                    String s = restTemplate.postForObject(inferencer, new HttpEntity<>(r.toString()), String.class);
+                    System.out.println(s);
+                    String bundle = restTemplate.postForObject(getBundle, new HttpEntity<>(s), String.class);
+                    taggedData.add(convertString(s, "SpamSecureList", normalized, bundle));
+                }
+                catch (HttpStatusCodeException e) {
+                    System.out.println("Error Found");
+                }
+            }
+        }
+    }
+
+    @KafkaListener(topics= "securelist", groupId = "id",
+            containerFactory = "IncidentSecureListListener")
+    public void publish(IncidentSecureListKafka inc) throws JSONException{
+        for(int i=0; i<inc.IncidentList.size();i++){
+            incSecureLists.add(inc.IncidentList.get(i));
+            JSONObject r = new JSONObject();
+            String addIncident = inc.IncidentList.get(i).getBody();
+            byte[] bytes = addIncident.getBytes(StandardCharsets.UTF_8);
+            String utf8String = new String(bytes);
+            String normalized;
+            normalized = utf8String.replace("\\","");
+            normalized = normalized.replaceAll("0x*", "");
+            normalized = normalized.replaceAll("[^a-zA-Z0-9_ !@#$%^&*()-<>:;.~=]+", "");
+            r.put("sentence", normalized);
+
+            System.out.println(r);
+            String[] words = addIncident.split("\\s+");
+//            System.out.println(addAPT);
+            if (words.length < 512){
+                try{
+                    String s = restTemplate.postForObject(inferencer, new HttpEntity<>(r.toString()), String.class);
+                    System.out.println(s);
+                    String bundle = restTemplate.postForObject(getBundle, new HttpEntity<>(s), String.class);
+                    taggedData.add(convertString(s, "IncidentSecureList", normalized, bundle));
+                }
+                catch (HttpStatusCodeException e) {
+                    System.out.println("Error Found");
+                }
+            }
+        }
+    }
+
+
+
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @RequestMapping("/getInference")
     public String getInferences(String sentence) throws JSONException {

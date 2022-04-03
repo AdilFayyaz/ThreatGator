@@ -96,9 +96,9 @@ def makeStixBundle(prediction):
           
   bundle = Bundle(a_list)
   # Add to Elastic Search
-  es = Elasticsearch("http://localhost:9200")
+  #es = Elasticsearch("http://localhost:9200")
   # Send the data into es
-  es.index(index='bundle', ignore=400, doc_type='doc', body=json.loads(bundle.serialize(pretty=True)))
+  #es.index(index='bundle', ignore=400, doc_type='doc', body=json.loads(bundle.serialize(pretty=True)))
 
   return bundle.serialize(pretty=True)
   
@@ -168,19 +168,25 @@ async def get_model_inference(req: Request):
     #return [["ok"]["ok"]]
     
     requestData = await req.json()
+    
     # sentence = requestData['sentence'].encode().decode('utf-8', 'replace')
     text=[]
-    sentence = requestData['sentence'].replace('\n','')
+    sentence = str(requestData['sentence']).replace('\n','')
     sentence = sentence.replace(',','')
-    
+    # sentence = sentence.encode('utf-8').strip()
     
     if(len(sentence.split()) > 510):
       return [[],[]]
     else:
       x= sentence.lower()
+      
+      x =  re.sub(r'[^a-zA-Z0-9_ !@#$%^&*()-<>:;.~=]+', '', str(x))
+      
       text.append(x)
 
+    
     prediction = relationExtracter.getInference(text)
+    
     # Fix location adjectives to nouns
     prediction = fixLocationAdjectives(prediction)
 
