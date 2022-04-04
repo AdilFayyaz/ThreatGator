@@ -11,5 +11,4 @@ import java.util.List;
 public interface AssetsService {
     public Assets saveAsset(Assets assets);
     public List<Assets> getAllAssets();
-    public List<Assets> getUserAssets(int admin_id);
 }

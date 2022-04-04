@@ -20,6 +20,6 @@ public class AdminServiceImpl implements AdminService{
     }
     @Override
     public List<Admin> getAllAdmin(){
-        return AdminRepository.findAll();
+        return (List<Admin>) AdminRepository.findAll();
     }
 }

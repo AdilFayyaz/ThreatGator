@@ -7,34 +7,16 @@ import javax.persistence.*;
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id; //pk
+    private Integer id; //pk
     // other fields
     private String name;
     private String email;
     private String password;
-//    @ManyToOne
-//    @JoinColumn(name = "AdminID", referencedColumnName="")
-//    private Admin admin;
 
+    @ManyToOne
+    @JoinColumn(name = "org_id")
+    private Organization organization;
 
-//    public Users(String name, String email, String password, Admin admin) {
-//        this.id = id;
-//        this.name = name;
-//        this.email = email;
-//        this.password = password;
-////        this.admin = admin;
-//    }
-
-    // Constructor
-    public Users(String name, String email, String password) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-    }
-
-    public Users() {
-
-    }
 
     // getters and setters
     public String getName() {
@@ -59,5 +41,21 @@ public class Users {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Organization getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
     }
 }

@@ -1,6 +1,11 @@
 package com.threatgator.usermanagement.controller;
 
+import com.threatgator.usermanagement.model.Assets;
+import com.threatgator.usermanagement.service.OrganizationService;
+import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.threatgator.usermanagement.model.Users;
 import com.threatgator.usermanagement.service.UsersService;
@@ -14,6 +19,8 @@ public class UsersController {
 
     @Autowired
     private UsersService usersService;
+    @Autowired
+    private OrganizationService organizationService;
 
     // add a user
     @PostMapping("/adduser")
@@ -21,6 +28,19 @@ public class UsersController {
         usersService.saveUser(user);
         return "New user added";
     }
+
+    @PostMapping("/addUser/{OrganizationId}")
+    public ResponseEntity<Users> createUser(@PathVariable(value = "OrganizationId") Integer OrganizationId,
+                                              @RequestBody Users users) {
+
+        System.out.println(users.getName());
+        Users users1 = organizationService.getOrganization(OrganizationId).map(organization -> {
+            users.setOrganization(organization);
+            return usersService.saveUser(users);
+        }).orElseThrow(() -> new ResourceNotFoundException("Not found Organization with id = " + OrganizationId));
+        return new ResponseEntity<>(users1, HttpStatus.CREATED);
+    }
+
     // get all users
     @GetMapping("/getAll")
     public List<Users> list(){

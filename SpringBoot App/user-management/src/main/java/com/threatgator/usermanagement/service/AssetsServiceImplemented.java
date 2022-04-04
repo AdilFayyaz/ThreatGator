@@ -16,10 +16,6 @@ public class AssetsServiceImplemented implements AssetsService{
     public Assets saveAsset(Assets assets){return assetsRepository.save(assets);}
 
     @Override
-    public List<Assets> getAllAssets() {return assetsRepository.findAll();}
+    public List<Assets> getAllAssets() {return (List<Assets>) assetsRepository.findAll();}
 
-    @Override
-    public List<Assets> getUserAssets(int admin) {
-        return assetsRepository.findByAdmin(admin);
-    }
 }

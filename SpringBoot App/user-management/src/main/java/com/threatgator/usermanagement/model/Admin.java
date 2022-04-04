@@ -9,25 +9,17 @@ import java.util.Set;
 public class Admin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id; // primary key
+    private Integer id; // primary key
     // other fields
     private String name;
     private String email;
     private String password;
 
-//    @OneToMany(mappedBy = "admin", cascade = CascadeType.ALL)
-//    Set<Users> user= new HashSet<Users>();
+    @ManyToOne
+    @JoinColumn(name = "org_id")
+    private Organization organization;
 
-    // Constructor
-    public Admin(String name, String email, String password) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-    }
 
-    public Admin() {
-
-    }
     // getters and setters
     public String getName() {
         return name;
@@ -51,5 +43,13 @@ public class Admin {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Organization getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
     }
 }
