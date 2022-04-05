@@ -1,0 +1,8 @@
+#a{
+
+  width:10rem;
+}
+#card{
+  background-color: transparent;
+  overflow-wrap: revert;
+}
