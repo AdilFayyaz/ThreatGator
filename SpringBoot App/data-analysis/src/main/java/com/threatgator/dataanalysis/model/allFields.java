@@ -137,6 +137,7 @@ public class allFields {
     // get field results in JSON format
     public JSONObject getJSONFields() throws JSONException {
         JSONObject j = new JSONObject();
+        j.put("hash", getHash());
         j.put("source", getSource());
         j.put("rawText",getRawText());
         j.put("malwares", getMalwares());
@@ -153,6 +154,7 @@ public class allFields {
     // Get field results in Map format
     public Map getLinkedMapFields(){
         Map j = new LinkedHashMap<String,String>();
+        j.put("hash", getHash());
         j.put("source", getSource());
         j.put("rawText",getRawText());
         j.put("malwares", getMalwares());

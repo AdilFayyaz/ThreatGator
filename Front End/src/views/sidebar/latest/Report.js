@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { useEffect, useState, createRef } from 'react'
 import classNames from 'classnames'
+import Visualizer from '/home/hurriya/Desktop/8semester/Fyp/20marchupdate/Front End/src/views/visualizer/visualizer.js'
 import {
   CRow,
   CCol,
@@ -16,6 +17,7 @@ import {
   CProgress,
   CTable,
   CButton,
+  CBadge,
 } from '@coreui/react'
 import { rgbToHex } from '@coreui/utils'
 import { DocsLink } from 'src/components'
@@ -83,6 +85,7 @@ const Reports = () => {
   const [reportsData, SetReportsData] = useState({})
   // fetching data from data analysis service for reports
   const location = useLocation()
+  const test = 'yahoo'
   return (
     <>
       <CCard className="mb-4">
@@ -93,59 +96,124 @@ const Reports = () => {
           </CButton>
         </CCardHeader>
         <CCardBody>
-          {<b>{location.state.rawText}</b>}
+          {/*{<b>{location.state.rawText}</b>}*/}
           {<br></br>}
           <CTable align="middle" className="mb-0 border" hover responsive>
             <CTableHead color="light">
               <CTableRow>
-                {/*<CTableHeaderCell className="text-center">*/}
-                {/*<CIcon icon={cilPeople} />*/}
-                {/*</CTableHeaderCell>*/}
-                <CTableHeaderCell className="text-center">Source</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Malware</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Vulnerabilities</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Location</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">ThreatActors</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Identities</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Tools</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Infrastructure</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Campaigns</CTableHeaderCell>
+                {location.state.source ? (
+                  <CTableHeaderCell className="text-center">Source</CTableHeaderCell>
+                ) : (
+                  console.log('-')
+                )}
+                {location.state.malware ? (
+                  <CTableHeaderCell className="text-center">Malware</CTableHeaderCell>
+                ) : (
+                  console.log('-')
+                )}
+                {location.state.vulnerabilities ? (
+                  <CTableHeaderCell className="text-center">Vulnerabilities</CTableHeaderCell>
+                ) : (
+                  console.log('-')
+                )}
+                {location.state.location ? (
+                  <CTableHeaderCell className="text-center">Location</CTableHeaderCell>
+                ) : (
+                  console.log('-')
+                )}
+                {location.state.threatActors ? (
+                  <CTableHeaderCell className="text-center">ThreatActors</CTableHeaderCell>
+                ) : (
+                  console.log('-')
+                )}
+                {location.state.identities ? (
+                  <CTableHeaderCell className="text-center">Identities</CTableHeaderCell>
+                ) : (
+                  console.log('-')
+                )}
+                {location.state.tools ? (
+                  <CTableHeaderCell className="text-center">Tools</CTableHeaderCell>
+                ) : (
+                  console.log('-')
+                )}
+                {location.state.infrastructure ? (
+                  <CTableHeaderCell className="text-center">Infrastructure</CTableHeaderCell>
+                ) : (
+                  console.log('-')
+                )}
+                {location.state.campaigns ? (
+                  <CTableHeaderCell className="text-center">Campaigns</CTableHeaderCell>
+                ) : (
+                  console.log('-')
+                )}
               </CTableRow>
             </CTableHead>
             <CTableBody>
               <CTableRow>
-                <CTableDataCell className="text-center">{location.state.source}</CTableDataCell>
-                <CTableDataCell className="text-center">{location.state.malware}</CTableDataCell>
-                <CTableDataCell className="text-center">
-                  {location.state.vulnerabilities}
-                </CTableDataCell>
-                <CTableDataCell className="text-center">{location.state.locations}</CTableDataCell>
-                <CTableDataCell className="text-center">
-                  {location.state.threatActors}
-                </CTableDataCell>
-                <CTableDataCell className="text-center">{location.state.identities}</CTableDataCell>
-                <CTableDataCell className="text-center">{location.state.tools}</CTableDataCell>
-                <CTableDataCell className="text-center">
-                  {location.state.infrastructure}
-                </CTableDataCell>
-                <CTableDataCell className="text-center">{location.state.campaigns}</CTableDataCell>
+                {location.state.source ? (
+                  <CTableDataCell className="text-center">{location.state.source}</CTableDataCell>
+                ) : (
+                  console.log('-')
+                )}
+                {location.state.malware ? (
+                  <CTableDataCell className="text-center">{location.state.malware}</CTableDataCell>
+                ) : (
+                  console.log('-')
+                )}
+                {location.state.vulnerabilities ? (
+                  <CTableDataCell className="text-center">
+                    {location.state.vulnerabilities}
+                  </CTableDataCell>
+                ) : (
+                  console.log('-')
+                )}
+                {location.state.location ? (
+                  <CTableDataCell className="text-center">
+                    {location.state.locations}
+                  </CTableDataCell>
+                ) : (
+                  console.log('-')
+                )}
+                {location.state.threatActors ? (
+                  <CTableDataCell className="text-center">
+                    {location.state.threatActors}
+                  </CTableDataCell>
+                ) : (
+                  console.log('-')
+                )}
+                {location.state.identities ? (
+                  <CTableDataCell className="text-center">
+                    {location.state.identities}
+                  </CTableDataCell>
+                ) : (
+                  console.log('-')
+                )}
+                {location.state.tools ? (
+                  <CTableDataCell className="text-center">{location.state.tools}</CTableDataCell>
+                ) : (
+                  console.log('-')
+                )}
+                {location.state.infrastructure ? (
+                  <CTableDataCell className="text-center">
+                    {location.state.infrastructure}
+                  </CTableDataCell>
+                ) : (
+                  console.log('-')
+                )}
+                {location.state.campaigns ? (
+                  <CTableDataCell className="text-center">
+                    {location.state.campaigns}
+                  </CTableDataCell>
+                ) : (
+                  console.log('-')
+                )}
               </CTableRow>
-              {/*  {Object.values(reportsData).map((el) => (*/}
-              {/*    <CTableRow key={el}>*/}
-              {/*      <CTableDataCell>{el.source}</CTableDataCell>*/}
-              {/*      <CTableDataCell>{el.malwares}</CTableDataCell>*/}
-              {/*      <CTableDataCell>{el.vulnerabilities}</CTableDataCell>*/}
-              {/*      <CTableDataCell>{el.locations}</CTableDataCell>*/}
-              {/*      <CTableDataCell>{el.threatActors}</CTableDataCell>*/}
-
-              {/*      /!*<CTableDataCell>{el.identities}</CTableDataCell>*!/*/}
-              {/*      /!*<CTableDataCell>{el.tools}</CTableDataCell>*!/*/}
-              {/*      /!*<CTableDataCell>{el.infrastructure}</CTableDataCell>*!/*/}
-              {/*      /!*<CTableDataCell>{el.campaigns}</CTableDataCell>*!/*/}
-              {/*    </CTableRow>*/}
-              {/*  ))}*/}
             </CTableBody>
           </CTable>
+          <div>
+            STIX Visualizer
+            <Visualizer name={test} />
+          </div>
         </CCardBody>
       </CCard>
     </>

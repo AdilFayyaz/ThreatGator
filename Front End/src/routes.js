@@ -7,7 +7,9 @@ const TEPReports = React.lazy(() => import('./views/sidebar/tep/TEPReports'))
 const Visualizer = React.lazy(() => import('./views/visualizer/visualizer.js'))
 const searchResults = React.lazy(() => import('./views/searchResults/searchResults.js'))
 const Report = React.lazy(() => import('./views/sidebar/latest/Report.js'))
-const Typography = React.lazy(() => import('./views/theme/typography/Typography'))
+const LatestReports_a = React.lazy(() => import('./views/AdminPanel/LatestReports_a.js'))
+const Report_ap = React.lazy(() => import('./views/AdminPanel/Report_ap.js'))
+const notification = React.lazy(() => import('./views/dashboard/notification.js'))
 
 // Base
 // const Accordion = React.lazy(() => import('./views/base/accordion/Accordion'))
@@ -64,6 +66,9 @@ const routes = [
   { path: '/visualizer', name: 'Visualizer', component: Visualizer },
   { path: '/searchResults', name: 'SearchResults', component: searchResults },
   { path: '/Report', name: 'ReportDetails', component: Report },
+  { path: '/latestReports_admin', name: 'Latest Reports Admin', component: LatestReports_a },
+  { path: '/Report_admin', name: 'ReportDetails', component: Report_ap },
+  { path: '/notification', name: 'notification', component: notification },
   // { path: '/theme/typography', name: 'Typography', component: Typography },
   // { path: '/base', name: 'Base', component: Cards, exact: true },
   // { path: '/base/accordion', name: 'Accordion', component: Accordion },
