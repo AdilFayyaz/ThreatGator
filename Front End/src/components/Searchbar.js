@@ -63,12 +63,12 @@ const Searchbar = () => {
   }
   return (
     <CForm onSubmit={getSearchResults}>
-      <div className="d-flex flex-row" style={{ width: '12rem', marginLeft: '2rem' }}>
+      <div className="d-flex flex-row" style={{ width: '15rem', marginLeft: '0.5rem' }}>
         {/*<CFormLabel htmlFor="search">sear</CFormLabel>*/}
         <CFormInput
           type="search"
           id="Keyword"
-          style={{ borderRadius: '50px', backgroundColor: 'transparent' }}
+          style={{ borderRadius: '50px', backgroundColor: 'whitesmoke', opacity: '70%' }}
           onChange={handleSearchChange}
         />
         {/*<CFormText id="emailHelp">We'll never share your email with anyone else.</CFormText>*/}

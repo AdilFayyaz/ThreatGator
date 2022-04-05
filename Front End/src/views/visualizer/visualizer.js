@@ -1,11 +1,13 @@
 import Graph from 'react-graph-vis'
 import React, { useEffect, useState } from 'react'
+import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
+import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import * as url from 'url'
 // import { Button } from 'react-bootstrap'
 import SlidingPane from 'react-sliding-pane'
 import 'react-sliding-pane/dist/react-sliding-pane.css'
-import { CButton, CCard, CCardBody, CCardHeader } from '@coreui/react'
+import { CButton, CCard, CCardBody, CCardHeader, CImage } from '@coreui/react'
 import { DocsLink } from '../../components'
 //STIX relations
 export class sro {
@@ -38,6 +40,7 @@ const options = {
       treeSpacing: 200,
     },
   },
+
   groups: {
     malware: {
       color: { border: '#ea8e8e', highlight: { border: '#B66565' } },
@@ -127,12 +130,24 @@ const options = {
     hover: true,
     multiselect: true,
     hoverConnectedEdges: false,
+    zoomView: false,
+    // keyboard: {
+    //   enabled: true,
+    //
+    //   bindToWindow: false,
+    // },
+    navigationButtons: true,
+    // tooltipDelay: 1000000,
+    // hideEdgesOnDrag: true,
+    //
+    // zoomView: false,
   },
   physics: {
     solver: 'repulsion',
     repulsion: {
       nodeDistance: 600, // Put more distance between the nodes.
     },
+    stabilization: true,
     forceAtlas2Based: {
       gravitationalConstant: -26,
       centralGravity: 0.005,
@@ -147,28 +162,31 @@ const options = {
   height: '900px',
 }
 
-const Visualizer = () => {
+const Visualizer = (props) => {
   const [data, setData] = useState([])
   const [state, setState] = useState({
     isPaneOpen: false,
   })
 
   //data for graph
+  let bundle
   const getData = () => {
-    fetch('bundle--97b40f76.json', {
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-    })
-      .then(function (response) {
-        console.log(response)
-        return response.json()
-      })
-      .then(function (myJson) {
-        console.log(myJson)
-        setData(myJson)
-      })
+    console.log(bundle)
+    // fetch(bundle.id, {
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     Accept: 'application/json',
+    //   },
+    // })
+    //   .then(function (response) {
+    //     console.log(response)
+    //     return response.json()
+    //   })
+    //   .then(function (myJson) {
+    //     console.log(myJson)
+    //     setData(myJson)
+    //   })
+    setData(bundle)
   }
   const dashboardNavigation = (event) => {
     console.log('here')
@@ -177,15 +195,21 @@ const Visualizer = () => {
     window.location.reload(false)
   }
   useEffect(() => {
+    Visualizer.propTypes = {
+      graph1: PropTypes.object,
+      //... other props you will use in this component
+    }
+    bundle = props.graph1
+    console.log('visualizer called' + bundle)
     getData()
-  }, [])
+  }, [props])
   let relationships = []
   let objects = []
   let graphE = []
   let graphN = []
   let uniqueObjects = []
-  console.log(data['id'])
-  console.log(data['objects'])
+  // console.log(data.id)
+  console.log(data)
   for (let i in data.objects) {
     if (data.objects[i]['type'] === 'relationship') {
       relationships.push(
@@ -234,6 +258,8 @@ const Visualizer = () => {
 
   return (
     <div>
+      {/* eslint-disable-next-line react/prop-types */}
+      {/*<div>Hi there {bundle.id}</div>*/}
       {/*<CCard className="mb-4">*/}
       {/*<CCardHeader>STIX Visualizer</CCardHeader>*/}
       {/*<CCardBody>*/}
@@ -251,11 +277,74 @@ const Visualizer = () => {
       {/*  Return*/}
       {/*</CButton>*/}
       {/*</div>*/}
-      <CButton onClick={() => setState({ isPaneOpen: true })}>View Legend</CButton>
 
-      <Graph align="middle" graph={graph} options={options} />
-      {/*style={{ height: '640px' }}*/}
-      {/*legend for graph*/}
+      <TransformWrapper
+        initialScale={1}
+        // initialPositionX={200}
+        // initialPositionY={100}
+      >
+        {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
+          <React.Fragment>
+            <div className="tools" style={{ backgroundColor: '#3C4B64', borderRadius: '5px' }}>
+              <CButton
+                onClick={() => zoomIn()}
+                style={{
+                  border: 'transparent',
+                  backgroundColor: 'transparent',
+                  width: '10%',
+                  borderRight: 'black',
+                }}
+              >
+                <CImage src="zoomIn.png" width="30%" height="15%"></CImage>
+              </CButton>
+              <CButton
+                onClick={() => zoomOut()}
+                style={{
+                  border: 'transparent',
+                  backgroundColor: 'transparent',
+                  width: '10%',
+                  borderRight: 'black',
+                }}
+              >
+                <CImage src="zoomOut.png" style={{ width: '30%', height: '15%' }}></CImage>
+              </CButton>
+
+              <CButton
+                style={{
+                  border: 'transparent',
+                  backgroundColor: 'transparent',
+                  width: '10%',
+                  height: '15%',
+                  color: 'black',
+                  borderLeft: 'black 1px solid',
+                  borderRight: 'black 1px solid',
+                  borderRadius: '1px',
+                }}
+                onClick={() => resetTransform()}
+              >
+                Reset
+              </CButton>
+              <CButton
+                style={{
+                  border: 'transparent',
+                  backgroundColor: 'transparent',
+                  width: '10%',
+                }}
+                onClick={() => setState({ isPaneOpen: true })}
+              >
+                View Legend
+              </CButton>
+            </div>
+            <TransformComponent>
+              <Graph
+                // align="middle"
+                graph={graph}
+                options={options}
+              />
+            </TransformComponent>
+          </React.Fragment>
+        )}
+      </TransformWrapper>
 
       <SlidingPane
         // className="glass"

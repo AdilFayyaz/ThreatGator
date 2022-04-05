@@ -32,7 +32,7 @@ const Login = (props) => {
   ]
   //a function that navigates to admin's add source page if the credentials match with admin's
   const navigateToAdmin = () => {
-    '/addSource'
+    '/latestReports_admin'
   }
   //function decides whether the credetials are correct w.e.t the database(both admin's and user's)
   //navigates accordingly
@@ -68,7 +68,7 @@ const Login = (props) => {
 
               console.log(data)
               if (data === true) {
-                history.push('/addSource')
+                history.push('/latestReports_admin')
               } else {
                 alert('Enter the correct credentials')
               }

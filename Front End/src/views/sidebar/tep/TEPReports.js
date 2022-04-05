@@ -98,10 +98,7 @@ const TEPReports = () => {
     <>
       {getTEPReports}
       <CCard className="mb-4">
-        <CCardHeader>
-          ThreatGator&apos;s Latest Reports
-          <DocsLink href="https://coreui.io/docs/utilities/colors/" />
-        </CCardHeader>
+        <CCardHeader>ThreatGator&apos;s Latest Threat Exchange Platform Reports</CCardHeader>
         <CCardBody>
           <CTable align="middle" className="mb-0 border" hover responsive>
             <CTableHead color="light">

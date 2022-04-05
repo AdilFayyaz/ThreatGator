@@ -24,7 +24,8 @@ import {
   CToastHeader,
 } from '@coreui/react'
 import { CChartDoughnut, CChartLine } from '@coreui/react-chartjs'
-// import { Line ,Doughnut} from "react-chartjs-2";
+import { countries, lookup } from 'country-data-list'
+import WorldMap from 'react-svg-worldmap'
 import { getStyle, hexToRgba } from '@coreui/utils'
 import CIcon from '@coreui/icons-react'
 import {
@@ -50,7 +51,8 @@ import {
   cilUserFemale,
 } from '@coreui/icons'
 
-import { useLocation, useParams } from 'react-router-dom'
+import { Redirect, useHistory, useLocation, useParams } from 'react-router-dom'
+import { sha256 } from 'js-sha256'
 
 const WidgetsDropdown = lazy(() => import('../widgets/WidgetsDropdown.js'))
 const WidgetsBrand = lazy(() => import('../widgets/WidgetsBrand.js'))
@@ -68,11 +70,16 @@ function getNotificationCards(x) {
 }
 
 const Dashboard = (props) => {
+  function capitalizeFirstLetter(str) {
+    const c = str.replace(/^./, str[0].toUpperCase())
+    return c
+  }
   const random = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min)
   }
   const location = useLocation()
   const [DoughnutData, setDoughnutData] = useState({})
+  const [LocationData, setLocationData] = useState([])
   const [WeekData, setWeekData] = useState({})
   const [NotificationsData, setNotificationsData] = useState([])
   const [SearchKeyword, SetSearchKeyword] = useState('')
@@ -103,8 +110,37 @@ const Dashboard = (props) => {
   const openModalExchange = () => SetIsOpenExchange(true)
   const closeModalExchange = () => SetIsOpenExchange(false)
   //
+  const objects = []
   // fetching data from data analysis service for doughnut graph e.g top 3 malwares
   let arr = []
+  const getLocations = (event) => {
+    let loc = []
+    var lookup = require('country-data-list').lookup
+    // event.preventDefault()
+
+    fetch('http://127.0.0.1:8082/dataAnalysis/getLocations')
+      .then((res) => res.json())
+      .then((data) => {
+        loc = Object.keys(data)
+
+        for (var i = 0; i < loc.length; i++) {
+          var countryFullName = capitalizeFirstLetter(loc[i])
+          if (lookup.countries({ name: countryFullName })[0] != undefined) {
+            console.log(lookup.countries({ name: countryFullName })[0].alpha2)
+            objects.push({
+              country: lookup.countries({ name: countryFullName })[0].alpha2,
+              value: ' ',
+            })
+          }
+        }
+      })
+
+    // countryFullName = capitalizeFirstLetter('pakistan')
+    // objects.push({ country: lookup.countries({ name: countryFullName })[0].alpha2, value: ' ' })
+
+    setLocationData(objects)
+  }
+
   const doughnut = () => {
     let topMalwares = []
     let topMalwaresData = []
@@ -185,7 +221,7 @@ const Dashboard = (props) => {
         SetHashNotif(keys)
         setNotificationsData(alerts)
 
-        // SetHashNotif(Object.keys(data))
+        SetHashNotif(Object.keys(data))
       })
   }
   // fetching data from data analysis service for vulnerability button
@@ -222,9 +258,9 @@ const Dashboard = (props) => {
         openModalExchange()
       })
   }
-
+  const history = useHistory()
   const handleNotifClick = (event) => {
-    event.preventDefault()
+    // event.preventDefault()
     // console.log(event.target.value)
     var count = 0
     var preHash
@@ -251,145 +287,169 @@ const Dashboard = (props) => {
       headers: { 'Content-Type': 'application/json' },
       body: _hash,
     }
-    fetch('http://127.0.0.1:8082/dataAnalysis/getResultOnHash', requestOptions)
-      .then((res) => res.json())
-      .then((data) => {
-        SetFieldsData(data)
-        openModal()
-      })
+    // <Redirect to={ pathname: "/notification"}></Redirect>
+    history.push('/notification', { requestOptions: requestOptions })
   }
   // const openVisualizer = (event) => {
   //   navigate('/visualizer', { replace: true })
   //   window.location.reload(false)
   // }
+  function getStrHash(str) {
+    var hash = 0
+    for (var i = 0; i < str.length; i++) {
+      var code = str.charCodeAt(i)
+      hash = (hash << 5) - hash + code
+      hash = hash & hash // Convert to 32bit integer
+    }
+    return hash
+  }
   useEffect(() => {
     doughnut()
     notifications()
     hitsGraph()
+    getLocations()
     return () => {
       console.log('returning -xyzzz')
     }
   }, [location])
   return (
     <>
-      {/* <CRow>
+      <CCard className="mb-4" style={{ backgroundColor: 'transparent', border: 'transparent' }}>
+        {/* <CRow>
         <h1>Welcome {location.state.username}!</h1>
       </CRow> */}
-      {/*<WidgetsDropdown />*/}
-      {/*<CAlert color="primary">A simple primary alert—check it out!</CAlert>*/}
-      {/*<CAlert color="secondary">A simple secondary alert—check it out!</CAlert>*/}
-      {/*<CAlert color="success">A simple success alert—check it out!</CAlert>*/}
-      {/*<CAlert color="danger">A simple danger alert—check it out!</CAlert>*/}
-      <CCard className="overflow-auto mb-4" style={{ height: '15rem', padding: '2rem' }}>
+
+        <CCard className="mb-4" style={{ height: '15rem', padding: '2rem' }}>
+          <CRow>
+            <CCol sm={5}>
+              <h4 id="notifications" className="card-title mb-0">
+                Notifications
+              </h4>
+            </CCol>
+          </CRow>
+          <CRow className="overflow-auto">
+            {/*<CButton color="primary" style={{ marginBottom: '1rem' }}>*/}
+            {/*  Button*/}
+            {/*  some notification*/}
+            {/*</CButton>*/}
+            {NotificationsData.map((notif) => (
+              <CRow key={notif}>
+                <CButton
+                  // color="primary"
+                  onClick={handleNotifClick}
+                  style={{
+                    marginBottom: '1rem',
+                    width: '80rem',
+                    height: '3rem',
+                    backgroundColor: '#1c2b45',
+                    borderRadius: '3rem',
+                  }}
+                  value={notif}
+                >
+                  {notif}
+                </CButton>
+              </CRow>
+
+              // return getNotificationCards(notif).bind(this);
+            ))}
+          </CRow>
+        </CCard>
+        {/*  charts start here*/}
         <CRow>
-          <CCol sm={5}>
-            <h4 id="notifications" className="card-title mb-0">
-              Notifications
-            </h4>
+          <CCol sm={7} className="d-none d-md-block">
+            <CCard className="mb-4">
+              <CCardBody>
+                <CRow>
+                  <CCol sm={5}>
+                    <h4 id="hits" className="card-title mb-0">
+                      Number of Hits
+                    </h4>
+                    <div className="small text-medium-emphasis">Weekly</div>
+                  </CCol>
+                  <CCol sm={7} className="d-none d-md-block"></CCol>
+                </CRow>
+                <CChartLine
+                  style={{ height: '300px', marginTop: '40px' }}
+                  // WeekData
+                  data={WeekData}
+                  options={{
+                    maintainAspectRatio: false,
+                    plugins: {
+                      legend: {
+                        display: false,
+                      },
+                    },
+                    scales: {
+                      x: {
+                        grid: {
+                          drawOnChartArea: false,
+                        },
+                      },
+                      y: {
+                        ticks: {
+                          beginAtZero: true,
+                          maxTicksLimit: 5,
+                          stepSize: Math.ceil(250 / 5),
+                          max: 250,
+                        },
+                      },
+                    },
+                    elements: {
+                      line: {
+                        tension: 0.4,
+                      },
+                      point: {
+                        radius: 0,
+                        hitRadius: 10,
+                        hoverRadius: 4,
+                        hoverBorderWidth: 3,
+                      },
+                    },
+                  }}
+                />
+              </CCardBody>
+              {/*<CCardFooter></CCardFooter>*/}
+            </CCard>
+          </CCol>
+          <CCol>
+            <CCol xs>
+              <CCard className="mb-4" style={{ position: 'absolute' }}>
+                <CCardBody>
+                  {/* {donughnut} */}
+                  <CCol sm={5}>
+                    <h4 id="topmalwares" className="card-title mb-0">
+                      Top Malwares
+                    </h4>
+                  </CCol>
+                  {/*replace data1 with DoughnutData*/}
+                  {/* <Doughnut data={DoughnutData}  /> */}
+                  <CChartDoughnut data={DoughnutData} />
+                </CCardBody>
+              </CCard>
+            </CCol>
           </CCol>
         </CRow>
-        {/*<CButton color="primary" style={{ marginBottom: '1rem' }}>*/}
-        {/*  Button*/}
-        {/*  some notification*/}
-        {/*</CButton>*/}
-        {NotificationsData.map((notif) => (
-          <CRow key={notif}>
-            <CButton
-              // color="primary"
-              onClick={handleNotifClick}
-              style={{
-                marginBottom: '1rem',
-                width: '80rem',
-                height: '3rem',
-                backgroundColor: '#1c2b45',
-                borderRadius: '3rem',
-              }}
-              value={notif}
-            >
-              {notif}
-            </CButton>
-          </CRow>
 
-          // return getNotificationCards(notif).bind(this);
-        ))}
-      </CCard>
-
-      {/*  charts start here*/}
-      <CRow>
-        <CCol sm={7} className="d-none d-md-block">
-          <CCard className="mb-4">
-            <CCardBody>
-              <CRow>
-                <CCol sm={5}>
-                  <h4 id="hits" className="card-title mb-0">
-                    Number of Hits
-                  </h4>
-                  <div className="small text-medium-emphasis">Weekly</div>
-                </CCol>
-                <CCol sm={7} className="d-none d-md-block"></CCol>
-              </CRow>
-              <CChartLine
-                style={{ height: '300px', marginTop: '40px' }}
-                // WeekData
-                data={WeekData}
-                options={{
-                  maintainAspectRatio: false,
-                  plugins: {
-                    legend: {
-                      display: false,
-                    },
-                  },
-                  scales: {
-                    x: {
-                      grid: {
-                        drawOnChartArea: false,
-                      },
-                    },
-                    y: {
-                      ticks: {
-                        beginAtZero: true,
-                        maxTicksLimit: 5,
-                        stepSize: Math.ceil(250 / 5),
-                        max: 250,
-                      },
-                    },
-                  },
-                  elements: {
-                    line: {
-                      tension: 0.4,
-                    },
-                    point: {
-                      radius: 0,
-                      hitRadius: 10,
-                      hoverRadius: 4,
-                      hoverBorderWidth: 3,
-                    },
-                  },
-                }}
+        <CCard className="mb-4" style={{ position: 'relative' }}>
+          <CCardBody>
+            <CCol sm={5}>
+              <h4 id="High Activity Countries" className="card-title mb-0">
+                High Activity Countries
+              </h4>
+            </CCol>
+            <div style={{ marginLeft: '15%' }}>
+              <WorldMap
+                strokeOpacity="3"
+                borderColor="black"
+                backgroundColor="#white"
+                color="#3C4B64"
+                size="xl"
+                data={LocationData}
               />
-            </CCardBody>
-            <CCardFooter></CCardFooter>
-          </CCard>
-        </CCol>
-        <CCol>
-          <CCol xs>
-            <CCard className="mb-4" style={{ position: 'absolute' }}>
-              <CCardBody>
-                {/* {donughnut} */}
-                <CCol sm={5}>
-                  <h4 id="topmalwares" className="card-title mb-0">
-                    Top Malwares
-                  </h4>
-                </CCol>
-                {/*replace data1 with DoughnutData*/}
-                {/* <Doughnut data={DoughnutData}  /> */}
-                <CChartDoughnut data={DoughnutData} />
-              </CCardBody>
-            </CCard>
-            {/* first row*/}
-          </CCol>
-        </CCol>
-      </CRow>
+            </div>
+          </CCardBody>
+        </CCard>
+      </CCard>
     </>
   )
 }
