@@ -1,11 +1,14 @@
 package com.threatgator.dataanalysis.controller;
 import com.threatgator.dataanalysis.model.*;
+import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 // Controller class communicating with the front end
 @RestController
@@ -121,8 +124,134 @@ public class analysisController {
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/updateElasticDocument")
     public String updateElasticDocument(@RequestBody String json_info) throws JSONException, IOException, org.json.JSONException {
-        connect.updateDocument(json_info);
-        return json_info;
+//        Manipulate the json string into the correct format
+        JSONObject input = new JSONObject(json_info);
+        JSONObject output = new JSONObject();
+        output.put("hash", input.getString("hash"));
+//        Malwares
+        JSONArray malwares = new JSONArray();
+        if (input.getString("malwares").length()>0) {
+            String[] malwareList = input.getString("malwares").split(",");
+            for (String mal : malwareList) {
+                JSONObject m = new JSONObject();
+                m.put("name", mal);
+                malwares.put(m);
+            }
+        }
+        output.put("malwares", malwares);
+
+//        Vulnerabilities
+        JSONArray vuln = new JSONArray();
+        if (input.getString("vulnerabilities").length()>0) {
+            String[] vulnList = input.getString("vulnerabilities").split(",");
+            for (String v : vulnList) {
+                JSONObject m = new JSONObject();
+                m.put("name", v);
+                vuln.put(m);
+            }
+        }
+        output.put("vulnerabilities", vuln);
+
+//        Threat Actors
+        JSONArray threatActors = new JSONArray();
+        if (input.getString("threatActors").length()>0) {
+            String[] threatActorsList = input.getString("threatActors").split(",");
+            System.out.println(threatActorsList);
+            for (String v : threatActorsList) {
+                System.out.println(v);
+                JSONObject m = new JSONObject();
+                m.put("name", v);
+                threatActors.put(m);
+            }
+        }
+        output.put("threatActors", threatActors);
+
+//        Identities
+        JSONArray identities = new JSONArray();
+        if (input.getString("identities").length()>0) {
+            String[] identitiesList = input.getString("identities").split(",");
+            for (String v : identitiesList) {
+                JSONObject m = new JSONObject();
+                m.put("name", v);
+                identities.put(m);
+            }
+        }
+        output.put("identities", identities);
+
+//        Locations
+        JSONArray locations = new JSONArray();
+        if (input.getString("locations").length()>0) {
+            String[] locationsList = input.getString("locations").split(",");
+            for (String v : locationsList) {
+                JSONObject m = new JSONObject();
+                m.put("name", v);
+                locations.put(m);
+            }
+        }
+        output.put("locations", locations);
+
+//        Tools
+        JSONArray tools = new JSONArray();
+        if (input.getString("tools").length()>0) {
+            String[] toolsList = input.getString("tools").split(",");
+            for (String v : toolsList) {
+                JSONObject m = new JSONObject();
+                m.put("name", v);
+                tools.put(m);
+            }
+        }
+        output.put("tools", tools);
+
+//        Infrastructures
+        JSONArray infrastructures = new JSONArray();
+        if (input.getString("infrastructures").length()>0) {
+            String[] infrastructuresList = input.getString("infrastructures").split(",");
+            for (String v : infrastructuresList) {
+                JSONObject m = new JSONObject();
+                m.put("name", v);
+                infrastructures.put(m);
+            }
+        }
+        output.put("infrastructures", infrastructures);
+
+//        Indicators
+        JSONArray indicators = new JSONArray();
+        if (input.getString("indicators").length()>0) {
+            String[] indicatorsList = input.getString("indicators").split(",");
+            for (String v : indicatorsList) {
+                JSONObject m = new JSONObject();
+                m.put("name", v);
+                indicators.put(m);
+            }
+        }
+        output.put("indicators", indicators);
+
+//        Campaigns
+        JSONArray campaigns = new JSONArray();
+        if (input.getString("campaigns").length()>0) {
+            String[] campaignsList = input.getString("campaigns").split(",");
+            for (String v : campaignsList) {
+                JSONObject m = new JSONObject();
+                m.put("name", v);
+                campaigns.put(m);
+            }
+        }
+        output.put("campaigns", campaigns);
+
+//        Attack Patterns
+        JSONArray attackPatterns = new JSONArray();
+        if (input.getString("attackPatterns").length()>0) {
+            String[] attackPatternsList = input.getString("attackPatterns").split(",");
+            for (String v : attackPatternsList) {
+                JSONObject m = new JSONObject();
+                m.put("name", v);
+                attackPatterns.put(m);
+            }
+        }
+        output.put("attackPatterns", attackPatterns);
+        System.out.println(output.toString());
+        connect.updateDocument(output.toString());
+        return output.toString();
     }
     // Delete an element from elasticsearch
     @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -136,6 +265,13 @@ public class analysisController {
     public String getStixBundle(@PathVariable int hash) throws JSONException, IOException{
 //        System.out.println("INSIDE****************************");
         return connect.getStix(hash);
+    }
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @GetMapping("/getRelatedReports/{hash}")
+    public String getRelatedReports(@PathVariable int hash) throws JSONException, IOException{
+
+        return "";
     }
 
 

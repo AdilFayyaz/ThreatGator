@@ -19,11 +19,12 @@ public class allFields {
     String infrastructures;
     String indicators;
     String campaigns;
+    String attackPatterns;
 
     public allFields() {
     }
 
-    public allFields(String source, String hash, String rawText, String malwares, String threatActors, String identities, String locations, String tools, String vulnerabilities, String infrastructures, String indicators, String campaigns) {
+    public allFields(String source, String hash, String rawText, String malwares, String threatActors, String identities, String locations, String tools, String vulnerabilities, String infrastructures, String indicators, String campaigns, String attackPatterns) {
         this.source = source;
         this.hash = hash;
         this.rawText = rawText;
@@ -36,6 +37,7 @@ public class allFields {
         this.infrastructures = infrastructures;
         this.indicators = indicators;
         this.campaigns = campaigns;
+        this.attackPatterns = attackPatterns;
     }
     // Getters and Setters
     public String getSource() {
@@ -134,6 +136,10 @@ public class allFields {
         this.campaigns = campaigns;
     }
 
+    public String getAttackPatterns() {return attackPatterns;}
+
+    public void setAttackPatterns(String attackPatterns) {this.attackPatterns = attackPatterns;}
+
     // get field results in JSON format
     public JSONObject getJSONFields() throws JSONException {
         JSONObject j = new JSONObject();
@@ -149,6 +155,7 @@ public class allFields {
         j.put("infrastructure", getInfrastructures());
         j.put("indicators", getIndicators());
         j.put("campaigns", getCampaigns());
+        j.put("attackPatterns", getAttackPatterns());
         return j;
     }
     // Get field results in Map format
@@ -166,6 +173,7 @@ public class allFields {
         j.put("infrastructure", getInfrastructures());
         j.put("indicators", getIndicators());
         j.put("campaigns", getCampaigns());
+        j.put("attackPatterns", getAttackPatterns());
         return j;
 
     }

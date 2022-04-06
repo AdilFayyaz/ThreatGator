@@ -49,7 +49,7 @@ public class elasticMapper {
     private static final RequestOptions COMMON_OPTIONS;
     static {
         RequestOptions.Builder builder = RequestOptions.DEFAULT.toBuilder();
-        builder.addParameter("size", "300");
+        builder.addParameter("size", "2000");
 
         COMMON_OPTIONS = builder.build();
     }
@@ -349,12 +349,18 @@ public class elasticMapper {
                     }
                     if(!camp.isEmpty()){fields.setCampaigns(camp);}
 
-
-
-
+                    // Get Attack Patterns Information
+                    String atk = "";
+                    JSONArray element10 = jsonComplete.getJSONArray("attackPatterns");
+                    for(int i=0;i<element10.length();i++){
+                        JSONObject e = element10.getJSONObject(i);
+                        String name = e.getString("name");
+                        if(!name.isEmpty()){
+                            atk += name + ",";
+                        }
+                    }
+                    if(!atk.isEmpty()){fields.setAttackPatterns(atk);}
                 }
-
-
             }
             catch (JSONException | NullPointerException n){
                 System.out.println("");
@@ -817,5 +823,9 @@ public class elasticMapper {
         return stixBundle;
     }
 
+    // return related reports
+    public String getRelatedReports(int hash) throws JSONException, IOException{
+        return "";
+    }
 
 }
