@@ -23,6 +23,7 @@ import {
 import { rgbToHex } from '@coreui/utils'
 import { DocsLink } from 'src/components'
 import CIcon from '@coreui/icons-react'
+import '/home/hurriya/Desktop/8semester/Fyp/20marchupdate/Front End/src/scss/Report_ap.css'
 import {
   cibCcAmex,
   cibCcApplePay,
@@ -44,12 +45,11 @@ const Report_ap = () => {
   const [reportsData, SetReportsData] = useState({})
   const [hash1, SetHash] = useState(0)
   const [isedit, SetIsedit] = useState(true)
+  const [badge, SetBadge] = useState('hidden')
   // fetching data from data analysis service for reports
   const location = useLocation()
   const edit = useRef(null)
   const blah = useRef(null)
-  const arr = [null, null, null, null, null, null, null, null, null, null]
-  const refs = useRef(arr.map(() => React.createRef()))
 
   const hash = location.state.hash
   function getStix() {
@@ -65,6 +65,7 @@ const Report_ap = () => {
     console.log('save')
 
     SetIsedit(true)
+    SetBadge('hidden')
     updateElastic()
   }
 
@@ -72,6 +73,7 @@ const Report_ap = () => {
     console.log('edit')
 
     SetIsedit(false)
+    SetBadge('visible')
   }
   const sourceChangedHandler = (event) => {
     event.preventDefault()
@@ -149,7 +151,7 @@ const Report_ap = () => {
             Return
           </CButton>
         </CCardHeader>
-        <CCardBody>
+        <CCardBody id="card">
           {/*{<b>{location.state.rawText}</b>}*/}
           {<br></br>}
           <CTable align="middle" className="mb-0 border" hover responsive>
@@ -471,6 +473,11 @@ const Report_ap = () => {
                     {isedit ? 'Edit' : 'Save'}
                   </CButton>
                 </CTableDataCell>
+              </CTableRow>
+              <CTableRow>
+                <CBadge style={{ backgroundColor: '#F7F7FF', visibility: badge }}>
+                  Scroll Right to Save
+                </CBadge>
               </CTableRow>
             </CTableBody>
           </CTable>
