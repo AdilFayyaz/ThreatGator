@@ -14,6 +14,8 @@ public class Assets implements Serializable {
 
     private Organization organization;
 
+    public Assets(){}
+
     public Assets(Integer id, String vendor, String name, String version, Organization organization) {
         this.id = id;
         this.vendor = vendor;

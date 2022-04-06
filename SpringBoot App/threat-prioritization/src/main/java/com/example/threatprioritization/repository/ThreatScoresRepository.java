@@ -10,6 +10,7 @@ import java.util.List;
 // Users interface extending JPA Repo - Hibernate
 @Repository
 public interface ThreatScoresRepository extends JpaRepository<ThreatScores,Integer> {
-    public List<ThreatScores> findByOrganization_id(Integer organization_id);
-    public List<ThreatScores> findByOrganization_idAndReport_id(Integer organization_id, Integer report_id);
+    public List<ThreatScores> findByOrganizationId(Integer organization_id);
+    public List<ThreatScores> findByOrganizationIdAndReportId(Integer organization_id, Integer report_id);
+    public boolean existsThreatScoresByOrganizationIdAndReportId(Integer organization_id, Integer report_id);
 }

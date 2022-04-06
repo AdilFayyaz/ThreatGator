@@ -6,6 +6,9 @@ public class Organization {
     private String sector;
     private String country;
 
+    public Organization() {
+    }
+
     public Organization(Integer id, String name, String sector, String country) {
         this.id = id;
         this.name = name;
