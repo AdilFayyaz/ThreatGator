@@ -95,6 +95,7 @@ const LatestReports_a = () => {
     console.log('in function')
   }
   function goToDetails(
+    hash,
     source,
     rawtext,
     malwares,
@@ -105,11 +106,13 @@ const LatestReports_a = () => {
     tools,
     infrastructure,
     campaigns,
+    attackPattern,
   ) {
     history.push('/Report_admin', {
+      hash: hash,
       source: source,
       rawText: rawtext,
-      malware: malwares,
+      malwares: malwares,
       vulnerabilities: vulnerabilities,
       locations: locations,
       threatActors: threatActors,
@@ -117,6 +120,7 @@ const LatestReports_a = () => {
       tools: tools,
       infrastructure: infrastructure,
       campaigns: campaigns,
+      attackPattern: attackPattern,
     })
   }
   const history = useHistory()
@@ -128,7 +132,7 @@ const LatestReports_a = () => {
   var isTools = false
   var isInfra = false
   var isCampaign = false
-
+  var isAttackPattern = false
   function setTags(
     malwares,
     vulnerabilities,
@@ -138,6 +142,7 @@ const LatestReports_a = () => {
     tools,
     infrastructure,
     campaigns,
+    attackPattern,
   ) {
     if (malwares) {
       isMalware = true
@@ -163,6 +168,9 @@ const LatestReports_a = () => {
     if (campaigns) {
       isCampaign = true
     }
+    if (attackPattern) {
+      isAttackPattern = true
+    }
   }
   useEffect(() => {
     getReports()
@@ -170,6 +178,7 @@ const LatestReports_a = () => {
       console.log('returning -xyzzz')
     }
   }, [location])
+
   return (
     <>
       {/* {getReports()} */}
@@ -205,6 +214,7 @@ const LatestReports_a = () => {
                     {(isTools = false)}
                     {(isInfra = false)}
                     {(isCampaign = false)}
+                    {(isAttackPattern = false)}
                     {setTags(
                       el.malwares,
                       el.vulnerabilities,
@@ -214,6 +224,7 @@ const LatestReports_a = () => {
                       el.tools,
                       el.infrastructure,
                       el.campaigns,
+                      el.attackPattern,
                     )}
                     {/*vulnerability tag*/}
                     {isVulnerability ? (
@@ -303,12 +314,25 @@ const LatestReports_a = () => {
                     ) : (
                       <div></div>
                     )}
+                    {/*if campaign tag*/}
+                    {isAttackPattern ? (
+                      <CBadge
+                        className="rounded-pill"
+                        style={{ margin: '1%', backgroundColor: '#BF749B' }}
+                      >
+                        Attack-Pattern
+                      </CBadge>
+                    ) : (
+                      <div></div>
+                    )}
                   </CTableDataCell>
                   <CTableDataCell className="text-center">
+                    {console.log('hashhh' + el.hash)}
                     <CButton
                       style={{ backgroundColor: 'blue', margin: '1%' }}
                       onClick={() =>
                         goToDetails(
+                          el.hash,
                           el.source,
                           el.rawText,
                           el.malwares,
@@ -319,6 +343,7 @@ const LatestReports_a = () => {
                           el.tools,
                           el.infrastructure,
                           el.campaigns,
+                          el.attackPattern,
                         )
                       }
                     >
