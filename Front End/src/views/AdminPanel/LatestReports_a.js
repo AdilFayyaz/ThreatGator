@@ -95,7 +95,6 @@ const LatestReports_a = () => {
     console.log('in function')
   }
   function goToDetails(
-    hash,
     source,
     rawtext,
     malwares,
@@ -108,10 +107,9 @@ const LatestReports_a = () => {
     campaigns,
   ) {
     history.push('/Report_admin', {
-      hash: hash,
       source: source,
       rawText: rawtext,
-      malwares: malwares,
+      malware: malwares,
       vulnerabilities: vulnerabilities,
       locations: locations,
       threatActors: threatActors,
@@ -307,12 +305,10 @@ const LatestReports_a = () => {
                     )}
                   </CTableDataCell>
                   <CTableDataCell className="text-center">
-                    {console.log('hashhh' + el.hash)}
                     <CButton
                       style={{ backgroundColor: 'blue', margin: '1%' }}
                       onClick={() =>
                         goToDetails(
-                          el.hash,
                           el.source,
                           el.rawText,
                           el.malwares,

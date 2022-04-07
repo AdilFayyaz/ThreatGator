@@ -23,7 +23,6 @@ import {
 import { rgbToHex } from '@coreui/utils'
 import { DocsLink } from 'src/components'
 import CIcon from '@coreui/icons-react'
-import '/home/hurriya/Desktop/8semester/Fyp/20marchupdate/Front End/src/scss/Report_ap.css'
 import {
   cibCcAmex,
   cibCcApplePay,
@@ -43,45 +42,51 @@ import { useLocation } from 'react-router-dom'
 
 const Report_ap = () => {
   const [reportsData, SetReportsData] = useState({})
-  const [hash1, SetHash] = useState(0)
   const [isedit, SetIsedit] = useState(true)
-  const [badge, SetBadge] = useState('hidden')
   // fetching data from data analysis service for reports
   const location = useLocation()
   const edit = useRef(null)
   const blah = useRef(null)
+  const arr = [null, null, null, null, null, null, null, null, null, null]
+  const refs = useRef(arr.map(() => React.createRef()))
 
-  const hash = location.state.hash
-  function getStix() {
-    console.log('getting stix')
-    fetch('http://127.0.0.1:8082/dataAnalysis/getStixBundle/' + hash)
-      .then((res) => res.json())
-      .then((data) => {
-        SetHash(data)
-      })
-    console.log(hash1.id)
-  }
+  const test = 'yahoo'
+
   function saveRow() {
     console.log('save')
-
+    //
+    // var len = edit.current.cells.length
+    // console.log(arr.length)
+    // for (var j = 0; j < len - 1; j++) {
+    //   let te = blah.current
+    //   console.log('ttt' + te)
+    //   edit.current.cells[j].innerHTML = te
+    // }
     SetIsedit(true)
-    SetBadge('hidden')
-    updateElastic()
   }
 
   const editField = () => {
     console.log('edit')
+    //
+    // var len = edit.current.cells.length
 
+    // for (var j = 0; j < len - 1; j++) {
+    //   var text = edit.current.cells[j].innerHTML
+    //   console.log(text)
+    //
+    //   edit.current.cells[j].innerHTML =
+    //     '<input ref=' + blah + 'type="text" value="' + text + '" id=' + j + '>'
+    //   console.log('ref ' + blah.current)
+    // }
     SetIsedit(false)
-    SetBadge('visible')
   }
   const sourceChangedHandler = (event) => {
     event.preventDefault()
     location.state.source = event.target.value
   }
-  const malwaresChangedHandler = (event) => {
+  const malwareChangedHandler = (event) => {
     event.preventDefault()
-    location.state.malwares = event.target.value
+    location.state.malware = event.target.value
   }
   const vulnerabilitiesChangedHandler = (event) => {
     event.preventDefault()
@@ -89,7 +94,7 @@ const Report_ap = () => {
   }
   const locationChangedHandler = (event) => {
     event.preventDefault()
-    location.state.locations = event.target.value
+    location.state.location = event.target.value
   }
   const threatActorsChangedHandler = (event) => {
     event.preventDefault()
@@ -112,92 +117,73 @@ const Report_ap = () => {
     location.state.campaigns = event.target.value
   }
   function updateElastic() {
-    var req = {
-      hash: location.state.hash,
-      malwares: location.state.malwares,
-      threatActors: location.state.threatActors,
-      identities: location.state.identities,
-      locations: location.state.locations,
-      tools: location.state.tools,
-      vulnerabilities: location.state.vulnerabilities,
-      infrastructures: location.state.infrastructure,
-      indicators: location.state.indicators,
-      campaigns: location.state.campaigns,
-    }
-    const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: req,
-    }
-    fetch('http://127.0.0.1:8082/dataAnalysis/updateElasticDocument', requestOptions)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log('sending...' + data)
-      })
+    // const requestOptions = {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: _hash,
+    // }
+    // fetch('http://127.0.0.1:8082/dataAnalysis/updateElasticDocument', location.state.requestOptions)
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     console.log('sending...' + data)
+    //   })
   }
-  useEffect(() => {
-    getStix()
-    return () => {
-      console.log('returning ')
-    }
-  }, [])
-
   return (
     <>
       <CCard className="mb-4">
         <CCardHeader>
           Report Details
-          <CButton href="/latestReports_admin" style={{ float: 'right' }}>
+          <CButton href="/latestReports" style={{ float: 'right' }}>
             Return
           </CButton>
         </CCardHeader>
-        <CCardBody id="card">
+        <CCardBody>
           {/*{<b>{location.state.rawText}</b>}*/}
           {<br></br>}
           <CTable align="middle" className="mb-0 border" hover responsive>
             <CTableHead color="light">
               <CTableRow>
-                {location.state.source || !isedit ? (
+                {location.state.source ? (
                   <CTableHeaderCell className="text-center">Source</CTableHeaderCell>
                 ) : (
                   console.log('-')
                 )}
-                {location.state.malwares || !isedit ? (
-                  <CTableHeaderCell className="text-center">Malwares</CTableHeaderCell>
+                {location.state.malware ? (
+                  <CTableHeaderCell className="text-center">Malware</CTableHeaderCell>
                 ) : (
                   console.log('-')
                 )}
-                {location.state.vulnerabilities || !isedit ? (
+                {location.state.vulnerabilities ? (
                   <CTableHeaderCell className="text-center">Vulnerabilities</CTableHeaderCell>
                 ) : (
                   console.log('-')
                 )}
-                {location.state.locations || !isedit ? (
+                {location.state.location ? (
                   <CTableHeaderCell className="text-center">Location</CTableHeaderCell>
                 ) : (
                   console.log('-')
                 )}
-                {location.state.threatActors || !isedit ? (
+                {location.state.threatActors ? (
                   <CTableHeaderCell className="text-center">ThreatActors</CTableHeaderCell>
                 ) : (
                   console.log('-')
                 )}
-                {location.state.identities || !isedit ? (
+                {location.state.identities ? (
                   <CTableHeaderCell className="text-center">Identities</CTableHeaderCell>
                 ) : (
                   console.log('-')
                 )}
-                {location.state.tools || !isedit ? (
+                {location.state.tools ? (
                   <CTableHeaderCell className="text-center">Tools</CTableHeaderCell>
                 ) : (
-                  console.log('=')
+                  console.log('-')
                 )}
-                {location.state.infrastructure || !isedit ? (
+                {location.state.infrastructure ? (
                   <CTableHeaderCell className="text-center">Infrastructure</CTableHeaderCell>
                 ) : (
                   console.log('-')
                 )}
-                {location.state.campaigns || !isedit ? (
+                {location.state.campaigns ? (
                   <CTableHeaderCell className="text-center">Campaigns</CTableHeaderCell>
                 ) : (
                   console.log('-')
@@ -221,46 +207,28 @@ const Report_ap = () => {
                       />
                     </CTableDataCell>
                   )
-                ) : isedit ? (
-                  console.log(isedit)
                 ) : (
-                  <CTableDataCell className="text-center">
-                    <CFormInput
-                      type="text"
-                      placeholder={location.state.source}
-                      id="a"
-                      onChange={sourceChangedHandler}
-                    />
-                  </CTableDataCell>
+                  console.log('src')
                 )}
-                {/*malwares*/}
-                {location.state.malwares ? (
+                {/*malware*/}
+                {location.state.malware ? (
                   isedit ? (
                     <CTableDataCell className="text-center">
-                      {location.state.malwares}
+                      {location.state.malware}
                     </CTableDataCell>
                   ) : (
                     <CTableDataCell className="text-center">
                       <CFormInput
                         ref={blah}
                         type="text"
-                        placeholder={location.state.malwares}
+                        placeholder={location.state.malware}
                         id="a"
-                        onChange={malwaresChangedHandler}
+                        onChange={malwareChangedHandler}
                       />
                     </CTableDataCell>
                   )
-                ) : isedit ? (
-                  console.log(isedit)
                 ) : (
-                  <CTableDataCell className="text-center">
-                    <CFormInput
-                      type="text"
-                      placeholder={location.state.malwares}
-                      id="a"
-                      onChange={malwaresChangedHandler}
-                    />
-                  </CTableDataCell>
+                  console.log('mal')
                 )}
                 {/*vulner*/}
                 {location.state.vulnerabilities ? (
@@ -279,46 +247,28 @@ const Report_ap = () => {
                       />
                     </CTableDataCell>
                   )
-                ) : isedit ? (
-                  console.log(isedit)
                 ) : (
-                  <CTableDataCell className="text-center">
-                    <CFormInput
-                      type="text"
-                      placeholder={location.state.vulnerabilities}
-                      id="a"
-                      onChange={vulnerabilitiesChangedHandler}
-                    />
-                  </CTableDataCell>
+                  console.log('vul')
                 )}
                 {/*location*/}
-                {location.state.locations ? (
+                {location.state.location ? (
                   isedit ? (
                     <CTableDataCell className="text-center">
-                      {location.state.locations}
+                      {location.state.location}
                     </CTableDataCell>
                   ) : (
                     <CTableDataCell className="text-center">
                       <CFormInput
                         ref={blah}
                         type="text"
-                        placeholder={location.state.locations}
+                        placeholder={location.state.location}
                         id="a"
                         onChange={locationChangedHandler}
                       />
                     </CTableDataCell>
                   )
-                ) : isedit ? (
-                  console.log(isedit)
                 ) : (
-                  <CTableDataCell className="text-center">
-                    <CFormInput
-                      type="text"
-                      placeholder={location.state.locations}
-                      id="a"
-                      onChange={locationChangedHandler}
-                    />
-                  </CTableDataCell>
+                  console.log('loc')
                 )}
                 {/*threat actors*/}
                 {location.state.threatActors ? (
@@ -337,17 +287,8 @@ const Report_ap = () => {
                       />
                     </CTableDataCell>
                   )
-                ) : isedit ? (
-                  console.log(isedit)
                 ) : (
-                  <CTableDataCell className="text-center">
-                    <CFormInput
-                      type="text"
-                      placeholder={location.state.threatActors}
-                      id="a"
-                      onChange={threatActorsChangedHandler}
-                    />
-                  </CTableDataCell>
+                  console.log('loc')
                 )}
                 {/*idnetities*/}
                 {location.state.identities ? (
@@ -366,17 +307,8 @@ const Report_ap = () => {
                       />
                     </CTableDataCell>
                   )
-                ) : isedit ? (
-                  console.log(isedit)
                 ) : (
-                  <CTableDataCell className="text-center">
-                    <CFormInput
-                      type="text"
-                      placeholder={location.state.identities}
-                      id="a"
-                      onChange={identitiesChangedHandler}
-                    />
-                  </CTableDataCell>
+                  console.log('-')
                 )}
                 {/*tools*/}
                 {location.state.tools ? (
@@ -393,17 +325,8 @@ const Report_ap = () => {
                       />
                     </CTableDataCell>
                   )
-                ) : isedit ? (
-                  console.log(isedit)
                 ) : (
-                  <CTableDataCell className="text-center">
-                    <CFormInput
-                      type="text"
-                      placeholder={location.state.tools}
-                      id="a"
-                      onChange={toolsChangedHandler}
-                    />
-                  </CTableDataCell>
+                  console.log('-')
                 )}
                 {/*infra*/}
                 {location.state.infrastructure ? (
@@ -422,17 +345,8 @@ const Report_ap = () => {
                       />
                     </CTableDataCell>
                   )
-                ) : isedit ? (
-                  console.log(isedit)
                 ) : (
-                  <CTableDataCell className="text-center">
-                    <CFormInput
-                      type="text"
-                      placeholder={location.state.infrastructure}
-                      id="a"
-                      onChange={infrastructureChangedHandler}
-                    />
-                  </CTableDataCell>
+                  console.log('-')
                 )}
                 {/*campaign*/}
                 {location.state.campaigns ? (
@@ -451,17 +365,8 @@ const Report_ap = () => {
                       />
                     </CTableDataCell>
                   )
-                ) : isedit ? (
-                  console.log(isedit)
                 ) : (
-                  <CTableDataCell className="text-center">
-                    <CFormInput
-                      type="text"
-                      placeholder={location.state.campaigns}
-                      id="a"
-                      onChange={campaignsChangedHandler}
-                    />
-                  </CTableDataCell>
+                  console.log('-')
                 )}
 
                 <CTableDataCell className="text-center">
@@ -474,16 +379,11 @@ const Report_ap = () => {
                   </CButton>
                 </CTableDataCell>
               </CTableRow>
-              <CTableRow>
-                <CBadge style={{ backgroundColor: '#F7F7FF', visibility: badge }}>
-                  Scroll Right to Save
-                </CBadge>
-              </CTableRow>
             </CTableBody>
           </CTable>
           <div>
             STIX Visualizer
-            <Visualizer graph1={hash1} />
+            <Visualizer name={test} />
           </div>
         </CCardBody>
       </CCard>
