@@ -64,6 +64,17 @@ public class StixBundle {
         }
     }
 
+    public boolean hasRelationship(SDO s){
+        for (SRO rel : relationships){
+            if (rel.target.equals(s.name) || rel.source.equals(s.name))
+                return true;
+        }
+        return false;
+    }
+
+    public void deleteRelationship(SRO r){
+        relationships.remove(r);
+    }
     public void addEntity(SDO s, Integer hash){
         if (!exists(s.name)) { //if not already added
             entities.add(s);

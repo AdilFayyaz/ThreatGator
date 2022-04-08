@@ -4,6 +4,7 @@ import com.example.threatprioritization.model.*;
 import com.example.threatprioritization.repository.ThreatScoresRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.http.HttpHost;
 import org.apache.lucene.search.spell.LevenshteinDistance;
 import org.elasticsearch.action.get.GetRequest;
@@ -37,7 +38,7 @@ public class ThreatPrioritizationService {
     @Autowired
     ThreatScoresRepository threatScoresRepository;
 
-    String organizationPath = "http://127.0.0.1:8084/organization/getOrganization{Org_id}";
+    String organizationPath = "http://127.0.0.1:8084/organization/getOrganization/{Org_id}";
     String getAssetsPath = "http://127.0.0.1:8084/assets/assetsByOrganization/{id}";
     String getAllOrganizationsPath = "http://127.0.0.1:8084/organization/getAll";
     String makeStix = "http://127.0.0.1:5000/makeStix";
@@ -418,7 +419,12 @@ public class ThreatPrioritizationService {
         for (SRO r : report.relationships){
             if(!identityExists(orgName, orgSector, orgCountry, assets, r.source)
             && !identityExists(orgName, orgSector, orgCountry, assets, r.target))
-                tempStix.deleteEntity(r.source);
+                tempStix.deleteRelationship(r);
+        }
+        for (SDO st : report.entities){
+            if (!tempStix.hasRelationship(st)){
+                tempStix.deleteEntity(st.name);
+            }
         }
 
         try {
@@ -431,6 +437,10 @@ public class ThreatPrioritizationService {
         } catch (HttpStatusCodeException | JsonProcessingException e) {
             System.out.println("Error Occurred in Making Filtered Stix");
         }
+        s= StringEscapeUtils.unescapeJava(s);
+
+        if (s.charAt(0) == '"')
+            s=s.substring(1, s.length()-1);
         return s;
     }
 
