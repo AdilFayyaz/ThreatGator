@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.model.*;
 import org.apache.http.HttpHost;
+import org.apache.lucene.search.spell.LevenshteinDistance;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
@@ -441,6 +442,7 @@ public class KafkaService {
 
 
     public void correlateArrays(ArrayList<StixBundle> initials, ArrayList<StixBundle> finals, int start, int end){
+        LevenshteinDistance lev = new LevenshteinDistance();
         for (int i=start; i<end; i++) {
             for (Iterator<StixBundle> iterator = finals.iterator(); iterator.hasNext();) {
                 StixBundle aFinal = iterator.next();
@@ -453,7 +455,7 @@ public class KafkaService {
                                 || ent1.type.equals("threat-actor") || (ent2.type.equals("malware")
                                 || ent2.type.equals("identity") || ent2.type.equals("threat-actor"))) {
 
-                            if (ent1.name.equals(ent2.name)) { //use levenshtein distance here
+                            if ( lev.getDistance(ent1.name, ent2.name) >=0.7) { //use levenshtein distance here
                                 // add all entities and relationships of initialBundle to finalBundle
                                 for (SDO ent : initials.get(i).entities)
                                     tempAFinal.addEntity(ent, initials.get(i).hash);
