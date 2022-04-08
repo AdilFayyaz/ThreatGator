@@ -2,21 +2,28 @@ package com.example.threatprioritization.services;
 
 import com.example.threatprioritization.model.*;
 import com.example.threatprioritization.repository.ThreatScoresRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
+import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -32,6 +39,7 @@ public class ThreatPrioritizationService {
     String organizationPath = "http://127.0.0.1:8084/organization/getOrganization{Org_id}";
     String getAssetsPath = "http://127.0.0.1:8084/assets/assetsByOrganization/{id}";
     String getAllOrganizationsPath = "http://127.0.0.1:8084/organization/getAll";
+    String makeStix = "http://127.0.0.1:5000/makeStix";
 
     public RestTemplate restTemplate = new RestTemplate();
 
@@ -377,6 +385,35 @@ public class ThreatPrioritizationService {
         for (Organization organization:organizations){
             getThreatScore(organization,report);
         }
+    }
+
+    public String filterStixObject(Organization organization, StixBundle report){
+        //get organization name, sector and country
+        String s=report.toString(); //report.bundle when get the new stixBundle obj
+        String orgName=organization.getName();
+        String orgSector=organization.getSector();
+        String orgCountry=organization.getCountry();
+        //get organization's assets, vendor + name
+        Assets[] assets = this.restTemplate.getForObject(getAssetsPath, Assets[].class, organization.getId());
+
+        //StixBundle tempStix = new copy constructor
+        for (SRO r : report.relationships){
+            if(!identityExists(orgName, orgSector, orgCountry, assets, r.source)
+            && !identityExists(orgName, orgSector, orgCountry, assets, r.target))
+                report.deleteEntity(r.source);
+        }
+
+        try {
+            ObjectMapper Nmapper = new ObjectMapper();
+            String rep = Nmapper.writeValueAsString(report);
+            s = restTemplate.postForObject(makeStix, new HttpEntity<>(rep), String.class);
+            System.out.println("*******************");
+            System.out.println(s);
+
+        } catch (HttpStatusCodeException | JsonProcessingException e) {
+            System.out.println("Error Occurred in Making Filtered Stix");
+        }
+        return s;
     }
 
 }

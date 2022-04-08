@@ -30,6 +30,18 @@ public class ThreatScoreController {
         }
     }
 
+    @GetMapping("/filterStixBundle")
+    public String filterStixBundle(Integer org_id, Integer report_id, String index) throws JSONException, IOException {
+        Organization org = threatPrioritizationService.getOrganization(org_id);
+        StixBundle report = threatPrioritizationService.getReport(report_id, index);
+        if (org!=null && report!=null){
+            return threatPrioritizationService.filterStixObject(org, report);
+        }
+        else{
+            return null;
+        }
+    }
+
     @GetMapping("/updateScoreForOrganization")
     public void updateByOrganization(Integer org_id) throws JSONException, IOException {
         Organization org = threatPrioritizationService.getOrganization(org_id);
