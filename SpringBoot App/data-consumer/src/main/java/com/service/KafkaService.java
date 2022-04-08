@@ -51,6 +51,13 @@ interface PyFunc{
 @Service
 @RestController
 public class KafkaService {
+    private static final RequestOptions COMMON_OPTIONS;
+    static {
+        RequestOptions.Builder builder = RequestOptions.DEFAULT.toBuilder();
+        builder.addParameter("size", "2000");
+
+        COMMON_OPTIONS = builder.build();
+    }
 
     private ArrayList<RedditThread> threads= new ArrayList<>();
     private ArrayList<RedditComment> comments = new ArrayList<>();
@@ -320,6 +327,7 @@ public class KafkaService {
         ArrayList<String> tools = new ArrayList<String>();
         ArrayList<String> locations = new ArrayList<String>();
         ArrayList<String> campaigns = new ArrayList<String>();
+        ArrayList<String> attackPatterns = new ArrayList<>();
         // Insert the Named Entities
         for(int i =0; i< jsonArrayObjects.length(); i++){
 
@@ -362,7 +370,7 @@ public class KafkaService {
             
             else if(Objects.equals(jsonArrayObjects.getJSONArray(i).getString(2), "AP")) {
                 insertEntity("attackPattern", jsonArrayObjects.getJSONArray(i).getString(1), Obj);
-                locations.add(jsonArrayObjects.getJSONArray(i).getString(1));
+                attackPatterns.add(jsonArrayObjects.getJSONArray(i).getString(1));
             }
         }
 
@@ -404,7 +412,7 @@ public class KafkaService {
     public Boolean checkIfEmpty(ElasticModel obj){
         if (obj.campaigns.size()==0 && obj.vulnerabilities.size()==0 && obj.tools.size()==0 && obj.threatActors.size()==0
         && obj.locations.size()==0 && obj.identities.size()==0 && obj.infrastructures.size()==0
-        && obj.indicators.size()==0 && obj.malwares.size()==0){
+        && obj.indicators.size()==0 && obj.malwares.size()==0 && obj.attackPatterns.size()==0){
             return true;
         }
         return false;
@@ -432,6 +440,34 @@ public class KafkaService {
     }
 
 
+    public void correlateArrays(ArrayList<StixBundle> initials, ArrayList<StixBundle> finals, int start, int end){
+        for (int i=start; i<end; i++) {
+            for (Iterator<StixBundle> iterator = finals.iterator(); iterator.hasNext();) {
+                StixBundle aFinal = iterator.next();
+                StixBundle tempAFinal = new StixBundle(aFinal);
+                for (SDO ent1 : initials.get(i).entities) {
+
+                    for (SDO ent2 : aFinal.entities) {
+
+                        if (ent1.type.equals("malware") || ent1.type.equals("identity")
+                                || ent1.type.equals("threat-actor") || (ent2.type.equals("malware")
+                                || ent2.type.equals("identity") || ent2.type.equals("threat-actor"))) {
+
+                            if (ent1.name.equals(ent2.name)) { //use levenshtein distance here
+                                // add all entities and relationships of initialBundle to finalBundle
+                                for (SDO ent : initials.get(i).entities)
+                                    tempAFinal.addEntity(ent, initials.get(i).hash);
+                                for (SRO rel : initials.get(i).relationships)
+                                    tempAFinal.addRelationship(rel, initials.get(i).hash);
+                            }
+                        }
+                    }
+                }
+                aFinal.entities = tempAFinal.entities;
+                aFinal.relationships = tempAFinal.relationships;
+            }
+        }
+    }
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @RequestMapping("/correlate")
@@ -445,7 +481,7 @@ public class KafkaService {
         SearchSourceBuilder searchSourceBuilder= new SearchSourceBuilder();
         searchSourceBuilder.query(QueryBuilders.matchAllQuery());
         request.source(searchSourceBuilder);
-        SearchResponse response = client.search(request, RequestOptions.DEFAULT);
+        SearchResponse response = client.search(request, COMMON_OPTIONS);
         ObjectMapper mapper = new ObjectMapper();
         List<ElasticModel> unMerged = new ArrayList<ElasticModel>();
         for(SearchHit hit : response.getHits().getHits()) {
@@ -486,29 +522,25 @@ public class KafkaService {
                 finals.add(new StixBundle(j.getString("bundle"), 0));
             }
         }
+        System.out.println("initials" + initials);
+        System.out.println("finals" + finals);
+
         // now initials has just the new bundles and finals has old + new bundles
-
-        for (StixBundle initial : initials) {
-            for (StixBundle aFinal : finals) {
-
-                for (SDO ent1 : initial.entities) {
-                    for (SDO ent2 : aFinal.entities) {
-                        if (ent1.type.equals("malware") || ent1.type.equals("identity")
-                                || ent1.type.equals("threat-actor") || (ent2.type.equals("malware")
-                                || ent2.type.equals("identity") || ent2.type.equals("threat-actor"))) {
-
-                            if (ent1.name.equals(ent2.name)) { //use levenshtein distance here
-                                // add all entities and relationships of initialBundle to finalBundle
-                                for (SDO ent : initial.entities)
-                                    aFinal.addEntity(ent, initial.hash);
-                                for (SRO rel : initial.relationships)
-                                    aFinal.addRelationship(rel, initial.hash);
-                            }
-                        }
-                    }
+        try {
+            int start;
+            int end;
+            for (int i=0;i<initials.size();i++) {
+                start = i;
+                end = i + 10;
+                if (end >= initials.size()){
+                    end = initials.size()-1;
                 }
-
+                correlateArrays(initials, finals, start, end);
+                i = end;
             }
+        }
+        catch (NullPointerException e){
+            String u= e.toString();
         }
 
         // now finals has all the final stix bundles, these will be converted to stix via python and added to elastic

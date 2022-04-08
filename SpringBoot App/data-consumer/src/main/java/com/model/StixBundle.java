@@ -12,14 +12,16 @@ public class StixBundle {
     public ArrayList<SDO> entities = new ArrayList<>();
     public ArrayList<SRO> relationships = new ArrayList<>();
     public ArrayList<Integer> mergedReports= new ArrayList<>();
+    public String bundleString;
 
     public StixBundle(String b, Integer hash) throws JSONException {
 
         this.hash=hash;
         b=StringEscapeUtils.unescapeJava(b);
+
         if (b.charAt(0) == '"')
             b=b.substring(1, b.length()-1);
-
+        this.bundleString = b;
        // System.out.println(b);
 
         JSONObject bundle = new JSONObject(b);
@@ -46,6 +48,12 @@ public class StixBundle {
         }
     }
 
+    public StixBundle(StixBundle stixBundle){
+        this.bundleString = stixBundle.bundleString;
+        this.hash = stixBundle.hash;
+        this.entities.addAll(stixBundle.entities);
+        this.relationships.addAll(stixBundle.relationships);
+    }
     public void addEntity(SDO s){
         if (!exists(s.name)) { //if not already added
             entities.add(s);
