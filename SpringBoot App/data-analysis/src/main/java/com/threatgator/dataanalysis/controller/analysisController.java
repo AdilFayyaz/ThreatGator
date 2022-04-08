@@ -77,13 +77,13 @@ public class analysisController {
         allFields fields[] = new allFields[hashes.size()];
         JSONObject j = new JSONObject();
         for(int i=0; i<hashes.size();i++){
-            if(i==150){break;}
             allFields f = new allFields();
             connect.GetAllResultsOnHash(f, hashes.get(i));
             JSONObject r = f.getJSONFields();
             j.put(String.valueOf(i),r);
         }
         return j.toString();
+
     }
 
     // get the number of reports fetched in the week
