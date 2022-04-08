@@ -21,6 +21,11 @@ class RelationExtracter:
     def getMax(self, x):
         return max(x, key=x.get)
 
+    def isAcceptableRelation(self, rel_dict, x):
+        if rel_dict[x]>=0.5:
+            return True
+        else:
+            return False
 
     def getInference(self, sentence):
         entities=[]
@@ -41,9 +46,13 @@ class RelationExtracter:
                                 # max(stats, key=stats.get)
                                 for relation in rel_dict:
                                     if (e.text, b.text) not in printed and (b.text, e.text) not in printed:
-                                        print(f" entities: {e.text, b.text} --> predicted relation: {self.getMax(rel_dict)}")
+                                        # print(f" entities: {e.text, b.text} --> predicted relation: {self.getMax(rel_dict)}")
                                         printed.append((e.text, b.text)) 
                                         rel={'entities':[e.text, b.text], 'predicted_relations':self.getMax(rel_dict) }
-                                        relationships.append(rel)
+                                        print(rel)
+                                        print(rel_dict[self.getMax(rel_dict)])
+                                        
+                                        if self.isAcceptableRelation(rel_dict, self.getMax(rel_dict)):
+                                            relationships.append(rel)
         return {'entity tags': entities, 'relationships': relationships}
                                                
