@@ -1,15 +1,12 @@
 package com.threatgator.usermanagement.controller;
 
-import com.threatgator.usermanagement.model.Assets;
 import com.threatgator.usermanagement.model.Organization;
-import com.threatgator.usermanagement.service.AssetsService;
 import com.threatgator.usermanagement.service.OrganizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.threatgator.usermanagement.model.Users;
-import com.threatgator.usermanagement.service.UsersService;
 
 import java.util.List;
+import java.util.Optional;
 
 // Users Controller - Users functions (endpoints)
 @RestController
@@ -29,6 +26,11 @@ public class OrganizationController {
     @GetMapping("/getAll")
     public List<Organization> getAll(){
         return organizationService.getAll();
+    }
+
+    @GetMapping("/getOrganization{Org_id}")
+    public Optional<Organization> getOrganization(@PathVariable(value="Org_id") Integer org_id){
+        return organizationService.getOrganization(org_id);
     }
 
     @GetMapping("/getName/{Org_id}")
