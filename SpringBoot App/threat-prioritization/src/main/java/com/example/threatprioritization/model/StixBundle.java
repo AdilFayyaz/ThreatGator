@@ -13,15 +13,17 @@ public class StixBundle {
     public ArrayList<SRO> relationships = new ArrayList<>();
     public boolean standalone;
     public ArrayList<Integer> mergedReports= new ArrayList<>();
+    public String bundleString;
 
     public StixBundle(String b, Integer hash) throws JSONException {
 
         this.hash=hash;
         b=StringEscapeUtils.unescapeJava(b);
+
         if (b.charAt(0) == '"')
             b=b.substring(1, b.length()-1);
-
-       // System.out.println(b);
+        this.bundleString = b;
+        // System.out.println(b);
 
         JSONObject bundle = new JSONObject(b);
         if (bundle.has("objects")) {
@@ -40,11 +42,18 @@ public class StixBundle {
                     if (!exists(objects.getJSONObject(i).getString("source_ref"), objects.getJSONObject(i).getString("target_ref"))) {
                         relationships.add(new SRO(objects.getJSONObject(i).getString("relationship_type"), getName(objects.getJSONObject(i).getString("source_ref")),
                                 getName(objects.getJSONObject(i).getString("target_ref"))
-                                ));
+                        ));
                     }
                 }
             }
         }
+    }
+
+    public StixBundle(StixBundle stixBundle){
+        this.bundleString = stixBundle.bundleString;
+        this.hash = stixBundle.hash;
+        this.entities.addAll(stixBundle.entities);
+        this.relationships.addAll(stixBundle.relationships);
     }
 
     public void addEntity(SDO s){

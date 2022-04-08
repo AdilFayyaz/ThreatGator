@@ -5,6 +5,7 @@ import com.example.threatprioritization.repository.ThreatScoresRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpHost;
+import org.apache.lucene.search.spell.LevenshteinDistance;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
@@ -81,6 +82,9 @@ public class ThreatPrioritizationService {
 
     public Organization getOrganization(Integer org_id){
         Organization org=this.restTemplate.getForObject(organizationPath, Organization.class, org_id);
+        if (org==null)
+            System.out.println("org not found");
+        assert org != null;
         System.out.println("GOT ORGANIZATION: "+org.getId());
         return org;
     }
@@ -123,20 +127,32 @@ public class ThreatPrioritizationService {
     }
 
     public boolean assetMentioned(Assets[] assets, String name){
+
+        LevenshteinDistance lev = new LevenshteinDistance();
+
         if (assets!=null) {
             for (int i = 0; i < assets.length; i++) {
-                if (assets[i].getName().equals(name) || assets[i].getVendor().equals(name)
-                        || assets[i].getVersion().equals(name))
+                if (lev.getDistance(assets[i].getName(), name) >=0.7 || lev.getDistance(assets[i].getVendor(), name) >=0.7
+                        || lev.getDistance(assets[i].getVersion(), name) >=0.7) {
+                    System.out.println("*********Matching assetttt***********");
                     return true;
+                }
             }
         }
+        System.out.println("$$$$$$$$no assets :($$$$$$$$$$$$$");
         return false;
     }
 
     public boolean identityExists(String orgName, String orgSector, String orgCountry, Assets[] assets, String identity){
-        if (identity.contains(orgName) || identity.contains(orgSector) || identity.contains(orgCountry) || orgCountry.contains(identity)
-        || assetMentioned(assets, identity))
+        LevenshteinDistance lev = new LevenshteinDistance();
+
+        if ( lev.getDistance(identity, orgName) >=0.7 || identity.contains(orgSector)
+        || identity.contains(orgCountry) || orgCountry.contains(identity)
+        || assetMentioned(assets, identity)){
+            System.out.println("*********Matching identity***********");
             return true;
+        }
+
         return false;
     }
 
@@ -382,30 +398,32 @@ public class ThreatPrioritizationService {
     public void updateThreatScoresForReport(StixBundle report){ //for all organizations
         // get all organizations
         Organization[] organizations =this.restTemplate.getForObject(getAllOrganizationsPath, Organization[].class);
+        assert organizations != null;
         for (Organization organization:organizations){
             getThreatScore(organization,report);
         }
     }
 
     public String filterStixObject(Organization organization, StixBundle report){
+
+        String s=report.bundleString;
         //get organization name, sector and country
-        String s=report.toString(); //report.bundle when get the new stixBundle obj
         String orgName=organization.getName();
         String orgSector=organization.getSector();
         String orgCountry=organization.getCountry();
         //get organization's assets, vendor + name
         Assets[] assets = this.restTemplate.getForObject(getAssetsPath, Assets[].class, organization.getId());
 
-        //StixBundle tempStix = new copy constructor
+        StixBundle tempStix = new StixBundle(report);
         for (SRO r : report.relationships){
             if(!identityExists(orgName, orgSector, orgCountry, assets, r.source)
             && !identityExists(orgName, orgSector, orgCountry, assets, r.target))
-                report.deleteEntity(r.source);
+                tempStix.deleteEntity(r.source);
         }
 
         try {
             ObjectMapper Nmapper = new ObjectMapper();
-            String rep = Nmapper.writeValueAsString(report);
+            String rep = Nmapper.writeValueAsString(tempStix);
             s = restTemplate.postForObject(makeStix, new HttpEntity<>(rep), String.class);
             System.out.println("*******************");
             System.out.println(s);
