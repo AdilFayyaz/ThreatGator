@@ -91,9 +91,9 @@ const Report_ap = () => {
     event.preventDefault()
     location.state.campaigns = event.target.value
   }
-  const attackPatternChangedHandler = (event) => {
+  const attackPatternsChangedHandler = (event) => {
     event.preventDefault()
-    location.state.attackPattern = event.target.value
+    location.state.attackPatterns = event.target.value
   }
   function updateElastic() {
     if (!location.state.malwares) {
@@ -123,8 +123,8 @@ const Report_ap = () => {
     if (!location.state.campaigns) {
       location.state.campaigns = ''
     }
-    if (!location.state.attackPattern) {
-      location.state.attackPattern = ''
+    if (!location.state.attackPatterns) {
+      location.state.attackPatterns = ''
     }
     var req = {
       hash: location.state.hash,
@@ -137,7 +137,7 @@ const Report_ap = () => {
       infrastructures: location.state.infrastructure,
       indicators: location.state.indicators,
       campaigns: location.state.campaigns,
-      attackPatterns: location.state.attackPattern,
+      attackPatterns: location.state.attackPatterns,
     }
     const requestOptions = {
       method: 'POST',
@@ -218,8 +218,8 @@ const Report_ap = () => {
                 ) : (
                   console.log('-')
                 )}
-                {location.state.attackPattern || !isedit ? (
-                  <CTableHeaderCell className="text-center">AttackPattern</CTableHeaderCell>
+                {location.state.attackPatterns || !isedit ? (
+                  <CTableHeaderCell className="text-center">AttackPatterns</CTableHeaderCell>
                 ) : (
                   console.log('-')
                 )}
@@ -485,19 +485,19 @@ const Report_ap = () => {
                   </CTableDataCell>
                 )}
                 {/*Attack Pattern*/}
-                {location.state.attackPattern ? (
+                {location.state.attackPatterns ? (
                   isedit ? (
                     <CTableDataCell className="text-center">
-                      {location.state.attackPattern}
+                      {location.state.attackPatterns}
                     </CTableDataCell>
                   ) : (
                     <CTableDataCell className="text-center">
                       <CFormInput
                         ref={blah}
                         type="text"
-                        defaultValue={location.state.attackPattern}
+                        defaultValue={location.state.attackPatterns}
                         id="a"
-                        onChange={attackPatternChangedHandler}
+                        onChange={attackPatternsChangedHandler}
                       />
                     </CTableDataCell>
                   )
@@ -507,9 +507,9 @@ const Report_ap = () => {
                   <CTableDataCell className="text-center">
                     <CFormInput
                       type="text"
-                      defaultValue={location.state.attackPattern}
+                      defaultValue={location.state.attackPatterns}
                       id="a"
-                      onChange={attackPatternChangedHandler}
+                      onChange={attackPatternsChangedHandler}
                     />
                   </CTableDataCell>
                 )}

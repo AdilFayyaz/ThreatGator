@@ -34,6 +34,7 @@ const LatestReports = () => {
     console.log('in function')
   }
   function goToDetails(
+    hash,
     source,
     rawtext,
     malwares,
@@ -44,9 +45,10 @@ const LatestReports = () => {
     tools,
     infrastructure,
     campaigns,
-    attackPattern,
+    attackPatterns,
   ) {
     history.push('/Report', {
+      hash: hash,
       source: source,
       rawText: rawtext,
       malware: malwares,
@@ -57,7 +59,7 @@ const LatestReports = () => {
       tools: tools,
       infrastructure: infrastructure,
       campaigns: campaigns,
-      attackPattern: attackPattern,
+      attackPatterns: attackPatterns,
     })
   }
   const history = useHistory()
@@ -69,7 +71,7 @@ const LatestReports = () => {
   var isTools = false
   var isInfra = false
   var isCampaign = false
-  var isAttackPattern = false
+  var isAttackPatterns = false
 
   function setTags(
     malwares,
@@ -80,7 +82,7 @@ const LatestReports = () => {
     tools,
     infrastructure,
     campaigns,
-    attackPattern,
+    attackPatterns,
   ) {
     if (malwares) {
       isMalware = true
@@ -106,8 +108,8 @@ const LatestReports = () => {
     if (campaigns) {
       isCampaign = true
     }
-    if (attackPattern) {
-      isAttackPattern = true
+    if (attackPatterns) {
+      isAttackPatterns = true
     }
   }
   useEffect(() => {
@@ -151,7 +153,7 @@ const LatestReports = () => {
                     {(isTools = false)}
                     {(isInfra = false)}
                     {(isCampaign = false)}
-                    {(isAttackPattern = false)}
+                    {(isAttackPatterns = false)}
                     {setTags(
                       el.malwares,
                       el.vulnerabilities,
@@ -161,7 +163,7 @@ const LatestReports = () => {
                       el.tools,
                       el.infrastructure,
                       el.campaigns,
-                      el.attackPattern,
+                      el.attackPatterns,
                     )}
                     {/*vulnerability tag*/}
                     {isVulnerability ? (
@@ -252,7 +254,7 @@ const LatestReports = () => {
                       <div></div>
                     )}
                     {/*if attack pattern tag*/}
-                    {isAttackPattern ? (
+                    {isAttackPatterns ? (
                       <CBadge
                         className="rounded-pill"
                         style={{ margin: '1%', backgroundColor: '#BF749B' }}
@@ -268,6 +270,7 @@ const LatestReports = () => {
                       style={{ backgroundColor: 'blue', margin: '1%' }}
                       onClick={() =>
                         goToDetails(
+                          el.hash,
                           el.source,
                           el.rawText,
                           el.malwares,
@@ -278,7 +281,7 @@ const LatestReports = () => {
                           el.tools,
                           el.infrastructure,
                           el.campaigns,
-                          el.attackPattern,
+                          el.attackPatterns,
                         )
                       }
                     >

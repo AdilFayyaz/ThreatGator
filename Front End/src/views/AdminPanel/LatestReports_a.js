@@ -15,6 +15,10 @@ import {
   CTable,
   CButton,
   CBadge,
+  CToaster,
+  CToast,
+  CToastHeader,
+  CToastBody,
 } from '@coreui/react'
 
 import { useHistory, useLocation } from 'react-router-dom'
@@ -22,6 +26,7 @@ import { useHistory, useLocation } from 'react-router-dom'
 const LatestReports_a = () => {
   const location = useLocation()
   const [reportsData, SetReportsData] = useState({})
+  const [toast, addToast] = useState(false)
   // fetching data from data analysis service for reports
   const getReports = () => {
     // event.preventDefault()
@@ -45,7 +50,7 @@ const LatestReports_a = () => {
     tools,
     infrastructure,
     campaigns,
-    attackPattern,
+    attackPatterns,
   ) {
     history.push('/Report_admin', {
       hash: hash,
@@ -59,7 +64,7 @@ const LatestReports_a = () => {
       tools: tools,
       infrastructure: infrastructure,
       campaigns: campaigns,
-      attackPattern: attackPattern,
+      attackPatterns: attackPatterns,
     })
   }
   const history = useHistory()
@@ -71,7 +76,7 @@ const LatestReports_a = () => {
   var isTools = false
   var isInfra = false
   var isCampaign = false
-  var isAttackPattern = false
+  var isAttackPatterns = false
   function setTags(
     malwares,
     vulnerabilities,
@@ -81,7 +86,7 @@ const LatestReports_a = () => {
     tools,
     infrastructure,
     campaigns,
-    attackPattern,
+    attackPatterns,
   ) {
     if (malwares) {
       isMalware = true
@@ -107,8 +112,8 @@ const LatestReports_a = () => {
     if (campaigns) {
       isCampaign = true
     }
-    if (attackPattern) {
-      isAttackPattern = true
+    if (attackPatterns) {
+      isAttackPatterns = true
     }
   }
   useEffect(() => {
@@ -117,6 +122,16 @@ const LatestReports_a = () => {
       console.log('returning -xyzzz')
     }
   }, [location])
+
+  function deleteReport(hash) {
+    // /deleteFromElastic/{hash}
+    fetch('http://127.0.0.1:8082/dataAnalysis/deleteFromElastic/' + hash)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data)
+        addToast(true)
+      })
+  }
 
   return (
     <>
@@ -136,6 +151,7 @@ const LatestReports_a = () => {
 
                 <CTableHeaderCell className="text-center"> </CTableHeaderCell>
                 <CTableHeaderCell className="text-center"> </CTableHeaderCell>
+                <CTableHeaderCell className="text-center"> </CTableHeaderCell>
               </CTableRow>
             </CTableHead>
             <CTableBody>
@@ -153,7 +169,7 @@ const LatestReports_a = () => {
                     {(isTools = false)}
                     {(isInfra = false)}
                     {(isCampaign = false)}
-                    {(isAttackPattern = false)}
+                    {(isAttackPatterns = false)}
                     {setTags(
                       el.malwares,
                       el.vulnerabilities,
@@ -163,7 +179,7 @@ const LatestReports_a = () => {
                       el.tools,
                       el.infrastructure,
                       el.campaigns,
-                      el.attackPattern,
+                      el.attackPatterns,
                     )}
                     {/*vulnerability tag*/}
                     {isVulnerability ? (
@@ -254,7 +270,7 @@ const LatestReports_a = () => {
                       <div></div>
                     )}
                     {/*if campaign tag*/}
-                    {isAttackPattern ? (
+                    {isAttackPatterns ? (
                       <CBadge
                         className="rounded-pill"
                         style={{ margin: '1%', backgroundColor: '#BF749B' }}
@@ -282,11 +298,20 @@ const LatestReports_a = () => {
                           el.tools,
                           el.infrastructure,
                           el.campaigns,
-                          el.attackPattern,
+                          el.attackPatterns,
                         )
                       }
                     >
                       Details
+                    </CButton>
+                  </CTableDataCell>
+                  <CTableDataCell className="text-center">
+                    {/*{console.log('hashhh' + el.hash)}*/}
+                    <CButton
+                      style={{ backgroundColor: 'blue', margin: '1%' }}
+                      onClick={() => deleteReport(el.hash)}
+                    >
+                      Delete Report
                     </CButton>
                   </CTableDataCell>
                   <CTableDataCell className="text-center"></CTableDataCell>
@@ -308,6 +333,16 @@ const LatestReports_a = () => {
           </CTable>
         </CCardBody>
       </CCard>
+      {/*  TOAST */}
+      <CToaster placement="top-end">
+        <CToast title="ThreatGator" autohide={true} visible={toast}>
+          <CToastHeader close>
+            <strong className="me-auto">ThreatGator</strong>
+            <small>Latest</small>
+          </CToastHeader>
+          <CToastBody>A Report Has been Deleted</CToastBody>
+        </CToast>
+      </CToaster>
     </>
   )
 }
