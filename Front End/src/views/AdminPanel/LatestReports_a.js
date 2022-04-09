@@ -1,4 +1,4 @@
-import React, { useEffect, useState, createRef } from 'react'
+import React, { useEffect, useState, createRef, useRef } from 'react'
 import {
   CRow,
   CCol,
@@ -19,6 +19,11 @@ import {
   CToast,
   CToastHeader,
   CToastBody,
+  CModal,
+  CModalHeader,
+  CModalTitle,
+  CModalBody,
+  CModalFooter,
 } from '@coreui/react'
 
 import { useHistory, useLocation } from 'react-router-dom'
@@ -27,6 +32,17 @@ const LatestReports_a = () => {
   const location = useLocation()
   const [reportsData, SetReportsData] = useState({})
   const [toast, addToast] = useState(false)
+  const [visible, setVisible] = useState(false)
+  var confirm
+  const [deleteData, setDeleteData] = useState()
+  // function confirmationPrompt(el, e) {
+  //   e.preventDefault()
+  //   return (
+  //
+  //
+  //     </>
+  //   )
+  // }
   // fetching data from data analysis service for reports
   const getReports = () => {
     // event.preventDefault()
@@ -116,12 +132,25 @@ const LatestReports_a = () => {
       isAttackPatterns = true
     }
   }
+
+  function deleteRow(item) {
+    // e.preventDefault()
+
+    console.log('confirm' + confirm)
+    if (confirm == 'yes') {
+      const data2 = Object.values(reportsData).filter((i) => i.hash !== item.hash)
+      // const data2 = reportsData.filter((i) => i.id !== item.id)
+      SetReportsData(data2)
+      deleteReport(item.hash)
+    }
+  }
+
   useEffect(() => {
     getReports()
     return () => {
       console.log('returning -xyzzz')
     }
-  }, [location])
+  }, [location, confirm])
 
   function deleteReport(hash) {
     // /deleteFromElastic/{hash}
@@ -156,7 +185,7 @@ const LatestReports_a = () => {
             </CTableHead>
             <CTableBody>
               {Object.values(reportsData).map((el) => (
-                <CTableRow key={el}>
+                <CTableRow key={el} id={el}>
                   <CTableDataCell>
                     <div className="rawText">{el.rawText}</div>
                   </CTableDataCell>
@@ -309,9 +338,12 @@ const LatestReports_a = () => {
                     {/*{console.log('hashhh' + el.hash)}*/}
                     <CButton
                       style={{ backgroundColor: 'blue', margin: '1%' }}
-                      onClick={() => deleteReport(el.hash)}
+                      onClick={() => {
+                        setVisible(!visible)
+                        setDeleteData(el)
+                      }}
                     >
-                      Delete Report
+                      Delete
                     </CButton>
                   </CTableDataCell>
                   <CTableDataCell className="text-center"></CTableDataCell>
@@ -343,6 +375,33 @@ const LatestReports_a = () => {
           <CToastBody>A Report Has been Deleted</CToastBody>
         </CToast>
       </CToaster>
+      <CModal visible={visible} onClose={() => setVisible(false)}>
+        <CModalHeader onClose={() => setVisible(false)}>
+          <CModalTitle>Confirmation</CModalTitle>
+        </CModalHeader>
+        <CModalBody>Do you want to delete this report?</CModalBody>
+        <CModalFooter>
+          <CButton
+            color="secondary"
+            onClick={() => {
+              setVisible(false)
+              confirm = 'no'
+            }}
+          >
+            No
+          </CButton>
+          <CButton
+            color="primary"
+            onClick={() => {
+              setVisible(false)
+              confirm = 'yes'
+              deleteRow(deleteData)
+            }}
+          >
+            Yes
+          </CButton>
+        </CModalFooter>
+      </CModal>
     </>
   )
 }
