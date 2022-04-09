@@ -21,9 +21,27 @@ import { useLocation } from 'react-router-dom'
 
 const Reports = () => {
   const [reportsData, SetReportsData] = useState({})
+  const [hash1, SetHash] = useState(0)
   // fetching data from data analysis service for reports
   const location = useLocation()
-  const test = 'yahoo'
+  const hash = location.state.hash
+  console.log('hash' + hash)
+  function getStix() {
+    console.log('getting stix')
+    fetch('http://127.0.0.1:8082/dataAnalysis/getStixBundle/' + hash)
+      .then((res) => res.json())
+      .then((data) => {
+        SetHash(data)
+      })
+    console.log('abc' + hash1.id)
+  }
+  useEffect(() => {
+    getStix()
+    return () => {
+      console.log('returning ')
+    }
+  }, [])
+
   return (
     <>
       <CCard className="mb-4">
@@ -84,7 +102,7 @@ const Reports = () => {
                 ) : (
                   console.log('-')
                 )}
-                {location.state.attackPattern ? (
+                {location.state.attackPatterns ? (
                   <CTableHeaderCell className="text-center">Attack-Pattern</CTableHeaderCell>
                 ) : (
                   console.log('-')
@@ -150,9 +168,9 @@ const Reports = () => {
                 ) : (
                   console.log('-')
                 )}
-                {location.state.attackPattern ? (
+                {location.state.attackPatterns ? (
                   <CTableDataCell className="text-center">
-                    {location.state.attackPattern}
+                    {location.state.attackPatterns}
                   </CTableDataCell>
                 ) : (
                   console.log('-')
@@ -162,7 +180,7 @@ const Reports = () => {
           </CTable>
           <div>
             STIX Visualizer
-            <Visualizer name={test} />
+            <Visualizer graph1={hash1} />
           </div>
         </CCardBody>
       </CCard>
