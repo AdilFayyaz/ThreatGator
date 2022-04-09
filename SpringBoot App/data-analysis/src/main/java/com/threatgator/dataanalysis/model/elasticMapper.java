@@ -399,7 +399,10 @@ public class elasticMapper {
         return hashes;
     }
 
-    public boolean hasReport(JSONArray array, String hash) throws JSONException {
+    public boolean hasMergedWithReport(JSONArray array, String hash) throws JSONException {
+        if (array.length()==1 && array.getString(0).equals(hash)){ //it's only merged with one report, itself
+            return false;
+        }
         for (int i=0; i<array.length(); i++){
             if (array.getString(i).equals(hash))
                 return true;
@@ -419,7 +422,7 @@ public class elasticMapper {
         for(SearchHit hit: hits) {
             JSONObject object = new JSONObject(hit.getSourceAsString());
             JSONArray ids = object.getJSONArray("ids");
-            if (hasReport(ids, hash)){
+            if (hasMergedWithReport(ids, hash)){
                 RelatedReport relatedReport = new RelatedReport();
                 relatedReport.id=hit.getId();
                 relatedReport.index="stix";
@@ -430,7 +433,8 @@ public class elasticMapper {
                     RelatedReport relatedReport1 = new RelatedReport();
                     relatedReport1.id=ids.getString(i);
                     relatedReport1.index="tagged_bundle_data";
-                    relatedReports.add(relatedReport1);
+                    if (!relatedReport1.id.equals(hash))
+                        relatedReports.add(relatedReport1);
                 }
             }
 
