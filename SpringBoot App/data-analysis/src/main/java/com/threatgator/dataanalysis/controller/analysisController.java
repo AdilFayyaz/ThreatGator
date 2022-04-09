@@ -271,10 +271,10 @@ public class analysisController {
     }
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
-    @GetMapping("/getStixBundle/{hash}")
-    public String getStixBundle(@PathVariable int hash) throws JSONException, IOException{
+    @GetMapping("/getStixBundle/{hash}/{index}")
+    public String getStixBundle(@PathVariable int hash, @PathVariable String index) throws JSONException, IOException{
 //        System.out.println("INSIDE****************************");
-        return connect.getStix(hash);
+        return connect.getStix(hash, index);
     }
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")

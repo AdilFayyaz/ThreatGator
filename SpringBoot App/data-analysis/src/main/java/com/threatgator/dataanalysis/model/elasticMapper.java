@@ -869,22 +869,26 @@ public class elasticMapper {
     }
 
     //returns the bundle as a jsonString
-    public String getStix(int hash) throws JSONException, IOException{
-
-        GetRequest request= new GetRequest("tagged_bundle_data", String.valueOf(hash));
+    public String getStix(int hash, String index) throws JSONException, IOException{
+        String stixBundle = "";
+        GetRequest request= new GetRequest(index ,String.valueOf(hash));
         GetResponse response = client.get(request, RequestOptions.DEFAULT);
-
-        String stixBundle="";
-        if (response.isExists()){
+        if (response.isExists() ){
             String sourceAsString = response.getSourceAsString();
             JSONObject jsonComplete = new JSONObject(sourceAsString);
-            stixBundle=jsonComplete.getString("bundleJson");
-            stixBundle= StringEscapeUtils.unescapeJava(stixBundle);
+            if(index.equals("tagged_bundle_data")) {
+                stixBundle = jsonComplete.getString("bundleJson");
+            }
+            else if (index.equals("stix")){
+                stixBundle = jsonComplete.getString("bundle");
+            }
+            stixBundle = StringEscapeUtils.unescapeJava(stixBundle);
             if (stixBundle.charAt(0) == '"')
-                stixBundle=stixBundle.substring(1, stixBundle.length()-1);
-            JSONObject bundle = new JSONObject(stixBundle);
+                stixBundle = stixBundle.substring(1, stixBundle.length() - 1);
         }
+
         return stixBundle;
+
     }
 
     // return related reports
