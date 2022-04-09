@@ -1,6 +1,7 @@
 package com.model;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.lucene.search.spell.LevenshteinDistance;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,6 +14,7 @@ public class StixBundle {
     public ArrayList<SRO> relationships = new ArrayList<>();
     public ArrayList<Integer> mergedReports= new ArrayList<>();
     public String bundleString;
+    LevenshteinDistance lev = new LevenshteinDistance();
 
     public StixBundle(String b, Integer hash) throws JSONException {
 
@@ -113,7 +115,7 @@ public class StixBundle {
 
     boolean exists(String name){
         for(int i=0; i< entities.size(); i++){
-            if (entities.get(i).name.equals(name)){
+            if (lev.getDistance(entities.get(i).name, name) >= 0.7){
                 return true;
             }
         }
@@ -123,7 +125,7 @@ public class StixBundle {
     boolean exists(String src, String dest){
         for (int i=0; i< relationships.size(); i++){
 
-            if (getName(src).equals(relationships.get(i).source) && getName(dest).equals(relationships.get(i).target)  )
+            if (lev.getDistance(getName(src),relationships.get(i).source) >=0.7 && lev.getDistance(getName(dest),relationships.get(i).target) >=0.7)
                 return true;
         }
         return false;
@@ -132,7 +134,7 @@ public class StixBundle {
     boolean existsN(String src, String dest){
         for (int i=0; i< relationships.size(); i++){
 
-            if (src.equals(relationships.get(i).source) && dest.equals(relationships.get(i).target)  )
+            if (lev.getDistance(src,relationships.get(i).source) >=0.7 && lev.getDistance(dest,relationships.get(i).target )>=0.7 )
                 return true;
         }
         return false;
@@ -140,7 +142,7 @@ public class StixBundle {
 
     int get(String name) {
         for (int i = 0; i < entities.size(); i++) {
-            if (entities.get(i).name.equals(name)) {
+            if (lev.getDistance(entities.get(i).name, name) >= 0.7) {
                 return i;
             }
         }
