@@ -21,7 +21,7 @@ import { lazy, useEffect, useState } from 'react'
 const Login = (props) => {
   const [username, setUsername] = useState({})
   const [password, setPassword] = useState({})
-  const [data, setData] = useState({})
+  const [data2, setData] = useState({})
 
   //a function that navigates to dashboard page if the credentials match with users's
   const navigateTo = [
@@ -39,36 +39,39 @@ const Login = (props) => {
   const history = useHistory()
   const authenticateUser = (event) => {
     event.preventDefault()
-    console.log('username')
-    console.log(username)
-    history.push('/dashboard', { username: username, password: password })
-    console.log(history)
-
-    console.log('here')
+    const req = {
+      username: username,
+      password: password,
+      organization: {},
+    }
+    console.log('here ' + JSON.stringify(req))
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username: username, password: password }),
+      body: JSON.stringify(req),
     }
     //uses the user management system
     fetch('http://127.0.0.1:8084/users/validateCredentials', requestOptions)
       .then((response) => response.json())
       .then((data) => {
-        setData(data)
+        setData(JSON.stringify(data))
 
-        console.log(data)
-        if (data === true) {
-          history.push('/dashboard/:username')
+        console.log('--' + JSON.stringify(data))
+        if (JSON.parse(JSON.stringify(data)).id != null) {
+          console.log('is user')
+          history.push('/dashboard')
         } else {
           //Admin checking
           fetch('http://127.0.0.1:8084/Admin/validateAdminCredentials', requestOptions)
             .then((response) => response.json())
             .then((data) => {
-              setData(data)
+              setData(JSON.stringify(data))
 
-              console.log(data)
-              if (data === true) {
-                history.push('/latestReports_admin')
+              console.log('--' + JSON.stringify(data))
+              if (JSON.parse(JSON.stringify(data)).id != null) {
+                history.push('/assetManagement', {
+                  org_id: JSON.parse(JSON.stringify(data)).id,
+                })
               } else {
                 alert('Enter the correct credentials')
               }

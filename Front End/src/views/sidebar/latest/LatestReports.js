@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types'
 import React, { useEffect, useState, createRef } from 'react'
-import classNames from 'classnames'
 import {
   CRow,
   CCol,
@@ -18,67 +17,7 @@ import {
   CButton,
   CBadge,
 } from '@coreui/react'
-import { rgbToHex } from '@coreui/utils'
-import { DocsLink } from 'src/components'
-import CIcon from '@coreui/icons-react'
-import {
-  cibCcAmex,
-  cibCcApplePay,
-  cibCcMastercard,
-  cibCcPaypal,
-  cibCcStripe,
-  cibCcVisa,
-  cifBr,
-  cifEs,
-  cifFr,
-  cifIn,
-  cifPl,
-  cifUs,
-  cilPeople,
-} from '@coreui/icons'
 import { useHistory, useLocation } from 'react-router-dom'
-
-const ThemeView = () => {
-  const [color, setColor] = useState('rgb(255, 255, 255)')
-  const ref = createRef()
-
-  useEffect(() => {
-    const el = ref.current.parentNode.firstChild
-    const varColor = window.getComputedStyle(el).getPropertyValue('background-color')
-    setColor(varColor)
-  }, [ref])
-
-  return (
-    <table className="table w-100" ref={ref}>
-      <tbody>
-        <tr>
-          <td className="text-medium-emphasis">HEX:</td>
-          <td className="font-weight-bold">{rgbToHex(color)}</td>
-        </tr>
-        <tr>
-          <td className="text-medium-emphasis">RGB:</td>
-          <td className="font-weight-bold">{color}</td>
-        </tr>
-      </tbody>
-    </table>
-  )
-}
-
-const ThemeColor = ({ className, children }) => {
-  const classes = classNames(className, 'theme-color w-75 rounded mb-3')
-  return (
-    <CCol xs={12} sm={6} md={4} xl={2} className="mb-4">
-      <div className={classes} style={{ paddingTop: '75%' }}></div>
-      {children}
-      <ThemeView />
-    </CCol>
-  )
-}
-
-ThemeColor.propTypes = {
-  children: PropTypes.node,
-  className: PropTypes.string,
-}
 
 const LatestReports = () => {
   const location = useLocation()
@@ -105,6 +44,7 @@ const LatestReports = () => {
     tools,
     infrastructure,
     campaigns,
+    attackPattern,
   ) {
     history.push('/Report', {
       source: source,
@@ -117,6 +57,7 @@ const LatestReports = () => {
       tools: tools,
       infrastructure: infrastructure,
       campaigns: campaigns,
+      attackPattern: attackPattern,
     })
   }
   const history = useHistory()
@@ -128,6 +69,7 @@ const LatestReports = () => {
   var isTools = false
   var isInfra = false
   var isCampaign = false
+  var isAttackPattern = false
 
   function setTags(
     malwares,
@@ -138,6 +80,7 @@ const LatestReports = () => {
     tools,
     infrastructure,
     campaigns,
+    attackPattern,
   ) {
     if (malwares) {
       isMalware = true
@@ -162,6 +105,9 @@ const LatestReports = () => {
     }
     if (campaigns) {
       isCampaign = true
+    }
+    if (attackPattern) {
+      isAttackPattern = true
     }
   }
   useEffect(() => {
@@ -205,6 +151,7 @@ const LatestReports = () => {
                     {(isTools = false)}
                     {(isInfra = false)}
                     {(isCampaign = false)}
+                    {(isAttackPattern = false)}
                     {setTags(
                       el.malwares,
                       el.vulnerabilities,
@@ -214,6 +161,7 @@ const LatestReports = () => {
                       el.tools,
                       el.infrastructure,
                       el.campaigns,
+                      el.attackPattern,
                     )}
                     {/*vulnerability tag*/}
                     {isVulnerability ? (
@@ -303,6 +251,17 @@ const LatestReports = () => {
                     ) : (
                       <div></div>
                     )}
+                    {/*if attack pattern tag*/}
+                    {isAttackPattern ? (
+                      <CBadge
+                        className="rounded-pill"
+                        style={{ margin: '1%', backgroundColor: '#BF749B' }}
+                      >
+                        attack-Pattern
+                      </CBadge>
+                    ) : (
+                      <div></div>
+                    )}
                   </CTableDataCell>
                   <CTableDataCell className="text-center">
                     <CButton
@@ -319,6 +278,7 @@ const LatestReports = () => {
                           el.tools,
                           el.infrastructure,
                           el.campaigns,
+                          el.attackPattern,
                         )
                       }
                     >

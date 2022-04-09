@@ -1,7 +1,5 @@
-import PropTypes from 'prop-types'
 import React, { useEffect, useState, createRef, useRef } from 'react'
-import classNames from 'classnames'
-import Visualizer from '/home/hurriya/Desktop/8semester/Fyp/20marchupdate/Front End/src/views/visualizer/visualizer.js'
+import Visualizer from '.././visualizer/visualizer'
 import {
   CRow,
   CCol,
@@ -20,25 +18,7 @@ import {
   CBadge,
   CFormInput,
 } from '@coreui/react'
-import { rgbToHex } from '@coreui/utils'
-import { DocsLink } from 'src/components'
-import CIcon from '@coreui/icons-react'
-import '/home/hurriya/Desktop/8semester/Fyp/20marchupdate/Front End/src/scss/Report_ap.css'
-import {
-  cibCcAmex,
-  cibCcApplePay,
-  cibCcMastercard,
-  cibCcPaypal,
-  cibCcStripe,
-  cibCcVisa,
-  cifBr,
-  cifEs,
-  cifFr,
-  cifIn,
-  cifPl,
-  cifUs,
-  cilPeople,
-} from '@coreui/icons'
+import '../../scss/Report_ap.css'
 import { useLocation } from 'react-router-dom'
 
 const Report_ap = () => {
@@ -162,7 +142,7 @@ const Report_ap = () => {
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.parse(JSON.stringify(req)),
+      body: JSON.stringify(req),
     }
     fetch('http://127.0.0.1:8082/dataAnalysis/updateElasticDocument', requestOptions)
       .then((res) => res.json())
@@ -188,7 +168,7 @@ const Report_ap = () => {
           </CButton>
         </CCardHeader>
         <CCardBody id="card">
-          {/*{<b>{location.state.rawText}</b>}*/}
+          {<b>{location.state.rawText}</b>}
           {<br></br>}
           <CTable align="middle" className="mb-0 border" hover responsive>
             <CTableHead color="light">
@@ -256,7 +236,7 @@ const Report_ap = () => {
                       <CFormInput
                         ref={blah}
                         type="text"
-                        placeholder={location.state.source}
+                        defaultValue={location.state.source}
                         id="a"
                         onChange={sourceChangedHandler}
                       />
@@ -268,7 +248,7 @@ const Report_ap = () => {
                   <CTableDataCell className="text-center">
                     <CFormInput
                       type="text"
-                      placeholder={location.state.source}
+                      defaultValue={location.state.source}
                       id="a"
                       onChange={sourceChangedHandler}
                     />
@@ -285,7 +265,7 @@ const Report_ap = () => {
                       <CFormInput
                         ref={blah}
                         type="text"
-                        placeholder={location.state.malwares}
+                        defaultValue={location.state.malwares}
                         id="a"
                         onChange={malwaresChangedHandler}
                       />
@@ -297,7 +277,7 @@ const Report_ap = () => {
                   <CTableDataCell className="text-center">
                     <CFormInput
                       type="text"
-                      placeholder={location.state.malwares}
+                      defaultValue={location.state.malwares}
                       id="a"
                       onChange={malwaresChangedHandler}
                     />
@@ -314,7 +294,7 @@ const Report_ap = () => {
                       <CFormInput
                         ref={blah}
                         type="text"
-                        placeholder={location.state.vulnerabilities}
+                        defaultValue={location.state.vulnerabilities}
                         id="a"
                         onChange={vulnerabilitiesChangedHandler}
                       />
@@ -326,7 +306,7 @@ const Report_ap = () => {
                   <CTableDataCell className="text-center">
                     <CFormInput
                       type="text"
-                      placeholder={location.state.vulnerabilities}
+                      defaultValue={location.state.vulnerabilities}
                       id="a"
                       onChange={vulnerabilitiesChangedHandler}
                     />
@@ -343,7 +323,7 @@ const Report_ap = () => {
                       <CFormInput
                         ref={blah}
                         type="text"
-                        placeholder={location.state.locations}
+                        defaultValue={location.state.locations}
                         id="a"
                         onChange={locationChangedHandler}
                       />
@@ -355,7 +335,7 @@ const Report_ap = () => {
                   <CTableDataCell className="text-center">
                     <CFormInput
                       type="text"
-                      placeholder={location.state.locations}
+                      defaultValue={location.state.locations}
                       id="a"
                       onChange={locationChangedHandler}
                     />
@@ -372,7 +352,7 @@ const Report_ap = () => {
                       <CFormInput
                         ref={blah}
                         type="text"
-                        placeholder={location.state.threatActors}
+                        defaultValue={location.state.threatActors}
                         id="a"
                         onChange={threatActorsChangedHandler}
                       />
@@ -384,7 +364,7 @@ const Report_ap = () => {
                   <CTableDataCell className="text-center">
                     <CFormInput
                       type="text"
-                      placeholder={location.state.threatActors}
+                      defaultValue={location.state.threatActors}
                       id="a"
                       onChange={threatActorsChangedHandler}
                     />
@@ -401,7 +381,7 @@ const Report_ap = () => {
                       <CFormInput
                         ref={blah}
                         type="text"
-                        placeholder={location.state.identities}
+                        defaultValue={location.state.identities}
                         id="a"
                         onChange={identitiesChangedHandler}
                       />
@@ -413,7 +393,7 @@ const Report_ap = () => {
                   <CTableDataCell className="text-center">
                     <CFormInput
                       type="text"
-                      placeholder={location.state.identities}
+                      defaultValue={location.state.identities}
                       id="a"
                       onChange={identitiesChangedHandler}
                     />
@@ -428,7 +408,7 @@ const Report_ap = () => {
                       <CFormInput
                         ref={blah}
                         type="text"
-                        placeholder={location.state.tools}
+                        defaultValue={location.state.tools}
                         id="a"
                         onChange={toolsChangedHandler}
                       />
@@ -440,7 +420,7 @@ const Report_ap = () => {
                   <CTableDataCell className="text-center">
                     <CFormInput
                       type="text"
-                      placeholder={location.state.tools}
+                      defaultValue={location.state.tools}
                       id="a"
                       onChange={toolsChangedHandler}
                     />
@@ -457,7 +437,7 @@ const Report_ap = () => {
                       <CFormInput
                         ref={blah}
                         type="text"
-                        placeholder={location.state.infrastructure}
+                        defaultValue={location.state.infrastructure}
                         id="a"
                         onChange={infrastructureChangedHandler}
                       />
@@ -469,7 +449,7 @@ const Report_ap = () => {
                   <CTableDataCell className="text-center">
                     <CFormInput
                       type="text"
-                      placeholder={location.state.infrastructure}
+                      defaultValue={location.state.infrastructure}
                       id="a"
                       onChange={infrastructureChangedHandler}
                     />
@@ -486,7 +466,7 @@ const Report_ap = () => {
                       <CFormInput
                         ref={blah}
                         type="text"
-                        placeholder={location.state.campaigns}
+                        defaultValue={location.state.campaigns}
                         id="a"
                         onChange={campaignsChangedHandler}
                       />
@@ -498,7 +478,7 @@ const Report_ap = () => {
                   <CTableDataCell className="text-center">
                     <CFormInput
                       type="text"
-                      placeholder={location.state.campaigns}
+                      defaultValue={location.state.campaigns}
                       id="a"
                       onChange={campaignsChangedHandler}
                     />
@@ -515,7 +495,7 @@ const Report_ap = () => {
                       <CFormInput
                         ref={blah}
                         type="text"
-                        placeholder={location.state.attackPattern}
+                        defaultValue={location.state.attackPattern}
                         id="a"
                         onChange={attackPatternChangedHandler}
                       />
@@ -527,7 +507,7 @@ const Report_ap = () => {
                   <CTableDataCell className="text-center">
                     <CFormInput
                       type="text"
-                      placeholder={location.state.attackPattern}
+                      defaultValue={location.state.attackPattern}
                       id="a"
                       onChange={attackPatternChangedHandler}
                     />

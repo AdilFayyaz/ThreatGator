@@ -10,6 +10,7 @@ const Report = React.lazy(() => import('./views/sidebar/latest/Report.js'))
 const LatestReports_a = React.lazy(() => import('./views/AdminPanel/LatestReports_a.js'))
 const Report_ap = React.lazy(() => import('./views/AdminPanel/Report_ap.js'))
 const notification = React.lazy(() => import('./views/dashboard/notification.js'))
+const assetmanagement = React.lazy(() => import('./views/AdminPanel/AssetManagement.js'))
 
 // Base
 // const Accordion = React.lazy(() => import('./views/base/accordion/Accordion'))
@@ -69,6 +70,12 @@ const routes = [
   { path: '/latestReports_admin', name: 'Latest Reports Admin', component: LatestReports_a },
   { path: '/Report_admin', name: 'ReportDetails', component: Report_ap },
   { path: '/notification', name: 'notification', component: notification },
+  {
+    path: '/assetManagement',
+    name: 'assetManagement',
+    component: assetmanagement,
+    props: { title: '1' },
+  },
   // { path: '/theme/typography', name: 'Typography', component: Typography },
   // { path: '/base', name: 'Base', component: Cards, exact: true },
   // { path: '/base/accordion', name: 'Accordion', component: Accordion },

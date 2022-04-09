@@ -17,17 +17,6 @@ import {
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 import Searchbar from './components/Searchbar'
 
-// fetching data from data analysis service for reports
-const getReports = (event) => {
-  event.preventDefault()
-  console.log('hello threatgator')
-  fetch('http://127.0.0.1:8082/dataAnalysis/getReports')
-    .then((res) => res.json())
-    .then((data) => {
-      // SetReportsData(data)
-      // openModalReport()
-    })
-}
 const _nav = [
   {
     component: Searchbar,

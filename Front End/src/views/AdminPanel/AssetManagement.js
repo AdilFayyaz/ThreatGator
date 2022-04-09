@@ -1,7 +1,4 @@
-import PropTypes from 'prop-types'
 import React, { useEffect, useState, createRef, useRef } from 'react'
-import classNames from 'classnames'
-import Visualizer from '/home/hurriya/Desktop/8semester/Fyp/20marchupdate/Front End/src/views/visualizer/visualizer.js'
 import {
   CRow,
   CCol,
@@ -19,11 +16,15 @@ import {
   CButton,
   CBadge,
   CFormInput,
+  CForm,
+  CFormLabel,
+  CFormText,
+  CToast,
+  CToastHeader,
+  CToastBody,
+  CToaster,
 } from '@coreui/react'
-import { rgbToHex } from '@coreui/utils'
-import { DocsLink } from 'src/components'
-import CIcon from '@coreui/icons-react'
-import '/home/hurriya/Desktop/8semester/Fyp/20marchupdate/Front End/src/scss/Report_ap.css'
+
 import {
   cibCcAmex,
   cibCcApplePay,
@@ -41,102 +42,85 @@ import {
 } from '@coreui/icons'
 import { useLocation } from 'react-router-dom'
 
-const Report_ap = () => {
-  const [reportsData, SetReportsData] = useState({})
-  const [hash1, SetHash] = useState(0)
-  const [isedit, SetIsedit] = useState(true)
-  const [badge, SetBadge] = useState('hidden')
-  // fetching data from data analysis service for reports
-  const location = useLocation()
-  const edit = useRef(null)
-  const blah = useRef(null)
-
-  const hash = location.state.hash
-  function getStix() {
-    console.log('getting stix')
-    fetch('http://127.0.0.1:8082/dataAnalysis/getStixBundle/' + hash)
-      .then((res) => res.json())
-      .then((data) => {
-        SetHash(data)
-      })
-    console.log(hash1.id)
-  }
-  function saveRow() {
-    console.log('save')
-
-    SetIsedit(true)
-    SetBadge('hidden')
-    updateElastic()
+const AssetManagement = () => {
+  var location = useLocation()
+  var assetName
+  var vendor
+  var version
+  const [assets, SetAssets] = useState({})
+  const [toast, addToast] = useState(false)
+  let [orgName, setOrgName] = useState()
+  let [tableVisibilty, setTableVisibility] = useState('hidden')
+  const [validated, setValidated] = useState(false)
+  const validate = (event) => {
+    event.preventDefault()
+    const form = event.currentTarget
+    if (form.checkValidity() === false) {
+      event.preventDefault()
+      event.stopPropagation()
+    }
+    setValidated(true)
+    addAsset()
   }
 
-  const editField = () => {
-    console.log('edit')
+  const orgNameChangedHandler = (event) => {
+    event.preventDefault()
+    setOrgName(event.target.value)
+  }
+  const vendorChangedHandler = (event) => {
+    event.preventDefault()
+    vendor = event.target.value
+  }
+  const versionChangedHandler = (event) => {
+    event.preventDefault()
+    version = event.target.value
+  }
+  const assetNameChangedHandler = (event) => {
+    event.preventDefault()
+    assetName = event.target.value
+  }
+  var response
 
-    SetIsedit(false)
-    SetBadge('visible')
-  }
-  const sourceChangedHandler = (event) => {
-    event.preventDefault()
-    location.state.source = event.target.value
-  }
-  const malwaresChangedHandler = (event) => {
-    event.preventDefault()
-    location.state.malwares = event.target.value
-  }
-  const vulnerabilitiesChangedHandler = (event) => {
-    event.preventDefault()
-    location.state.vulnerabilities = event.target.value
-  }
-  const locationChangedHandler = (event) => {
-    event.preventDefault()
-    location.state.locations = event.target.value
-  }
-  const threatActorsChangedHandler = (event) => {
-    event.preventDefault()
-    location.state.threatActors = event.target.value
-  }
-  const identitiesChangedHandler = (event) => {
-    event.preventDefault()
-    location.state.identities = event.target.value
-  }
-  const toolsChangedHandler = (event) => {
-    event.preventDefault()
-    location.state.tools = event.target.value
-  }
-  const infrastructureChangedHandler = (event) => {
-    event.preventDefault()
-    location.state.infrastructure = event.target.value
-  }
-  const campaignsChangedHandler = (event) => {
-    event.preventDefault()
-    location.state.campaigns = event.target.value
-  }
-  function updateElastic() {
+  function addAsset() {
+    console.log('in function')
+    if (vendor == undefined || assetName == undefined) {
+      return
+    }
+    addToast(true)
+    setTableVisibility('visible')
     var req = {
-      hash: location.state.hash,
-      malwares: location.state.malwares,
-      threatActors: location.state.threatActors,
-      identities: location.state.identities,
-      locations: location.state.locations,
-      tools: location.state.tools,
-      vulnerabilities: location.state.vulnerabilities,
-      infrastructures: location.state.infrastructure,
-      indicators: location.state.indicators,
-      campaigns: location.state.campaigns,
+      vendor: vendor,
+      name: assetName,
+      version: version,
     }
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: req,
+      body: JSON.stringify(req),
     }
-    fetch('http://127.0.0.1:8082/dataAnalysis/updateElasticDocument', requestOptions)
+
+    fetch('http://127.0.0.1:8084/assets/addAsset/' + location.state.org_id, requestOptions)
       .then((res) => res.json())
       .then((data) => {
-        console.log('sending...' + data)
+        console.log('got...' + JSON.stringify(data))
+        console.log('sending...' + JSON.stringify(req))
+        response = JSON.parse(JSON.stringify(data))
+        getAssets()
+      })
+  }
+  function getAssets() {
+    fetch('http://127.0.0.1:8084/assets/assetsByOrganization/' + response.organization.id)
+      .then((res) => res.json())
+      .then((data) => {
+        setOrgName(response.organization.name)
+        console.log('assets' + JSON.stringify(data))
+        SetAssets(data)
+        console.log('id of org' + orgName)
+        // addToast(exampleToast(orgName))
       })
   }
   useEffect(() => {
-    getStix()
+    // getStix()
     return () => {
       console.log('returning ')
     }
@@ -146,19 +130,109 @@ const Report_ap = () => {
     <>
       <CCard className="mb-4">
         <CCardHeader>
-          Asset Management
+          <h3>Asset Management</h3>
           <CButton href="/latestReports_admin" style={{ float: 'right' }}>
             Latest Reports
           </CButton>
         </CCardHeader>
         <CCardBody id="card">
-          {/*{<b>{location.state.rawText}</b>}*/}
+          <h5>Add Your Organizations Assets Below</h5>
           {<br></br>}
+          <CRow>
+            <div style={{ paddingLeft: '15%', paddingRight: '15%' }}>
+              <CForm validated={validated} onSubmit={validate}>
+                {/*<div className="mb-3">*/}
+                {/*  <CFormLabel>Organization Name</CFormLabel>*/}
+                {/*  <CFormInput*/}
+                {/*    type="text"*/}
+                {/*    id="exampleInputName"*/}
+                {/*    aria-describedby="nameHelp"*/}
+                {/*    required={true}*/}
+                {/*    onChange={orgNameChangedHandler}*/}
+                {/*  />*/}
+                {/*</div>*/}
+                <div className="mb-3">
+                  <CFormLabel>Vendor</CFormLabel>
+                  <CFormInput
+                    type="text"
+                    id="exampleInputName1"
+                    aria-describedby="nameHelp"
+                    required={true}
+                    onChange={vendorChangedHandler}
+                  />
+                </div>
+                <div className="mb-3">
+                  <CFormLabel htmlFor="exampleName1">Asset Name</CFormLabel>
+                  <CFormInput
+                    type="name"
+                    id="exampleInputName1"
+                    aria-describedby="nameHelp"
+                    required={true}
+                    onChange={assetNameChangedHandler}
+                  />
+                </div>
+                <div className="mb-3">
+                  <CFormLabel>Version</CFormLabel>
+                  <CFormInput
+                    type="name"
+                    id="exampleInputName1"
+                    aria-describedby="emailHelp"
+                    onChange={versionChangedHandler}
+                  />
+                </div>
 
+                <CButton type="Submit" color="primary">
+                  Submit
+                </CButton>
+              </CForm>
+            </div>
+          </CRow>
+          <br />
+          {/*display this later when submitted*/}
+          <CRow>
+            <div style={{ visibility: tableVisibilty }}>
+              <h3>Assets of {orgName}</h3>
+              <CTable align="middle" className="mb-0 border" hover responsive>
+                <CTableHead color="light">
+                  <CTableRow>
+                    <CTableHeaderCell className="text-center">Vendor</CTableHeaderCell>
+                    <CTableHeaderCell className="text-center">Asset Name</CTableHeaderCell>
+                    <CTableHeaderCell className="text-center">Version</CTableHeaderCell>
+                  </CTableRow>
+                </CTableHead>
+                <CTableBody>
+                  {Object.values(assets).map((el) => (
+                    <CTableRow key={el}>
+                      <CTableDataCell>
+                        <div className="rawText">{el.vendor}</div>
+                      </CTableDataCell>
+                      <CTableDataCell>
+                        <div className="rawText">{el.name}</div>
+                      </CTableDataCell>
+                      <CTableDataCell>
+                        <div className="rawText">{el.version}</div>
+                      </CTableDataCell>
+                    </CTableRow>
+                  ))}
+                </CTableBody>
+              </CTable>
+            </div>
+          </CRow>
+
+          {/*  TOAST */}
+          <CToaster placement="top-end">
+            <CToast title="ThreatGator" autohide={true} visible={toast}>
+              <CToastHeader close>
+                <strong className="me-auto">ThreatGator</strong>
+                <small>Latest</small>
+              </CToastHeader>
+              <CToastBody>New Asset Added to {orgName}</CToastBody>
+            </CToast>
+          </CToaster>
         </CCardBody>
       </CCard>
     </>
   )
 }
 
-export default Report_ap
+export default AssetManagement
