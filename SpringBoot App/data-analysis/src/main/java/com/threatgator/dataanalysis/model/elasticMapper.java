@@ -410,6 +410,13 @@ public class elasticMapper {
         return false;
     }
 
+    public boolean alreadyAdded(ArrayList<RelatedReport> relatedReports, String id){
+        for (RelatedReport relatedReport : relatedReports) {
+            if (relatedReport.id.equals(id))
+                return true;
+        }
+        return false;
+    }
 
     public ArrayList<RelatedReport> getRelatedReports(String hash) throws IOException, JSONException {
         SearchRequest request= new SearchRequest("stix");
@@ -434,7 +441,8 @@ public class elasticMapper {
                     relatedReport1.id=ids.getString(i);
                     relatedReport1.index="tagged_bundle_data";
                     if (!relatedReport1.id.equals(hash))
-                        relatedReports.add(relatedReport1);
+                        if (!alreadyAdded(relatedReports, relatedReport1.id))
+                            relatedReports.add(relatedReport1);
                 }
             }
 

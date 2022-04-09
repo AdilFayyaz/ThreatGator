@@ -63,7 +63,8 @@ public class analysisController {
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/getRelatedReports")
     public ArrayList<RelatedReport> getRelatedReports(@RequestBody String hash) throws JSONException, IOException {
-        return connect.getRelatedReports(hash);
+        JSONObject j = new JSONObject(hash);
+        return connect.getRelatedReports(j.getString("hash"));
     }
 
     // get vulnerabilities list from elasticsearch
