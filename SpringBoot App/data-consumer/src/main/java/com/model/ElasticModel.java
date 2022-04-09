@@ -25,6 +25,7 @@ public class ElasticModel {
     public ArrayList<Entity> attackPatterns = new ArrayList<>();
     public HashMap<List<Entity>, String> relation = new HashMap<>();
     public String bundleJson = new String();
+    public boolean hasMerged = false;
 
     @Override
     public String toString() {

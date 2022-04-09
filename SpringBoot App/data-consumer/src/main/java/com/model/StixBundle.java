@@ -19,6 +19,7 @@ public class StixBundle {
     public StixBundle(String b, Integer hash) throws JSONException {
 
         this.hash=hash;
+        this.mergedReports.add(hash);
         b=StringEscapeUtils.unescapeJava(b);
 
         if (b.charAt(0) == '"')
@@ -103,11 +104,28 @@ public class StixBundle {
         }
     }
 
+    @Override
+    public String toString() {
+        return "{" +
+                "hash:" + hash +
+                ", entities:" + entities.toString() +
+                ", relationships:" + relationships.toString() +
+                ", mergedReports:" + mergedReports +
+                ", bundleString:'" + bundleString + '\'' +
+                ", lev:" + lev +
+                '}';
+    }
+
     public void addEntity(SDO s, Integer hash){
         if (!exists(s.name)) { //if not already added
             entities.add(s);
         } else { //exists but has a different id
-            entities.get(get(s.name)).ids.addAll(s.ids); // add id to that object
+            for (String a: s.ids){
+                if(!entities.get(get(s.name)).ids.contains(a)){
+                    entities.get(get(s.name)).ids.add(a);
+                }
+            }
+//            entities.get(get(s.name)).ids.addAll(s.ids); // add id to that object
         }
         if (!mergedReports.contains(hash)){
             mergedReports.add(hash);

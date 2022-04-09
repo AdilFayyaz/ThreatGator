@@ -7,11 +7,15 @@ import com.model.*;
 import org.apache.http.HttpHost;
 import org.apache.lucene.search.spell.LevenshteinDistance;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
+import org.elasticsearch.action.get.GetRequest;
+import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.support.master.AcknowledgedResponse;
+import org.elasticsearch.action.update.UpdateRequest;
+import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
@@ -444,30 +448,39 @@ public class KafkaService {
     public void correlateArrays(ArrayList<StixBundle> initials, ArrayList<StixBundle> finals, int start, int end){
         LevenshteinDistance lev = new LevenshteinDistance();
         for (int i=start; i<end; i++) {
+            System.out.println("About to merge initial at " + i);
             for (Iterator<StixBundle> iterator = finals.iterator(); iterator.hasNext();) {
                 StixBundle aFinal = iterator.next();
-                StixBundle tempAFinal = new StixBundle(aFinal);
-                for (SDO ent1 : initials.get(i).entities) {
+                if (!aFinal.mergedReports.contains(initials.get(i).hash)) {
 
-                    for (SDO ent2 : aFinal.entities) {
+                    StixBundle tempAFinal = new StixBundle(aFinal);
+                    for (SDO ent1 : initials.get(i).entities) {
 
-                        if (ent1.type.equals("malware") || ent1.type.equals("identity")
-                                || ent1.type.equals("threat-actor") || (ent2.type.equals("malware")
-                                || ent2.type.equals("identity") || ent2.type.equals("threat-actor"))) {
+                        for (SDO ent2 : aFinal.entities) {
 
-                            if ( lev.getDistance(ent1.name, ent2.name) >=0.7) { //use levenshtein distance here
-                                // add all entities and relationships of initialBundle to finalBundle
-                                for (SDO ent : initials.get(i).entities)
-                                    tempAFinal.addEntity(ent, initials.get(i).hash);
-                                for (SRO rel : initials.get(i).relationships)
-                                    tempAFinal.addRelationship(rel, initials.get(i).hash);
+                            if (ent1.type.equals("malware") || ent1.type.equals("identity")
+                                    || ent1.type.equals("threat-actor") || (ent2.type.equals("malware")
+                                    || ent2.type.equals("identity") || ent2.type.equals("threat-actor"))) {
+
+                                if (lev.getDistance(ent1.name, ent2.name) >= 0.7) { //use levenshtein distance here
+                                    // add all entities and relationships of initialBundle to finalBundle
+                                    System.out.println("MERGINGGGGG");
+                                    for (SDO ent : initials.get(i).entities)
+                                        tempAFinal.addEntity(ent, initials.get(i).hash);
+                                    for (SRO rel : initials.get(i).relationships)
+                                        tempAFinal.addRelationship(rel, initials.get(i).hash);
+                                }
                             }
                         }
                     }
+                    aFinal.entities = tempAFinal.entities;
+                    aFinal.relationships = tempAFinal.relationships;
+                    aFinal.mergedReports = tempAFinal.mergedReports;
                 }
-                aFinal.entities = tempAFinal.entities;
-                aFinal.relationships = tempAFinal.relationships;
-                aFinal.mergedReports = tempAFinal.mergedReports;
+                else{
+                    System.out.println(initials.get(i).hash + " is already part of " +
+                            Arrays.toString(aFinal.mergedReports.toArray()));
+                }
             }
         }
     }
@@ -495,56 +508,52 @@ public class KafkaService {
             e.rawText=j.getString("rawText");
             e.time=j.getLong("time");
             e.bundleJson=j.getString("bundleJson");
+            if (j.has("hasMerged")){
+                e.hasMerged = j.getBoolean("hasMerged");
+            }
+            else{
+                e.hasMerged = false;
+            }
             unMerged.add(e);
             System.out.println(e.source);
         }
         // clean the bundles
         ArrayList<StixBundle> initials = new ArrayList<>();
         for (int i=0; i< unMerged.size(); i++){
-            initials.add(new StixBundle(unMerged.get(i).bundleJson, unMerged.get(i).hash));
-            //initials.get(i).print();
+            // OVER HERE, IF NOT BEEN MERGED BEFORE, ONLY THEN ADD TO INITIALS
+            if(!unMerged.get(i).hasMerged)
+                initials.add(new StixBundle(unMerged.get(i).bundleJson, unMerged.get(i).hash));
+
         }
+        System.out.println("Length of Initials: " + initials.size());
         // now get all the existing merged bundles, if any
         GetIndexRequest req = new GetIndexRequest("stix");
         boolean exists = client.indices().exists(req, RequestOptions.DEFAULT);
 
         ArrayList<StixBundle> finals= new ArrayList<>();
 
-        if (!exists){
-            finals.addAll(initials);
-        }
-        else {
+
+        finals.addAll(initials);
+
+        if(exists) {
             SearchRequest request2 = new SearchRequest("stix");
             SearchSourceBuilder searchSourceBuilder2 = new SearchSourceBuilder();
             searchSourceBuilder.query(QueryBuilders.matchAllQuery());
             request2.source(searchSourceBuilder2);
-            SearchResponse response2 = client.search(request2, RequestOptions.DEFAULT);
+            SearchResponse response2 = client.search(request2, COMMON_OPTIONS);
+            System.out.println("docs fetched from STIX:" + response2.getHits().getTotalHits());
 
             for (SearchHit hit : response2.getHits().getHits()) {
                 JSONObject j = new JSONObject(hit.getSourceAsString());
                 finals.add(new StixBundle(j.getString("bundle"), 0, j.getJSONArray("ids")));
             }
         }
-        System.out.println("initials" + initials);
-        System.out.println("finals" + finals);
+//        System.out.println("initials" + initials);
+        System.out.println("finals Size:" + finals.size());
 
         // now initials has just the new bundles and finals has old + new bundles
-        try {
-            int start;
-            int end;
-            for (int i=0;i<initials.size();i++) {
-                start = i;
-                end = i + 10;
-                if (end >= initials.size()){
-                    end = initials.size()-1;
-                }
-                correlateArrays(initials, finals, start, end);
-                i = end;
-            }
-        }
-        catch (NullPointerException e){
-            String u= e.toString();
-        }
+
+        correlateArrays(initials, finals, 0, initials.size());
 
         // now finals has all the final stix bundles, these will be converted to stix via python and added to elastic
 
@@ -552,32 +561,60 @@ public class KafkaService {
         if (exists) {
             DeleteIndexRequest deleteIndexRequest = new DeleteIndexRequest("stix");
             AcknowledgedResponse deleteIndexResponse = client.indices().delete(deleteIndexRequest, RequestOptions.DEFAULT);
+            System.out.println("Deleting Stix Index: " + deleteIndexResponse);
         }
 
         int i=0;
-        for (StixBundle finalBundle: finals){
-            i++;
-            ObjectMapper Nmapper = new ObjectMapper();
-            String r = Nmapper.writeValueAsString(finalBundle);
-            try {
-                String s = restTemplate.postForObject(makeStix, new HttpEntity<>(r.toString()), String.class);
-                System.out.println("*******************");
-                System.out.println(s);
-                Stix toUpload = new Stix();
-                toUpload.bundle=s;
-                toUpload.ids.addAll(finalBundle.mergedReports);
-                String jsonstring = Nmapper.writeValueAsString(toUpload);
-                IndexRequest rQ = new IndexRequest("stix")
-                        .id(String.valueOf(i))
-                        .source(jsonstring, XContentType.JSON);
-                IndexResponse res = client.index(rQ, RequestOptions.DEFAULT);
-                System.out.println("Response Id: " + res.getId());
+        System.out.println(finals.size());
+        initials.trimToSize();
+        finals.trimToSize();
+        for (StixBundle finalBundle: finals) {
+            // Only add those bundles that have entities
 
-            } catch (HttpStatusCodeException e) {
-                System.out.println("Error Occurred in Making Stix");
+            if (finalBundle.entities.size() > 0) {
+                System.out.println("*******************");
+                System.out.println(finalBundle.entities.toString());
+                System.out.println(finalBundle.entities.size());
+                i++;
+                ObjectMapper Nmapper = new ObjectMapper();
+                String r = Nmapper.writeValueAsString(finalBundle);
+//                String r = finalBundle.toString();
+                try {
+                    String s = restTemplate.postForObject(makeStix, new HttpEntity<>(r.toString()), String.class);
+
+                    System.out.println(s);
+                    Stix toUpload = new Stix();
+                    toUpload.bundle = s;
+                    toUpload.ids.addAll(finalBundle.mergedReports);
+                    String jsonstring = Nmapper.writeValueAsString(toUpload);
+//                    String jsonstring = toUpload.toString();
+                    IndexRequest rQ = new IndexRequest("stix")
+                            .id(String.valueOf(i))
+                            .source(jsonstring, XContentType.JSON);
+                    IndexResponse res = client.index(rQ, RequestOptions.DEFAULT);
+                    System.out.println("Response Id: " + res.getId());
+
+
+
+                } catch (HttpStatusCodeException e) {
+                    System.out.println("Error Occurred in Making Stix");
+                }
             }
         }
+        System.out.println("Entities correlated: " + i);
         // all the docs with same id as the unmerged ones will get a field telling that theyve been merged
+
+//        update the tagged bundle data index to mark all checked reports as true
+        for(StixBundle emodel: initials){
+            JSONObject finaljson = new JSONObject();
+            finaljson.put("hasMerged", true);
+            String finaljsonstring = finaljson.toString();
+
+            UpdateRequest request2 = new UpdateRequest("tagged_bundle_data", String.valueOf(emodel.hash));
+            request2.doc(finaljsonstring,XContentType.JSON);
+            UpdateResponse updateResponse = client.update(
+                    request2, RequestOptions.DEFAULT);
+        }
 
     }
 
