@@ -183,7 +183,7 @@ async def get_apt_data():
     returnDic["data"] = reports
 
     json_apt = json.dumps(returnDic)
-    producer.send('securelist', value=json_apt)
+    producer.send('APTsecurelist', value=json_apt)
     return returnDic
 
 @app.get('/source/securelist/malwares')
@@ -198,7 +198,7 @@ async def get_malwares_data():
     returnDic["data"] = reports
 
     json_mal = json.dumps(returnDic)
-    producer.send('securelist', value=json_mal)
+    producer.send('Malwaresecurelist', value=json_mal)
     return returnDic
 
 @app.get('/source/securelist/spams')
@@ -213,7 +213,7 @@ async def get_spams_data():
     returnDic["data"] = reports
 
     json_spam = json.dumps(returnDic)
-    producer.send('securelist', value=json_spam)
+    producer.send('Spamsecurelist', value=json_spam)
     return returnDic
 
 @app.get('/source/securelist/incidents')
@@ -228,5 +228,5 @@ async def get_incidents_data():
     returnDic["data"] = reports
 
     json_inc = json.dumps(returnDic)
-    producer.send('securelist', value=json_inc)
+    producer.send('Incidentsecurelist', value=json_inc)
     return returnDic

@@ -152,7 +152,7 @@ public class KafkaService {
         }
     }
 
-    @KafkaListener(topics= "securelist", groupId = "id",
+    @KafkaListener(topics= "APTsecurelist", groupId = "id",
             containerFactory = "APTSecureListListener")
     public void publish(APTSecureListKafka apt) throws JSONException{
         for(int i=0; i<apt.APTList.size();i++){
@@ -185,7 +185,7 @@ public class KafkaService {
     }
 
 
-    @KafkaListener(topics= "securelist", groupId = "id",
+    @KafkaListener(topics= "Malwaresecurelist", groupId = "id",
             containerFactory = "MalwareSecureListListener")
     public void publish(MalwareSecureListKafka mal) throws JSONException{
         for(int i=0; i<mal.MalwareList.size();i++){
@@ -217,7 +217,7 @@ public class KafkaService {
         }
     }
 
-    @KafkaListener(topics= "securelist", groupId = "id",
+    @KafkaListener(topics= "Spamsecurelist", groupId = "id",
             containerFactory = "SpamSecureListListener")
     public void publish(SpamSecureListKafka spam) throws JSONException{
         for(int i=0; i<spam.SpamList.size();i++){
@@ -249,7 +249,7 @@ public class KafkaService {
         }
     }
 
-    @KafkaListener(topics= "securelist", groupId = "id",
+    @KafkaListener(topics= "Incidentsecurelist", groupId = "id",
             containerFactory = "IncidentSecureListListener")
     public void publish(IncidentSecureListKafka inc) throws JSONException{
         for(int i=0; i<inc.IncidentList.size();i++){
