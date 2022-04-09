@@ -20,7 +20,7 @@ It includes curation of threat intelligence data from different sources particul
 ### Start ElasticSearch
 ./bin/elasticsearch
 ### Start Python Crawler
-1. Navigate to Crawler Director
+1. Navigate to Crawler Directory
 2. Run the following command: uvicorn main:app --reload (running on port 8000)
 ### Start BERT Inference
 1. Download Model from https://drive.google.com/drive/folders/1eGOOkR304ssgh_Bh0-6ZWEsoGEGvmveJ?usp=sharing *
