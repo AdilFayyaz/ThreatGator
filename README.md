@@ -25,7 +25,7 @@ It includes curation of threat intelligence data from different sources particul
 ### Start BERT Inference
 1. Download Model from https://drive.google.com/drive/folders/1eGOOkR304ssgh_Bh0-6ZWEsoGEGvmveJ?usp=sharing *
 2. Place Model in bert_inference directory
-3. Run the following command: uvicorn bert_inference:app --reload --port 5000
+3. Run the following command: uvicorn relation_inferencer:app --reload --port 5000
 ### Start SpringBoot Services
 1. Open SpringBoot App as a Maven Project on IntelliJ
 2. Download all Maven Dependencies
