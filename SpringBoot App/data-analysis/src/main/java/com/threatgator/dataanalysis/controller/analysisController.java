@@ -57,6 +57,15 @@ public class analysisController {
         return r;
     }
 
+    // this function gives an array that tells what reports are related and which index that related report is in
+    // a check should be added so that same report is not shown that there should be more than 1 tagged stix bundle report
+    // as one will be itself
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PostMapping("/getRelatedReports")
+    public ArrayList<RelatedReport> getRelatedReports(@RequestBody String hash) throws JSONException, IOException {
+        return connect.getRelatedReports(hash);
+    }
+
     // get vulnerabilities list from elasticsearch
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/getVulnerabilities")
