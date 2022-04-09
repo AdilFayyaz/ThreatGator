@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 from stix2 import *
 import requests, json, os
-from elasticsearch import Elasticsearch
+# from elasticsearch import Elasticsearch
 # pip install elasticsearch==5.5.3
 # pip install nltk
 # pip install pycountry
@@ -19,7 +19,14 @@ import pycountry
 
 def exists(entities_list, entity_name):
   for e in entities_list:
-    if (e["name"]==entity_name):
+    if ( e["name"]==entity_name):
+      print("EXISTS="+e["name"])
+      return True
+  return False
+
+def inBundle(a_list, entity):
+  for e in a_list:
+    if (e==entity):
       print("EXISTS="+e["name"])
       return True
   return False
@@ -77,8 +84,8 @@ def makeStixBundle(prediction):
         entities_list.append(Location(name=e[1], longitude=0.0, latitude=0.0,region="", country=""))
       elif(e[2]=="INF"):
         entities_list.append(Infrastructure(name=e[1]))
-	 elif(e[2]=="AP"):
-	    entities_list.append(AttackPattern(name=e[1]))
+      elif(e[2]=="AP"):
+        entities_list.append(AttackPattern(name=e[1]))
       elif(e[2]=="C"):
         entities_list.append(Campaign(name=e[1]))
      
@@ -88,8 +95,8 @@ def makeStixBundle(prediction):
   a= None 
   global b
   b= None 
-  for e in entities_list:
-    a_list.append(e)
+  # for e in entities_list:
+  #   a_list.append(e)
 
   print(a_list)
 
@@ -108,6 +115,11 @@ def makeStixBundle(prediction):
           source_ref=a,
           target_ref=b)
           
+          # only add those entities that have some relationship
+          if (inBundle(a_list, a)==False):
+            a_list.append(a)
+          if (inBundle(a_list, b)==False):
+            a_list.append(b)
           a_list.append(relationship)
           a= None
           b=None
@@ -176,6 +188,17 @@ def fixLocationAdjectives(prediction):
   return prediction
 
 	
+def hasRelationship(entity_name, prediction):
+  relations = prediction["relationships"]
+  for val in relations:
+    if val["entities"][0] == entity_name or val["entities"][1] == entity_name  :
+      return True
+  return False
+         
+          
+
+
+
 # bertModel = BertTokenClassification()
 relationExtracter=RelationExtracter()
 @app.post("/getInference")
@@ -204,6 +227,14 @@ async def get_model_inference(req: Request):
     
     # Fix location adjectives to nouns
     prediction = fixLocationAdjectives(prediction)
+
+    # only keep those entities in prediction too that are in some relationship
+    entities = prediction["entity tags"]
+    for e in entities[0]:
+      if (hasRelationship(e[1], prediction)==False): # if the entity is not in an relationship
+        entities[0].remove(e)
+    
+    print(entities[0])
 
     return prediction
     
@@ -249,8 +280,8 @@ def makeStixBundle2(finalBundle):
   b= None 
 
   #  ADDRESS DUPLICATION!!
-  for e in entities_list:
-    a_list.append(e)
+  # for e in entities_list:
+  #   a_list.append(e)
 
 
   for val in relations:
@@ -266,6 +297,10 @@ def makeStixBundle2(finalBundle):
           relationship = Relationship(relationship_type=val["name"],
           source_ref=a,
           target_ref=b)
+          if (inBundle(a_list, a)==False):
+            a_list.append(a)
+          if (inBundle(a_list, b)==False):
+            a_list.append(b)
           a_list.append(relationship)
           a= None
           b=None
