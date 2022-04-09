@@ -271,7 +271,7 @@ def makeStixBundle2(finalBundle):
     elif(e["type"]=="campaign"):
       entities_list.append(Campaign(name=e["name"]))
     elif(e["type"]=="attack-pattern"):
-      entities_list.append(AttackPattern(name=e[1]))
+      entities_list.append(AttackPattern(name=e["name"]))
 
   a_list = []
   global a
