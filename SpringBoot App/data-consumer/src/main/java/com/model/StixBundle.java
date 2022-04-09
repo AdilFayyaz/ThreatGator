@@ -50,11 +50,50 @@ public class StixBundle {
         }
     }
 
+    public StixBundle(String b, Integer hash, JSONArray mergedReports) throws JSONException {
+
+        this.hash=hash;
+        b=StringEscapeUtils.unescapeJava(b);
+
+        if (b.charAt(0) == '"')
+            b=b.substring(1, b.length()-1);
+        this.bundleString = b;
+        // System.out.println(b);
+
+        for (int i=0; i< mergedReports.length(); i++){
+            this.mergedReports.add(Integer.parseInt(mergedReports.getString(i)));
+        }
+
+        JSONObject bundle = new JSONObject(b);
+        if (bundle.has("objects")) {
+            JSONArray objects = bundle.getJSONArray("objects");
+            for (int i = 0; i < objects.length(); i++) {
+                if (!objects.getJSONObject(i).getString("type").equals("relationship")) { // if it's an SDO
+                    if (!exists(objects.getJSONObject(i).getString("name"))) { //if not already added
+                        entities.add(new SDO(objects.getJSONObject(i).getString("id"), objects.getJSONObject(i).getString("name"), objects.getJSONObject(i).getString("type")));
+                    } else { //exists but has a different id
+                        entities.get(get(objects.getJSONObject(i).getString("name"))).ids.add(objects.getJSONObject(i).getString("id")); // add id to that object
+                    }
+                }
+            }
+            for (int i = 0; i < objects.length(); i++) {
+                if (objects.getJSONObject(i).getString("type").equals("relationship")) { //if its an SRO
+                    if (!exists(objects.getJSONObject(i).getString("source_ref"), objects.getJSONObject(i).getString("target_ref"))) {
+                        relationships.add(new SRO(objects.getJSONObject(i).getString("relationship_type"), getName(objects.getJSONObject(i).getString("source_ref")),
+                                getName(objects.getJSONObject(i).getString("target_ref"))
+                        ));
+                    }
+                }
+            }
+        }
+    }
+
     public StixBundle(StixBundle stixBundle){
         this.bundleString = stixBundle.bundleString;
         this.hash = stixBundle.hash;
         this.entities.addAll(stixBundle.entities);
         this.relationships.addAll(stixBundle.relationships);
+        this.mergedReports.addAll(stixBundle.mergedReports);
     }
     public void addEntity(SDO s){
         if (!exists(s.name)) { //if not already added

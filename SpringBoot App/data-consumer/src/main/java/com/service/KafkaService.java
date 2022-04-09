@@ -467,6 +467,7 @@ public class KafkaService {
                 }
                 aFinal.entities = tempAFinal.entities;
                 aFinal.relationships = tempAFinal.relationships;
+                aFinal.mergedReports = tempAFinal.mergedReports;
             }
         }
     }
@@ -521,7 +522,7 @@ public class KafkaService {
 
             for (SearchHit hit : response2.getHits().getHits()) {
                 JSONObject j = new JSONObject(hit.getSourceAsString());
-                finals.add(new StixBundle(j.getString("bundle"), 0));
+                finals.add(new StixBundle(j.getString("bundle"), 0, j.getJSONArray("ids")));
             }
         }
         System.out.println("initials" + initials);
