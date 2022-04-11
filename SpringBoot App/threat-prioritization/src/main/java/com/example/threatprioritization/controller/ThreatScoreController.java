@@ -1,6 +1,7 @@
 package com.example.threatprioritization.controller;
 
 import com.example.threatprioritization.model.Organization;
+import com.example.threatprioritization.model.ReportScores;
 import com.example.threatprioritization.model.StixBundle;
 import org.elasticsearch.ResourceNotFoundException;
 import org.json.JSONException;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.threatprioritization.services.ThreatPrioritizationService;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/threatScore")
@@ -42,14 +44,15 @@ public class ThreatScoreController {
         }
     }
 
-    @GetMapping("/updateScoreForOrganization")
-    public void updateByOrganization(Integer org_id) throws JSONException, IOException {
+    @GetMapping("/getScoreForOrganization")
+    public ArrayList<ReportScores> getByOrganization(Integer org_id) throws JSONException, IOException {
         Organization org = threatPrioritizationService.getOrganization(org_id);
         if (org!=null){
-            threatPrioritizationService.updateThreatScoresForOrganization(org);
+            return threatPrioritizationService.getThreatScoresForOrganization(org);
         }
         else{
             System.out.println("Org not found :(");
+            return null;
         }
     }
 
