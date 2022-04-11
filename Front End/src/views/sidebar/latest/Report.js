@@ -19,16 +19,50 @@ import {
 } from '@coreui/react'
 import { useLocation } from 'react-router-dom'
 
-const Reports = () => {
+const Reports = (props) => {
   const [reportsData, SetReportsData] = useState({})
   const [hash1, SetHash] = useState(0)
+  const [threatScore, SetThreatScore] = useState('')
   // fetching data from data analysis service for reports
   const location = useLocation()
   const hash = location.state.hash
+  // const org_id=location.state.org_id
+
   console.log('hash' + hash)
+
+  function getScore() {
+    // return null
+    const data1 = { org_id: location.state.org_id, reportId: hash, index: 'tagged_bundle_data' }
+
+    var myHeaders = new Headers()
+    myHeaders.append('Content-Type', 'text/plain')
+
+    // var raw = '{   "org_id":2\n    "report_id":-1138549715\n    "index":"tagged_data_bundle"}'
+
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      // body: data1,
+      redirect: 'follow',
+    }
+
+    fetch(
+      'http://127.0.0.1:8086/threatScore/getThreatScoreByOrganizationReport?org_id=' +
+        encodeURIComponent(data1.org_id) +
+        '&report_id=' +
+        encodeURIComponent(data1.reportId) +
+        '&index=' +
+        encodeURIComponent(data1.index),
+      requestOptions,
+    )
+      .then((response) => response.text())
+      .then((result) => SetThreatScore(result))
+      .catch((error) => console.log('error', error))
+  }
+
   function getStix() {
     console.log('getting stix')
-    fetch('http://127.0.0.1:8082/dataAnalysis/getStixBundle/' + hash)
+    fetch('http://127.0.0.1:8082/dataAnalysis/getStixBundle/' + hash + '/tagged_bundle_data')
       .then((res) => res.json())
       .then((data) => {
         SetHash(data)
@@ -36,7 +70,8 @@ const Reports = () => {
     console.log('abc' + hash1.id)
   }
   useEffect(() => {
-    getStix()
+    // getStix()
+    getScore()
     return () => {
       console.log('returning ')
     }
@@ -46,13 +81,13 @@ const Reports = () => {
     <>
       <CCard className="mb-4">
         <CCardHeader>
-          Report Details
+          Report Details {location.state.org_id}
           <CButton href="/latestReports" style={{ float: 'right' }}>
             Return
           </CButton>
         </CCardHeader>
         <CCardBody>
-          {/*{<b>{location.state.rawText}</b>}*/}
+          {<b>{location.state.rawText}</b>}
           {<br></br>}
           <CTable align="middle" className="mb-0 border" hover responsive>
             <CTableHead color="light">
@@ -179,8 +214,11 @@ const Reports = () => {
             </CTableBody>
           </CTable>
           <div>
+            <p>Threat Score: {threatScore}</p>
+          </div>
+          <div>
             STIX Visualizer
-            <Visualizer graph1={hash1} />
+            {/*<Visualizer graph1={hash1} />*/}
           </div>
         </CCardBody>
       </CCard>

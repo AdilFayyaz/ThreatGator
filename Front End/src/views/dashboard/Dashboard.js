@@ -53,6 +53,7 @@ import {
 
 import { Redirect, useHistory, useLocation, useParams } from 'react-router-dom'
 import { sha256 } from 'js-sha256'
+import PropTypes from 'prop-types'
 
 const WidgetsDropdown = lazy(() => import('../widgets/WidgetsDropdown.js'))
 const WidgetsBrand = lazy(() => import('../widgets/WidgetsBrand.js'))
@@ -303,6 +304,7 @@ const Dashboard = (props) => {
     }
     return hash
   }
+
   useEffect(() => {
     doughnut()
     notifications()

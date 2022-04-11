@@ -17,23 +17,22 @@ import {
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
 import { lazy, useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
 
 const Login = (props) => {
   const [username, setUsername] = useState({})
   const [password, setPassword] = useState({})
+  let org = 'not'
   const [data2, setData] = useState({})
 
-  //a function that navigates to dashboard page if the credentials match with users's
-  const navigateTo = [
-    {
-      to: '/dashboard',
-      // window.location.reload(false)
-    },
-  ]
-  //a function that navigates to admin's add source page if the credentials match with admin's
-  const navigateToAdmin = () => {
-    '/latestReports_admin'
+  Login.propTypes = {
+    parentCallback: PropTypes.string,
+    //... other props you will use in this component
   }
+  const sendData = () => {
+    props.parentCallback(org)
+  }
+
   //function decides whether the credetials are correct w.e.t the database(both admin's and user's)
   //navigates accordingly
   const history = useHistory()
@@ -59,7 +58,11 @@ const Login = (props) => {
         console.log('--' + JSON.stringify(data))
         if (JSON.parse(JSON.stringify(data)).id != null) {
           console.log('is user')
-          history.push('/dashboard')
+          org = JSON.parse(JSON.stringify(data)).id
+          sendData()
+          history.push('/dashboard', {
+            org_id: JSON.parse(JSON.stringify(data)).id,
+          })
         } else {
           //Admin checking
           fetch('http://127.0.0.1:8084/Admin/validateAdminCredentials', requestOptions)
@@ -69,6 +72,8 @@ const Login = (props) => {
 
               console.log('--' + JSON.stringify(data))
               if (JSON.parse(JSON.stringify(data)).id != null) {
+                org = JSON.parse(JSON.stringify(data)).id
+                sendData()
                 history.push('/assetManagement', {
                   org_id: JSON.parse(JSON.stringify(data)).id,
                 })
@@ -90,6 +95,11 @@ const Login = (props) => {
     event.preventDefault()
     setPassword(event.target.value)
   }
+  useEffect(() => {
+    return () => {
+      console.log('returning ')
+    }
+  }, [])
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
       <CContainer>

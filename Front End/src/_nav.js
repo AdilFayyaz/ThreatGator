@@ -17,17 +17,17 @@ import {
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 import Searchbar from './components/Searchbar'
 
-const _nav = [
+var _nav = [
   {
     component: Searchbar,
     // name: 'Latest Reports',
-    to: '/searchResults',
+    to: { pathname: '/searchResults', org_id: 'someTitle' },
     // icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
   },
   {
     component: CNavItem,
     name: 'Dashboard',
-    to: '/dashboard',
+    to: { pathname: '/dashboard', org_id: 'someTitle' },
     icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
     // badge: {
     //   color: 'info',
@@ -37,20 +37,20 @@ const _nav = [
   {
     component: CNavItem,
     name: 'Latest Reports',
-    to: '/latestReports',
+    to: { pathname: '/latestReports', org_id: 'someTitle' },
     icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
-    // attributes: { onClick: { getReports } },
+    graph1: '--',
   },
   {
     component: CNavItem,
     name: 'TEP Reports',
-    to: '/TEPReports',
+    to: { pathname: '/TEPReports', org_id: 'someTitle' },
     icon: <CIcon icon={cilShieldAlt} customClassName="nav-icon" />,
   },
   {
     component: CNavItem,
     name: 'Visualizer',
-    to: '/visualizer',
+    to: { pathname: '/visualizer', org_id: 'someTitle' },
     icon: <CIcon icon={cilGraph} customClassName="nav-icon" />,
   },
 ]

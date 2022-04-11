@@ -11,8 +11,15 @@ import 'simplebar/dist/simplebar.min.css'
 
 // sidebar nav config
 import navigation from '../_nav'
+import PropTypes from 'prop-types'
 
-const AppSidebar = () => {
+const AppSidebar = (props) => {
+  AppSidebar.propTypes = {
+    graph1: PropTypes.string,
+    //... other props you will use in this component
+  }
+  var bundle = props.graph1
+  console.log(bundle)
   const dispatch = useDispatch()
   const unfoldable = useSelector((state) => state.sidebarUnfoldable)
   const sidebarShow = useSelector((state) => state.sidebarShow)
@@ -37,7 +44,7 @@ const AppSidebar = () => {
       </CSidebarBrand>
       <CSidebarNav>
         <SimpleBar>
-          <AppSidebarNav items={navigation} />
+          <AppSidebarNav items={navigation} graph1={bundle} />
         </SimpleBar>
       </CSidebarNav>
       <CSidebarToggler

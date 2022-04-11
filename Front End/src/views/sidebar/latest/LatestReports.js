@@ -19,7 +19,7 @@ import {
 } from '@coreui/react'
 import { useHistory, useLocation } from 'react-router-dom'
 
-const LatestReports = () => {
+const LatestReports = (props) => {
   const location = useLocation()
   const [reportsData, SetReportsData] = useState({})
   // fetching data from data analysis service for reports
@@ -60,6 +60,7 @@ const LatestReports = () => {
       infrastructure: infrastructure,
       campaigns: campaigns,
       attackPatterns: attackPatterns,
+      org_id: props.location.org_id,
     })
   }
   const history = useHistory()
@@ -112,18 +113,27 @@ const LatestReports = () => {
       isAttackPatterns = true
     }
   }
+  var org
   useEffect(() => {
     getReports()
+
     return () => {
       console.log('returning -xyzzz')
     }
   }, [location])
+  LatestReports.propTypes = {
+    graph1: PropTypes.string,
+    location: PropTypes.object,
+    org_id: PropTypes.string,
+    //... other props you will use in this component
+  }
+  console.log('sdddsss' + JSON.stringify(props))
   return (
     <>
       {/* {getReports()} */}
       <CCard className="mb-4">
         <CCardHeader>ThreatGator&apos;s Latest Reports</CCardHeader>
-
+        <h1>hahah{props.location.org_id}</h1>
         <CCardBody>
           <CTable align="middle" className="mb-0 border" hover responsive>
             <CTableHead color="light">
