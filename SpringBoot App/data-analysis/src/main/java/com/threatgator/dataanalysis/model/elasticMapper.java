@@ -25,6 +25,7 @@ import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.TermQueryBuilder;
+import org.elasticsearch.index.reindex.ScrollableHitSource;
 import org.elasticsearch.index.reindex.UpdateByQueryRequest;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.Scroll;
@@ -41,6 +42,7 @@ import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static org.elasticsearch.index.query.QueryBuilders.matchQuery;
@@ -642,11 +644,19 @@ public class elasticMapper {
     }
 
     // update an elastic document
-    public String updateDocument(String jsonInfo) throws JSONException, IOException, org.json.JSONException {
+    public String updateDocument(String jsonInfo, Integer adminId, Integer orgId) throws JSONException, IOException, org.json.JSONException {
+
+        //create log object
+        
+        Log log= new Log();
+        log.timestamp = new SimpleDateFormat("yyy.MM.dd.HH.mm.ss").format(new Date());
+        log.adminId=adminId;
+        log.orgId=orgId;
 
         // generate stix bundle again from the class using python
         JSONObject document = new JSONObject(jsonInfo);
         String hash = document.getString("hash");
+        log.reportHash = hash;
         // get original document's stix bundle
         GetRequest request1= new GetRequest("tagged_bundle_data", String.valueOf(hash));
         GetResponse response = client.get(request1, RequestOptions.DEFAULT);
@@ -670,9 +680,11 @@ public class elasticMapper {
                         Integer index = object.getIndex(malware.getString("name"));
                         if (!object.entities.get(index).type.equals("malware")) {
                             object.editEntity(malware.getString("name"), "malware");
+                            log.changedTypes.add(malware.getString("name"));
                         }
                     } else {
                         object.addEntity(new SDO("", malware.getString("name"), "malware"));
+                        log.newEntities.add(malware.getString("name"));
                     }
                 }
             }
@@ -686,9 +698,11 @@ public class elasticMapper {
                         Integer index = object.getIndex(m.getString("name"));
                         if (!object.entities.get(index).type.equals("threat-actor")) {
                             object.editEntity(m.getString("name"), "threat-actor");
+                            log.changedTypes.add(m.getString("name"));
                         }
                     } else {
                         object.addEntity(new SDO("", m.getString("name"), "threat-actor"));
+                        log.newEntities.add(m.getString("name"));
                     }
                 }
             }
@@ -702,9 +716,11 @@ public class elasticMapper {
                         Integer index = object.getIndex(m.getString("name"));
                         if (!object.entities.get(index).type.equals("identity")) {
                             object.editEntity(m.getString("name"), "identity");
+                            log.changedTypes.add(m.getString("name"));
                         }
                     } else {
                         object.addEntity(new SDO("", m.getString("name"), "identity"));
+                        log.newEntities.add(m.getString("name"));
                     }
                 }
             }
@@ -718,9 +734,11 @@ public class elasticMapper {
                         Integer index = object.getIndex(m.getString("name"));
                         if (!object.entities.get(index).type.equals("vulnerability")) {
                             object.editEntity(m.getString("name"), "vulnerability");
+                            log.changedTypes.add(m.getString("name"));
                         }
                     } else {
                         object.addEntity(new SDO("", m.getString("name"), "vulnerability"));
+                        log.newEntities.add(m.getString("name"));
                     }
                 }
             }
@@ -734,9 +752,11 @@ public class elasticMapper {
                         Integer index = object.getIndex(m.getString("name"));
                         if (!object.entities.get(index).type.equals("campaign")) {
                             object.editEntity(m.getString("name"), "campaign");
+                            log.changedTypes.add(m.getString("name"));
                         }
                     } else {
                         object.addEntity(new SDO("", m.getString("name"), "campaign"));
+                        log.newEntities.add(m.getString("name"));
                     }
                 }
             }
@@ -750,9 +770,11 @@ public class elasticMapper {
                         Integer index = object.getIndex(m.getString("name"));
                         if (!object.entities.get(index).type.equals("infrastructure")) {
                             object.editEntity(m.getString("name"), "infrastructure");
+                            log.changedTypes.add(m.getString("name"));
                         }
                     } else {
                         object.addEntity(new SDO("", m.getString("name"), "infrastructure"));
+                        log.newEntities.add(m.getString("name"));
                     }
                 }
             }
@@ -766,9 +788,11 @@ public class elasticMapper {
                         Integer index = object.getIndex(l.getString("name"));
                         if (!object.entities.get(index).type.equals("location")) {
                             object.editEntity(l.getString("name"), "location");
+                            log.changedTypes.add(l.getString("name"));
                         }
                     } else {
                         object.addEntity(new SDO("", l.getString("name"), "location"));
+                        log.newEntities.add(l.getString("name"));
                     }
                 }
             }
@@ -782,9 +806,11 @@ public class elasticMapper {
                         Integer index = object.getIndex(t.getString("name"));
                         if (!object.entities.get(index).type.equals("tool")) {
                             object.editEntity(t.getString("name"), "tool");
+                            log.changedTypes.add(t.getString("name"));
                         }
                     } else {
                         object.addEntity(new SDO("", t.getString("name"), "tool"));
+                        log.newEntities.add(t.getString("name"));
                     }
                 }
             }
@@ -798,9 +824,11 @@ public class elasticMapper {
                         Integer index = object.getIndex(ind.getString("name"));
                         if (!object.entities.get(index).type.equals("indicator")) {
                             object.editEntity(ind.getString("name"), "indicator");
+                            log.changedTypes.add(ind.getString("name"));
                         }
                     } else {
                         object.addEntity(new SDO("", ind.getString("name"), "indicator"));
+                        log.newEntities.add(ind.getString("name"));
                     }
                 }
             }
@@ -813,9 +841,11 @@ public class elasticMapper {
                         Integer index = object.getIndex(att.getString("name"));
                         if (!object.entities.get(index).type.equals("attack-pattern")) {
                             object.editEntity(att.getString("name"), "attack-pattern");
+                            log.changedTypes.add(att.getString("name"));
                         }
                     } else {
                         object.addEntity(new SDO("", att.getString("name"), "attack-pattern"));
+                        log.newEntities.add(att.getString("name"));
                     }
                 }
             }
@@ -836,6 +866,7 @@ public class elasticMapper {
                         !foundEntity(attackPatterns, object.entities.get(i).name) &&
                         !foundEntity(infrastructures, object.entities.get(i).name)){
                     System.out.println("Object "+object.entities.get(i).name+ " needs to be deleted");
+                    log.deletedEntities.add(object.entities.get(i).name);
                     object.deleteEntity(object.entities.get(i).name);
                 }
 
@@ -862,10 +893,57 @@ public class elasticMapper {
             request.doc(finaljsonstring,XContentType.JSON);
             UpdateResponse updateResponse = client.update(
                     request, RequestOptions.DEFAULT);
+
+
+            // push history object to elastic
+            String jsonString =Nmapper.writeValueAsString(log);
+            IndexRequest reqHis = new IndexRequest("history").source(jsonString, XContentType.JSON);
+            IndexResponse responseHis = client.index(reqHis, RequestOptions.DEFAULT);
+
             return "true";
 
         }
         return "false";
+    }
+
+    ArrayList<String> getArrayList(JSONArray array) throws JSONException {
+        ArrayList<String> arrayList = new ArrayList<>();
+        for (int i=0; i<array.length(); i++){
+            arrayList.add(array.getString(i));
+        }
+        return arrayList;
+    }
+
+    public ArrayList<Log> getHistory(Integer hash) throws IOException, JSONException {
+
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+        sourceBuilder.query(QueryBuilders.termQuery("reportHash", hash.toString()));
+
+        SearchRequest searchRequest = new SearchRequest();
+        searchRequest.indices("history");
+        searchRequest.source(sourceBuilder);
+
+        SearchResponse searchResponse = client.search(searchRequest, COMMON_OPTIONS);
+
+        ArrayList<Log> history = new ArrayList<>();
+        Integer i=0;
+        for (SearchHit hit : searchResponse.getHits()){
+            i++;
+            String sourceAsString = hit.getSourceAsString();
+            JSONObject jsonComplete = new JSONObject(sourceAsString);
+            Log log = new Log();
+            log.id=i.toString();
+            log.reportHash=hash.toString();
+            log.timestamp=jsonComplete.getString("timestamp");
+            log.orgId=jsonComplete.getInt("orgId");
+            log.adminId=jsonComplete.getInt("adminId");
+            log.deletedEntities=getArrayList(jsonComplete.getJSONArray("deletedEntities"));
+            log.newEntities=getArrayList(jsonComplete.getJSONArray("newEntities"));
+            log.changedTypes=getArrayList(jsonComplete.getJSONArray("changedTypes"));
+
+            history.add(log);
+        }
+        return history;
     }
 
     //returns the bundle as a jsonString
