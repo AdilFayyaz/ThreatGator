@@ -653,6 +653,10 @@ public class elasticMapper {
         log.adminId=adminId;
         log.orgId=orgId;
 
+        log.changedTypes = new ArrayList<>();
+        log.newEntities = new ArrayList<>();
+        log.deletedEntities = new ArrayList<>();
+
         // generate stix bundle again from the class using python
         JSONObject document = new JSONObject(jsonInfo);
         String hash = document.getString("hash");
@@ -681,6 +685,8 @@ public class elasticMapper {
                         if (!object.entities.get(index).type.equals("malware")) {
                             object.editEntity(malware.getString("name"), "malware");
                             log.changedTypes.add(malware.getString("name"));
+                            System.out.println("changed type");
+                            System.out.println(log.changedTypes.size());
                         }
                     } else {
                         object.addEntity(new SDO("", malware.getString("name"), "malware"));

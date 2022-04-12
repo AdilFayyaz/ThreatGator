@@ -132,8 +132,8 @@ public class analysisController {
     }
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
-    @PostMapping("/updateElasticDocument/{adminID}/{orgId}")
-    public String updateElasticDocument(@RequestBody String json_info, @PathVariable Integer adminId, @PathVariable Integer orgId) throws JSONException, IOException, org.json.JSONException {
+    @PostMapping("/updateElasticDocument/")
+    public String updateElasticDocument(@RequestBody String json_info, Integer adminId, Integer orgId) throws JSONException, IOException, org.json.JSONException {
 //        Manipulate the json string into the correct format
         JSONObject input = new JSONObject(json_info);
         JSONObject output = new JSONObject();
