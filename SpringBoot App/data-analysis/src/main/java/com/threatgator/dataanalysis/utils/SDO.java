@@ -12,4 +12,12 @@ public class SDO {
         this.name = name;
         this.type = type;
     }
+    @Override
+    public String toString() {
+        return "{" +
+                "ids:" + ids +
+                ", name:'" + name + '\'' +
+                ", type:'" + type + '\'' +
+                '}';
+    }
 }

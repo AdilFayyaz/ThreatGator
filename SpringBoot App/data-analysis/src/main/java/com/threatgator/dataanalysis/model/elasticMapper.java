@@ -652,8 +652,7 @@ public class elasticMapper {
         log.timestamp = new SimpleDateFormat("yyy.MM.dd.HH.mm.ss").format(new Date());
         log.adminId=adminId;
         log.orgId=orgId;
-
-        log.changedTypes = new ArrayList<>();
+        log.changedTypes= new ArrayList<>();
         log.newEntities = new ArrayList<>();
         log.deletedEntities = new ArrayList<>();
 
@@ -669,9 +668,10 @@ public class elasticMapper {
             String sourceAsString = response.getSourceAsString();
             JSONObject jsonComplete = new JSONObject(sourceAsString);
             stixBundle = jsonComplete.getString("bundleJson");
+
             // convert to StixBundle class
             StixBundle object = new StixBundle(stixBundle, Integer.parseInt(hash));
-            System.out.println(object.relationships.size());
+            System.out.println(object.entities.size());
 
             // compare what has changed
             // apply changes
@@ -680,13 +680,13 @@ public class elasticMapper {
                 malwares = document.getJSONArray("malwares");
                 for (int i = 0; i < malwares.length(); i++) {
                     JSONObject malware = malwares.getJSONObject(i);
+                    System.out.println(object.entities.toString());
                     if (object.exists(malware.getString("name"))) {
                         Integer index = object.getIndex(malware.getString("name"));
+
                         if (!object.entities.get(index).type.equals("malware")) {
                             object.editEntity(malware.getString("name"), "malware");
                             log.changedTypes.add(malware.getString("name"));
-                            System.out.println("changed type");
-                            System.out.println(log.changedTypes.size());
                         }
                     } else {
                         object.addEntity(new SDO("", malware.getString("name"), "malware"));
