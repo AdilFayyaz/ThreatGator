@@ -389,12 +389,19 @@ public class ThreatPrioritizationService {
         return Score;
     }
 
-    public void updateThreatScoresForOrganization(Organization organization) throws JSONException, IOException { //for all reports
+    public ArrayList<ReportScores> getThreatScoresForOrganization(Organization organization) throws JSONException, IOException { //for all reports
         List<StixBundle> reports = getAllReports();
+        ArrayList<ReportScores> reportScores = new ArrayList<ReportScores>();
         for (StixBundle report: reports){
-            getThreatScore(organization, report);
+            ReportScores reportScores1 = new ReportScores();
+            reportScores1.reportId=report.hash.toString();
+            reportScores1.score=getThreatScore(organization, report);
+            reportScores.add(reportScores1);
         }
+        return reportScores;
     }
+
+
 
     public void updateThreatScoresForReport(StixBundle report){ //for all organizations
         // get all organizations

@@ -132,8 +132,8 @@ public class analysisController {
     }
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
-    @PostMapping("/updateElasticDocument")
-    public String updateElasticDocument(@RequestBody String json_info) throws JSONException, IOException, org.json.JSONException {
+    @PostMapping("/updateElasticDocument/{adminID}/{orgId}")
+    public String updateElasticDocument(@RequestBody String json_info, @PathVariable Integer adminId, @PathVariable Integer orgId) throws JSONException, IOException, org.json.JSONException {
 //        Manipulate the json string into the correct format
         JSONObject input = new JSONObject(json_info);
         JSONObject output = new JSONObject();
@@ -260,9 +260,18 @@ public class analysisController {
         }
         output.put("attackPatterns", attackPatterns);
         System.out.println(output.toString());
-        connect.updateDocument(output.toString());
+        connect.updateDocument(output.toString(), adminId, orgId);
         return output.toString();
     }
+
+    // get History elements of a report
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @GetMapping("/getHistory")
+    public ArrayList<Log> getHistory(@RequestBody String json_info) throws JSONException, IOException{
+        JSONObject input = new JSONObject(json_info);
+        return connect.getHistory(input.getInt("hash"));
+    }
+
     // Delete an element from elasticsearch
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/deleteFromElastic/{hash}")
