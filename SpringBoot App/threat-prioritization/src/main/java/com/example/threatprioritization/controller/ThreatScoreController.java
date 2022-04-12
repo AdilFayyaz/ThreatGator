@@ -6,6 +6,7 @@ import com.example.threatprioritization.model.StixBundle;
 import org.elasticsearch.ResourceNotFoundException;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +21,7 @@ public class ThreatScoreController {
     @Autowired
     private ThreatPrioritizationService threatPrioritizationService;
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/getThreatScoreByOrganizationReport")
     public Double getThreatScore(Integer org_id, Integer report_id, String index) throws JSONException, IOException {
         Organization org = threatPrioritizationService.getOrganization(org_id);
@@ -32,6 +34,7 @@ public class ThreatScoreController {
         }
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/filterStixBundle")
     public String filterStixBundle(Integer org_id, Integer report_id, String index) throws JSONException, IOException {
         Organization org = threatPrioritizationService.getOrganization(org_id);
@@ -44,6 +47,7 @@ public class ThreatScoreController {
         }
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/getScoreForOrganization")
     public ArrayList<ReportScores> getByOrganization(Integer org_id) throws JSONException, IOException {
         Organization org = threatPrioritizationService.getOrganization(org_id);
@@ -56,6 +60,7 @@ public class ThreatScoreController {
         }
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/updateScoreForReports")
     public void updateByReport(Integer report_id, String index) throws JSONException, IOException {
         StixBundle report = threatPrioritizationService.getReport(report_id, index);
