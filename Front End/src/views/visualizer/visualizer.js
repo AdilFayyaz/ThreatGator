@@ -7,7 +7,17 @@ import * as url from 'url'
 // import { Button } from 'react-bootstrap'
 import SlidingPane from 'react-sliding-pane'
 import 'react-sliding-pane/dist/react-sliding-pane.css'
-import { CButton, CCard, CCardBody, CCardHeader, CImage } from '@coreui/react'
+import {
+  CButton,
+  CCard,
+  CCardBody,
+  CCardHeader,
+  CDropdown,
+  CDropdownItem,
+  CDropdownMenu,
+  CDropdownToggle,
+  CImage,
+} from '@coreui/react'
 import { DocsLink } from '../../components'
 //STIX relations
 export class sro {
@@ -170,22 +180,9 @@ const Visualizer = (props) => {
 
   //data for graph
   let bundle
+  let mergedReports
   const getData = () => {
     console.log(bundle)
-    // fetch(bundle.id, {
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     Accept: 'application/json',
-    //   },
-    // })
-    //   .then(function (response) {
-    //     console.log(response)
-    //     return response.json()
-    //   })
-    //   .then(function (myJson) {
-    //     console.log(myJson)
-    //     setData(myJson)
-    //   })
     setData(bundle)
   }
   const dashboardNavigation = (event) => {
@@ -197,9 +194,11 @@ const Visualizer = (props) => {
   useEffect(() => {
     Visualizer.propTypes = {
       graph1: PropTypes.object,
+      mergedReports: PropTypes.array,
       //... other props you will use in this component
     }
     bundle = props.graph1
+    mergedReports = props.mergedReports
     console.log('visualizer called' + bundle)
     getData()
   }, [props])
@@ -256,6 +255,11 @@ const Visualizer = (props) => {
   }
   console.log(graph)
 
+  // dropp down selection handler
+  const handleSelect = (e) => {
+    console.log(e)
+    setData(e)
+  }
   return (
     <div>
       {/* eslint-disable-next-line react/prop-types */}
@@ -285,6 +289,7 @@ const Visualizer = (props) => {
       >
         {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
           <React.Fragment>
+            {/* tool bar*/}
             <div className="tools" style={{ backgroundColor: '#3C4B64', borderRadius: '5px' }}>
               <CButton
                 onClick={() => zoomIn()}
@@ -334,6 +339,21 @@ const Visualizer = (props) => {
               >
                 View Legend
               </CButton>
+
+              {/*  drop down menu*/}
+              <CDropdown title="dropDown" id="dropDown" onSelect={handleSelect}>
+                <CDropdownToggle href="#" color="secondary">
+                  View graph
+                </CDropdownToggle>
+                <CDropdownMenu>
+                  {Object.values(mergedReports).map((el) => (
+                    <CDropdownItem key={el}>el</CDropdownItem>
+                  ))}
+                  {/*<CDropdownItem href="#">Action</CDropdownItem>*/}
+                  {/*<CDropdownItem href="#">Another action</CDropdownItem>*/}
+                  {/*<CDropdownItem href="#">Something else here</CDropdownItem>*/}
+                </CDropdownMenu>
+              </CDropdown>
             </div>
             <TransformComponent>
               <Graph

@@ -29,6 +29,7 @@ const Reports = (props) => {
   const hash = location.state.hash
   // const org_id=location.state.org_id
   const mergedReportsBundles = []
+  const relatedLinks = []
   console.log('hash' + hash)
   const data1 = { org_id: location.state.org_id, reportId: hash, index: 'tagged_bundle_data' }
 
@@ -110,18 +111,32 @@ const Reports = (props) => {
 
     if (mergedReports != []) {
       for (var i = 0; i < mergedReports.length; i++) {
-        fetch(
-          'http://127.0.0.1:8082/threatScore/filterStixBundle/' +
-            mergedReports[i].id +
-            mergedReports[i].index,
-        )
-          .then((res) => res.json())
-          .then((data) => {
-            mergedReportsBundles.push(data)
-          })
+        if (mergedReports[i].index === 'stix') {
+          fetch(
+            'http://127.0.0.1:8086/dataAnalysis/getStixBundle/' +
+              mergedReports[i].id +
+              mergedReports[i].index,
+          )
+            .then((res) => res.json())
+            .then((data) => {
+              mergedReportsBundles.push(data)
+            })
+        } else if (mergedReports[i].index == 'tagged_bundle_data') {
+          fetch(
+            'http://127.0.0.1:8086/dataAnalysis/getStixBundle/' +
+              mergedReports[i].id +
+              mergedReports[i].index,
+          )
+            .then((res) => res.json())
+            .then((data) => {
+              relatedLinks.push(data)
+            })
+        }
       }
-      console.log('merged reports!!!! ' + mergedReportsBundles)
     }
+
+    console.log('merged reports!!!! ' + mergedReportsBundles)
+    console.log('Related links ' + relatedLinks)
   }
   useEffect(() => {
     getStix()
@@ -272,7 +287,7 @@ const Reports = (props) => {
           </div>
           <div>
             STIX Visualizer
-            {/*<Visualizer graph1={hash1} />*/}
+            <Visualizer graph1={hash1} mergedReports={mergedReportsBundles} />
           </div>
         </CCardBody>
       </CCard>
