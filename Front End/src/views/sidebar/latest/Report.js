@@ -1,5 +1,6 @@
 import React, { useEffect, useState, createRef } from 'react'
 import Visualizer from '../../visualizer/visualizer'
+import { useHistory } from 'react-router-dom'
 import {
   CRow,
   CCol,
@@ -20,15 +21,21 @@ import {
 import { useLocation } from 'react-router-dom'
 
 const Reports = (props) => {
+  var history = useHistory()
   const [reportsData, SetReportsData] = useState({})
-  const [hash1, SetHash] = useState(0)
+  var [hash1, SetHash] = useState({})
+  // var hash1 = {}
   const [threatScore, SetThreatScore] = useState('')
-  const [mergedReports, setMergedReports] = useState([])
+  var mergedReports = []
+  var [relatedReportData, setRelatedReportData] = useState([])
+  // var [mergedReports, SetMergedReports] = useState([])
   // fetching data from data analysis service for reports
   const location = useLocation()
   const hash = location.state.hash
   // const org_id=location.state.org_id
-  const mergedReportsBundles = []
+  // const mergedReportsBundles = []
+  var [mergedReportsBundles, setMergedReportsBundles] = useState([])
+  var [objectMergedReport, setObjectMergedReport] = useState({})
   const relatedLinks = []
   console.log('hash' + hash)
   const data1 = { org_id: location.state.org_id, reportId: hash, index: 'tagged_bundle_data' }
@@ -63,20 +70,47 @@ const Reports = (props) => {
       .catch((error) => console.log('error', error))
   }
 
-  function getStix() {
+  function goToDetails(
+    hash,
+    source,
+    rawtext,
+    malwares,
+    vulnerabilities,
+    locations,
+    threatActors,
+    identities,
+    tools,
+    infrastructure,
+    campaigns,
+    attackPatterns,
+  ) {
+    history.push('/Report', {
+      hash: hash,
+      source: source,
+      rawText: rawtext,
+      malware: malwares,
+      vulnerabilities: vulnerabilities,
+      locations: locations,
+      threatActors: threatActors,
+      identities: identities,
+      tools: tools,
+      infrastructure: infrastructure,
+      campaigns: campaigns,
+      attackPatterns: attackPatterns,
+      org_id: data1.org_id,
+    })
+    window.location.reload(true)
+  }
+
+  async function getStix() {
     console.log('getting stix')
-    // fetch('http://127.0.0.1:8082/threatScore/filterStixBundle/' + hash + '/tagged_bundle_data')
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     SetHash(data)
-    //   })
-    // console.log('abc' + hash1.id)
+
     var requestOptions = {
       method: 'GET',
       redirect: 'follow',
     }
 
-    fetch(
+    var x = await fetch(
       'http://127.0.0.1:8086/threatScore/filterStixBundle/?org_id=' +
         encodeURIComponent(data1.org_id) +
         '&report_id=' +
@@ -85,59 +119,105 @@ const Reports = (props) => {
         encodeURIComponent(data1.index),
       requestOptions,
     )
-      .then((response) => response.text())
-      .then((result) => SetHash(result))
+      .then((response) => response.json())
+      .then((result) => {
+        SetHash(result)
+        // hash1 = result
+        getMergedReports()
+      })
       .catch((error) => console.log('error', error))
 
+    // SetHash(JSON.parse(JSON.stringify(hash1)))
+    // getMergedReports()
+  }
+  async function getMergedReports() {
+    console.log('Merged called')
     //  get merged reports
     var myHeaders = new Headers()
     myHeaders.append('Content-Type', 'application/json')
-
     var raw = JSON.stringify({
       hash: hash,
     })
-
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
       body: raw,
-      redirect: 'follow',
     }
 
-    fetch('http://127.0.0.1:8082/dataAnalysis/getRelatedReports', requestOptions)
-      .then((response) => response.text())
-      .then((result) => setMergedReports(result))
+    var x = await fetch('http://127.0.0.1:8082/dataAnalysis/getRelatedReports', requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        mergedReports = result
+        console.log('Merged', mergedReports)
+        split()
+      })
       .catch((error) => console.log('error', error))
-
+  }
+  async function split() {
+    console.log('Split called')
     if (mergedReports != []) {
+      var temp = new Object()
+      temp.merged = []
+      var temp2 = []
       for (var i = 0; i < mergedReports.length; i++) {
         if (mergedReports[i].index === 'stix') {
+          console.log(mergedReports[i])
           fetch(
-            'http://127.0.0.1:8086/dataAnalysis/getStixBundle/' +
+            'http://127.0.0.1:8082/dataAnalysis/getStixBundle/' +
               mergedReports[i].id +
+              '/' +
               mergedReports[i].index,
           )
             .then((res) => res.json())
             .then((data) => {
-              mergedReportsBundles.push(data)
+              setMergedReportsBundles(data)
+              temp.merged.push(data)
+              console.log(temp)
+              setObjectMergedReport(temp)
+              // Object.assign(objectMergedReport, mergedReportsBundles)
+              // mergedReportsBundles.push(data)
+              // console.log(mergedReportsBundles)
             })
         } else if (mergedReports[i].index == 'tagged_bundle_data') {
-          fetch(
-            'http://127.0.0.1:8086/dataAnalysis/getStixBundle/' +
-              mergedReports[i].id +
-              mergedReports[i].index,
-          )
-            .then((res) => res.json())
+          //   console.log('tagged bundle data')
+          //   fetch(
+          //     'http://127.0.0.1:8082/dataAnalysis/getStixBundle/' +
+          //       mergedReports[i].id +
+          //       '/' +
+          //       mergedReports[i].index,
+          //   )
+          //     .then((res) => res.json())
+          //     .then((data) => {
+          //       relatedLinks.push(data)
+          //       console.log(relatedLinks)
+          //     })
+          // }
+          var myHeaders = new Headers()
+          myHeaders.append('Content-Type', 'application/json')
+          var raw = JSON.stringify({
+            hash: mergedReports[i].id,
+          })
+          var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow',
+          }
+          fetch('http://127.0.0.1:8082/dataAnalysis/getResultOnHash', requestOptions)
+            .then((response) => response.text())
             .then((data) => {
-              relatedLinks.push(data)
+              temp2.push(JSON.parse(data))
+              setRelatedReportData(temp2)
+              console.log(temp2)
             })
+            .catch((error) => console.log('error', error))
         }
       }
     }
-
     console.log('merged reports!!!! ' + mergedReportsBundles)
     console.log('Related links ' + relatedLinks)
   }
+
   useEffect(() => {
     getStix()
     getScore()
@@ -150,13 +230,17 @@ const Reports = (props) => {
     <>
       <CCard className="mb-4">
         <CCardHeader>
-          Report Details {location.state.org_id}
+          Report Details
           <CButton href="/latestReports" style={{ float: 'right' }}>
             Return
           </CButton>
         </CCardHeader>
         <CCardBody>
-          {<b>{location.state.rawText}</b>}
+          {
+            <div className="rawText" style={{ height: '200px' }}>
+              {location.state.rawText}
+            </div>
+          }
           {<br></br>}
           <CTable align="middle" className="mb-0 border" hover responsive>
             <CTableHead color="light">
@@ -287,7 +371,56 @@ const Reports = (props) => {
           </div>
           <div>
             STIX Visualizer
-            <Visualizer graph1={hash1} mergedReports={mergedReportsBundles} />
+            {hash1 && mergedReportsBundles ? (
+              <Visualizer graph1={hash1} graph2={objectMergedReport} />
+            ) : (
+              //   console.log('Hash1 is: ' + JSON.parse(JSON.stringify(hash1)))
+              console.log('Visualizer not called')
+            )}
+          </div>
+          <div>
+            Related Links
+            {/*  Adding related links */}
+            {console.log(relatedReportData)}
+            <CTable align="middle" className="mb-0 border" hover responsive>
+              <CTableBody>
+                {Object.values(relatedReportData).map((el) => (
+                  <CTableRow key={el}>
+                    <CTableDataCell>
+                      <div>{el.rawText.slice(0, 100) + '...'}</div>
+                    </CTableDataCell>
+
+                    <CTableDataCell className="text-center">
+                      <CButton
+                        style={{ backgroundColor: 'blue', margin: '1%' }}
+                        onClick={() =>
+                          goToDetails(
+                            el.hash,
+                            el.source,
+                            el.rawText,
+                            el.malwares,
+                            el.vulnerabilities,
+                            el.locations,
+                            el.threatActors,
+                            el.identities,
+                            el.tools,
+                            el.infrastructure,
+                            el.campaigns,
+                            el.attackPatterns,
+                          )
+                        }
+                      >
+                        Details
+                      </CButton>
+                    </CTableDataCell>
+                  </CTableRow>
+
+                  // <CDropdownItem onClick={() => handleSelect(el)} key={el}>
+                  //   Report: {i + 1}
+                  // </CDropdownItem>
+                ))}
+              </CTableBody>
+            </CTable>
           </div>
         </CCardBody>
       </CCard>

@@ -170,6 +170,7 @@ const options = {
     color: '#000000',
   },
   height: '900px',
+  width: '100%',
 }
 
 const Visualizer = (props) => {
@@ -177,10 +178,12 @@ const Visualizer = (props) => {
   const [state, setState] = useState({
     isPaneOpen: false,
   })
+  const [reportData, setReportData] = useState([])
 
   //data for graph
   let bundle
   let mergedReports
+  let reports
   const getData = () => {
     console.log(bundle)
     setData(bundle)
@@ -192,14 +195,19 @@ const Visualizer = (props) => {
     window.location.reload(false)
   }
   useEffect(() => {
+    console.log(props)
     Visualizer.propTypes = {
       graph1: PropTypes.object,
-      mergedReports: PropTypes.array,
+      graph2: PropTypes.object,
+      // mergedReports: PropTypes.object,
       //... other props you will use in this component
     }
     bundle = props.graph1
-    mergedReports = props.mergedReports
-    console.log('visualizer called' + bundle)
+    reports = props.graph2
+    setReportData(reports.merged)
+    // mergedReports = props.mergedReports
+    console.log('bundle called' + JSON.stringify(bundle))
+    console.log('reports merged called' + JSON.stringify(reports.merged))
     getData()
   }, [props])
   let relationships = []
@@ -257,6 +265,7 @@ const Visualizer = (props) => {
 
   // dropp down selection handler
   const handleSelect = (e) => {
+    console.log('in handle select')
     console.log(e)
     setData(e)
   }
@@ -313,7 +322,6 @@ const Visualizer = (props) => {
               >
                 <CImage src="zoomOut.png" style={{ width: '30%', height: '15%' }}></CImage>
               </CButton>
-
               <CButton
                 style={{
                   border: 'transparent',
@@ -340,19 +348,24 @@ const Visualizer = (props) => {
                 View Legend
               </CButton>
 
-              {/*  drop down menu*/}
-              <CDropdown title="dropDown" id="dropDown" onSelect={handleSelect}>
+              <CDropdown title="dropDown" id="dropDown">
                 <CDropdownToggle href="#" color="secondary">
                   View graph
                 </CDropdownToggle>
-                <CDropdownMenu>
-                  {Object.values(mergedReports).map((el) => (
-                    <CDropdownItem key={el}>el</CDropdownItem>
-                  ))}
-                  {/*<CDropdownItem href="#">Action</CDropdownItem>*/}
-                  {/*<CDropdownItem href="#">Another action</CDropdownItem>*/}
-                  {/*<CDropdownItem href="#">Something else here</CDropdownItem>*/}
-                </CDropdownMenu>
+                {reportData ? (
+                  <CDropdownMenu>
+                    {Object.values(reportData).map((el, i) => (
+                      <CDropdownItem onClick={() => handleSelect(el)} key={el}>
+                        Report: {i + 1}
+                      </CDropdownItem>
+                    ))}
+                    {/*<CDropdownItem href="#">Action</CDropdownItem>*/}
+                    {/*<CDropdownItem href="#">Another action</CDropdownItem>*/}
+                    {/*<CDropdownItem href="#">Something else here</CDropdownItem>*/}
+                  </CDropdownMenu>
+                ) : (
+                  console.log('drop down error')
+                )}
               </CDropdown>
             </div>
             <TransformComponent>

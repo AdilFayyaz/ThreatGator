@@ -219,14 +219,15 @@ public class elasticMapper {
     }
 
     // helper function - get results from elastic given a hashed value
-    public void GetAllResultsOnHash(allFields fields, String hash) throws IOException, JSONException {
+    public allFields GetAllResultsOnHash(allFields fields, String hash) throws IOException, JSONException {
 //        SearchRequest request= new SearchRequest("tagged_bundle_data");
 //        SearchSourceBuilder searchSourceBuilder=new SearchSourceBuilder();
 //        searchSourceBuilder.query(QueryBuilders.matchAllQuery());
 //        request.source(searchSourceBuilder);
-
+        System.out.println("Hash is: " + hash);
         GetRequest request1 = new GetRequest("tagged_bundle_data", String.valueOf(hash));
         GetResponse response = client.get(request1, RequestOptions.DEFAULT);
+
 
         if (response.isExists()) {
             String sourceAsString = response.getSourceAsString();
@@ -366,19 +367,20 @@ public class elasticMapper {
             if (!camp.isEmpty()) {
                 fields.setCampaigns(camp);
             }
-
-//            // Get Attack Patterns Information
-//            String atk = "";
-//            JSONArray element10 = jsonComplete.getJSONArray("attackPatterns");
-//            for(int i=0;i<element10.length();i++){
-//                JSONObject e = element10.getJSONObject(i);
-//                String name = e.getString("name");
-//                if(!name.isEmpty()){
-//                    atk += name + ",";
-//                }
-//            }
-//            if(!atk.isEmpty()){fields.setAttackPatterns(atk);}
+            
+            // Get Attack Patterns Information
+            String atk = "";
+            JSONArray element10 = jsonComplete.getJSONArray("attackPatterns");
+            for(int i=0;i<element10.length();i++){
+                JSONObject e = element10.getJSONObject(i);
+                String name = e.getString("name");
+                if(!name.isEmpty()){
+                    atk += name + ",";
+                }
+            }
+            if(!atk.isEmpty()){fields.setAttackPatterns(atk);}
         }
+        return fields;
     }
 
     // get a list of all hashes for each index in elastic search

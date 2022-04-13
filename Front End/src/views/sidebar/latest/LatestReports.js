@@ -133,7 +133,6 @@ const LatestReports = (props) => {
       {/* {getReports()} */}
       <CCard className="mb-4">
         <CCardHeader>ThreatGator&apos;s Latest Reports</CCardHeader>
-        <h1>hahah{props.location.org_id}</h1>
         <CCardBody>
           <CTable align="middle" className="mb-0 border" hover responsive>
             <CTableHead color="light">

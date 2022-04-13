@@ -51,7 +51,8 @@ public class analysisController {
     @PostMapping("/getResultOnHash")
     public String getResultsOnHash(@RequestBody String hash) throws JSONException, IOException {
         allFields fields = new allFields();
-        connect.GetAllResultsOnHash(fields, hash);
+        JSONObject j = new JSONObject(hash);
+        fields = connect.GetAllResultsOnHash(fields, j.getString("hash"));
         String r = fields.getJSONFields().toString();
         System.out.println(r);
         return r;
@@ -285,7 +286,6 @@ public class analysisController {
 //        System.out.println("INSIDE****************************");
         return connect.getStix(hash, index);
     }
-
 
 
 }
