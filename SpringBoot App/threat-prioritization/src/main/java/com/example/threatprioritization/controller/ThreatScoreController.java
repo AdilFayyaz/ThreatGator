@@ -14,6 +14,7 @@ import com.example.threatprioritization.services.ThreatPrioritizationService;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 @RestController
 @RequestMapping("/threatScore")
@@ -59,6 +60,21 @@ public class ThreatScoreController {
             return null;
         }
     }
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @GetMapping("/getTopReports")
+    public ArrayList<ReportScores> getTopReports(Integer org_id) throws JSONException, IOException {
+        Organization org = threatPrioritizationService.getOrganization(org_id);
+        if (org!=null){
+            ArrayList<ReportScores> scores=threatPrioritizationService.getThreatScoresForOrganization(org);
+            return threatPrioritizationService.getTop5(scores);
+        }
+        else{
+            System.out.println("Org not found :(");
+            return null;
+        }
+    }
+
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/updateScoreForReports")
