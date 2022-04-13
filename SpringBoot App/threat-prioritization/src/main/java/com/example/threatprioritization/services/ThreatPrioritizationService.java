@@ -2,6 +2,7 @@ package com.example.threatprioritization.services;
 
 import com.example.threatprioritization.model.*;
 import com.example.threatprioritization.repository.ThreatScoresRepository;
+import com.example.threatprioritization.util.ConvertScore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -367,7 +368,8 @@ public class ThreatPrioritizationService {
                 }
             }
         }
-
+        ConvertScore convertScore = new ConvertScore();
+        Score = convertScore.convertScore(Score);
         if (!threatScoresRepository.existsThreatScoresByOrganizationIdAndReportId(organization.getId(), report.hash)) {
             System.out.println("First Score Calculation");
             ThreatScores t= new ThreatScores();
