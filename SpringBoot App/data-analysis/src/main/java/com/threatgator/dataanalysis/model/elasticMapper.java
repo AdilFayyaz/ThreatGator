@@ -621,14 +621,19 @@ public class elasticMapper {
             String sourceAsString=hit.getSourceAsString();
             JSONObject jsonComplete = new JSONObject(sourceAsString);
             try {
-
+                String time = jsonComplete.getString("time");
+                Date d = new Date(Long.parseLong(time));
+                Date today = new Date();
+                Long timeDiff = today.getTime() - d.getTime();
+                long daysDiff = (timeDiff / (1000 * 60 * 60 * 24));
                 JSONArray element = jsonComplete.getJSONArray("locations");
                 for(int i=0; i<element.length(); i++){
                     JSONObject e = element.getJSONObject(i);
                     String name = e.getString("name");
 
                     // Do not insert empty values here
-                    if(!name.isEmpty()) {
+                    // Insert values only if the days difference is less than 30 days
+                    if(!name.isEmpty() && daysDiff <= 30) {
 //                        loc.addLocation(name);
                         Integer val = locationsMap.get(name);
                         if (val!= null) {
