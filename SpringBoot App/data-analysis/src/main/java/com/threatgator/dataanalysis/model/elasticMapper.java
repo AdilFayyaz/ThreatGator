@@ -47,6 +47,21 @@ import java.util.*;
 
 import static org.elasticsearch.index.query.QueryBuilders.matchQuery;
 
+class ValueComparator implements Comparator<String> {
+
+    Map<String, Integer> base;
+    public ValueComparator(Map<String, Integer> base) {
+        this.base = base;
+    }
+
+    public int compare(String a, String b) {
+        if (base.get(a) >= base.get(b)) {
+            return -1;
+        } else {
+            return 1;
+        }
+    }
+}
 // Accesses the elastic search data store
 public class elasticMapper {
 
@@ -598,7 +613,10 @@ public class elasticMapper {
         SearchResponse response=client.search(request, COMMON_OPTIONS);
 
         SearchHit[] hits=response.getHits().getHits();
-
+        Map<String, Integer> locationsMap
+                = new HashMap<String, Integer>();
+        ValueComparator bvc =  new ValueComparator(locationsMap);
+        TreeMap<String,Integer> sorted_map = new TreeMap<String,Integer>(bvc);
         for(SearchHit hit: hits){
             String sourceAsString=hit.getSourceAsString();
             JSONObject jsonComplete = new JSONObject(sourceAsString);
@@ -611,7 +629,14 @@ public class elasticMapper {
 
                     // Do not insert empty values here
                     if(!name.isEmpty()) {
-                        loc.addLocation(name);
+//                        loc.addLocation(name);
+                        Integer val = locationsMap.get(name);
+                        if (val!= null) {
+                            locationsMap.put(name, val+1);
+                        }
+                        else{
+                            locationsMap.put(name, 1);
+                        }
                     }
                 }
             }
@@ -619,6 +644,18 @@ public class elasticMapper {
                 System.out.println("--");
             }
         }
+        sorted_map.putAll(locationsMap);
+        Integer count = 0;
+
+        for (Map.Entry<String, Integer> entry : sorted_map.entrySet()) {
+            if(count>=7){break;} //Get top 8 locations
+            Integer val = entry.getValue();
+            for (int i=0;i<val;i++){
+                loc.addLocation(entry.getKey());
+            }
+            count +=1;
+        }
+
     }
     
      // remove document from elastic search
