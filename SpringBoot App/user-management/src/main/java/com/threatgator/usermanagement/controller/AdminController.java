@@ -1,6 +1,5 @@
 package com.threatgator.usermanagement.controller;
 
-import com.threatgator.usermanagement.model.Organization;
 import com.threatgator.usermanagement.model.Users;
 import com.threatgator.usermanagement.service.OrganizationService;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
@@ -51,18 +50,14 @@ public class AdminController {
     // validate the admins credentials
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/validateAdminCredentials")
-    public Organization validateAdminCredentials(@RequestBody user_details userDetails){
-        Organization organization = new Organization();
-        List<Admin> usersList= AdminService.getAllAdmin();
-        System.out.println(usersList);
-        for (int i=0; i< usersList.size(); i++){
-            if (usersList.get(i).getEmail().equals(userDetails.username) && usersList.get(i).getPassword().equals(userDetails.password)){
-
-                return usersList.get(i).getOrganization();
+    public boolean validateCredentials(@RequestBody user_details userDetails){
+        List<Admin> AdminList= AdminService.getAllAdmin();
+        for (int i=0; i< AdminList.size(); i++){
+            if (AdminList.get(i).getEmail().equals(userDetails.username) && AdminList.get(i).getPassword().equals(userDetails.password)){
+                return true;
             }
         }
 
-        return organization ;
+        return false;
     }
-
 }

@@ -39,14 +39,13 @@ public class Organization {
 //    private List<Assets> assets = new ArrayList<>();
 
     public Organization(String name, String sector, String country) {
-        System.out.println("org");
         this.name = name;
         this.sector = sector;
         this.country = country;
     }
 
     public Organization() {
-        System.out.println("org2");
+
     }
 
     public void setId(int id) {

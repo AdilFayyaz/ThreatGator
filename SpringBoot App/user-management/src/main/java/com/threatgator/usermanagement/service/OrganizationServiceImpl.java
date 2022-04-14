@@ -1,5 +1,6 @@
 package com.threatgator.usermanagement.service;
 
+import com.threatgator.usermanagement.model.Assets;
 import com.threatgator.usermanagement.model.Organization;
 import com.threatgator.usermanagement.repository.OrganizationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +18,6 @@ public class OrganizationServiceImpl implements OrganizationService {
     public Optional<Organization> getOrganization(Integer id) {
         return OrganizationRepository.findById(id);
     }
-
-    @Override
-    public Optional<Organization> getOrganization(String name) {
-        return OrganizationRepository.findByName(name);
-    }
-
 
     @Override
     public String getSector(Integer id) {

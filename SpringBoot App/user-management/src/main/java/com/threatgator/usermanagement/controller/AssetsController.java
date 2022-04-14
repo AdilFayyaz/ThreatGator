@@ -32,7 +32,7 @@ public class AssetsController {
     @Autowired
     private OrganizationService organizationService;
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
+
     @PostMapping("/addAsset/{OrganizationId}")
     public ResponseEntity<Assets> createAsset(@PathVariable(value = "OrganizationId") Integer OrganizationId,
                                               @RequestBody Assets assets) {
@@ -44,27 +44,14 @@ public class AssetsController {
         }).orElseThrow(() -> new ResourceNotFoundException("Not found Organization with id = " + OrganizationId));
         return new ResponseEntity<>(assets1, HttpStatus.CREATED);
     }
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
-    @PostMapping("/addAssets/{OrganizationName}")
-    public ResponseEntity<Assets> createAsset(@PathVariable(value = "OrganizationName") String OrganizationName,
-                                              @RequestBody Assets assets) {
-
-        System.out.println(assets.getName());
-        Assets assets1 = organizationService.getOrganization(OrganizationName).map(organization -> {
-            assets.setOrganization(organization);
-            return assetsService.saveAsset(assets);
-        }).orElseThrow(() -> new ResourceNotFoundException("Not found Organization with name= " + OrganizationName));
-        return new ResponseEntity<>(assets1, HttpStatus.CREATED);
-    }
 
     // get all users
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/getAll")
     public List<Assets> list(){
         return assetsService.getAllAssets();
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
+
     @GetMapping("/assetsByOrganization/{organizationId}")
     public ResponseEntity<List<Assets>> getAllAssetsByOrganizationId(@PathVariable(value = "organizationId") Integer OrganizationId) {
         if (!organizationRepository.existsById(OrganizationId)) {
