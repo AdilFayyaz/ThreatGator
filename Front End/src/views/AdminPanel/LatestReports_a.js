@@ -44,7 +44,7 @@ const LatestReports_a = () => {
   //   )
   // }
   // fetching data from data analysis service for reports
-  const getReports = () => {
+  const getReports = (props) => {
     // event.preventDefault()
 
     fetch('http://127.0.0.1:8082/dataAnalysis/getReports')

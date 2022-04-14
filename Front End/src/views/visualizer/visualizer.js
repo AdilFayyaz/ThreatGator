@@ -181,10 +181,16 @@ const Visualizer = (props) => {
   const [reportData, setReportData] = useState([])
 
   //data for graph
-  let bundle
-  let mergedReports
-  let reports
-  const getData = () => {
+  let bundle = {}
+  let mergedReports = {}
+  let reports = {}
+  bundle = props.graph1
+
+  // reports = props.graph2
+  async function getData() {
+    // console.log('heree ' + props.graph2.merged)
+    // setReportData(reports.merged)
+    setReportData(props.graph2.merged)
     console.log(bundle)
     setData(bundle)
   }
@@ -194,22 +200,20 @@ const Visualizer = (props) => {
     // navigate("/dashboard", {replace: true})
     window.location.reload(false)
   }
-  useEffect(() => {
-    console.log(props)
-    Visualizer.propTypes = {
-      graph1: PropTypes.object,
-      graph2: PropTypes.object,
-      // mergedReports: PropTypes.object,
-      //... other props you will use in this component
-    }
-    bundle = props.graph1
-    reports = props.graph2
-    setReportData(reports.merged)
+  Visualizer.propTypes = {
+    graph1: PropTypes.object,
+    graph2: PropTypes.array,
+    // mergedReports: PropTypes.object,
+    //... other props you will use in this component
+  }
+  useEffect(async () => {
+    // console.log(props)
+
     // mergedReports = props.mergedReports
-    console.log('bundle called' + JSON.stringify(bundle))
-    console.log('reports merged called' + JSON.stringify(reports.merged))
-    getData()
-  }, [props])
+    // console.log('bundle called' + JSON.stringify(bundle))
+    // console.log('reports merged called' + JSON.stringify(reports.merged))
+    await getData()
+  }, [props.graph2])
   let relationships = []
   let objects = []
   let graphE = []
@@ -354,8 +358,12 @@ const Visualizer = (props) => {
                 </CDropdownToggle>
                 {reportData ? (
                   <CDropdownMenu>
+                    <CDropdownItem onClick={() => handleSelect(bundle)} key={bundle}>
+                      Filtered Report
+                    </CDropdownItem>
+
                     {Object.values(reportData).map((el, i) => (
-                      <CDropdownItem onClick={() => handleSelect(el)} key={el}>
+                      <CDropdownItem onClick={() => handleSelect(el)} key={i}>
                         Report: {i + 1}
                       </CDropdownItem>
                     ))}

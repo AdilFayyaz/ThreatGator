@@ -162,7 +162,7 @@ const Reports = (props) => {
       for (var i = 0; i < mergedReports.length; i++) {
         if (mergedReports[i].index === 'stix') {
           console.log(mergedReports[i])
-          fetch(
+          var y = await fetch(
             'http://127.0.0.1:8082/dataAnalysis/getStixBundle/' +
               mergedReports[i].id +
               '/' +
@@ -173,7 +173,7 @@ const Reports = (props) => {
               setMergedReportsBundles(data)
               temp.merged.push(data)
               console.log(temp)
-              setObjectMergedReport(temp)
+
               // Object.assign(objectMergedReport, mergedReportsBundles)
               // mergedReportsBundles.push(data)
               // console.log(mergedReportsBundles)
@@ -203,16 +203,18 @@ const Reports = (props) => {
             body: raw,
             redirect: 'follow',
           }
-          fetch('http://127.0.0.1:8082/dataAnalysis/getResultOnHash', requestOptions)
+          var x = await fetch('http://127.0.0.1:8082/dataAnalysis/getResultOnHash', requestOptions)
             .then((response) => response.text())
             .then((data) => {
               temp2.push(JSON.parse(data))
-              setRelatedReportData(temp2)
+
               console.log(temp2)
             })
             .catch((error) => console.log('error', error))
         }
       }
+      setObjectMergedReport(temp)
+      setRelatedReportData(temp2)
     }
     console.log('merged reports!!!! ' + mergedReportsBundles)
     console.log('Related links ' + relatedLinks)
