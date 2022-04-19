@@ -91,15 +91,15 @@ class SecureListScrapper:
             # text= text.translate(str.maketrans('', '', string.punctuation))
             final_paragraphs.append(text)
 
-        punctuations = '''!()-[]{};:'"\\<>/?@#$%^&*_~“”’'''
+        # punctuations = '''!()-[]{};:'"\\<>/?@#$%^&*_~“”’'''
 
-        # Clean the final paragraphs
-        for i,para in enumerate(final_paragraphs):
-            use_string = ""
-            for char in final_paragraphs[i]:
-                if char not in punctuations:
-                    use_string += char
-            final_paragraphs[i] = use_string
+        # # Clean the final paragraphs
+        # for i,para in enumerate(final_paragraphs):
+        #     use_string = ""
+        #     for char in final_paragraphs[i]:
+        #         if char not in punctuations:
+        #             use_string += char
+        #     final_paragraphs[i] = use_string
 
         
         return final_paragraphs
