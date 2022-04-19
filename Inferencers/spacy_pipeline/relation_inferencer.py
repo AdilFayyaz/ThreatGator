@@ -7,6 +7,7 @@ from relationship_extraction import *
 from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 from stix2 import *
+import copy
 import requests, json, os
 # from elasticsearch import Elasticsearch
 # pip install elasticsearch==5.5.3
@@ -230,11 +231,12 @@ async def get_model_inference(req: Request):
 
     # only keep those entities in prediction too that are in some relationship
     entities = prediction["entity tags"]
+    temp_entities = copy.deepcopy(entities[0])
     for e in entities[0]:
       if (hasRelationship(e[1], prediction)==False): # if the entity is not in an relationship
-        entities[0].remove(e)
-    
-    print(entities[0])
+        temp_entities.remove(e)
+      
+    entities[0] = temp_entities
 
     return prediction
     
