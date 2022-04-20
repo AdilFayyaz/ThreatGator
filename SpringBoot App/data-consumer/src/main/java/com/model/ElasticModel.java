@@ -11,6 +11,7 @@ public class ElasticModel {
     //attributes can be added later as needed for prioritization module like score, time etc
     public int hash=0; //to uniquely identify
     public String source="";
+    public String originalRawText = "";
     public String rawText="";
     public long time=0;
     public ArrayList<Entity> malwares=new ArrayList<>();

@@ -80,6 +80,7 @@ public class KafkaService {
     String getBundle ="http://127.0.0.1:5000/getBundle";
     String makeStix = "http://127.0.0.1:5000/makeStix";
     // Annotation required to listen
+    String originalText = "";
     // the message from Kafka server
     @KafkaListener(topics = "reddit-threads",
             groupId = "id", containerFactory
@@ -91,6 +92,7 @@ public class KafkaService {
             threads.add(thread.threads.get(i));
             JSONObject r = new JSONObject();
             String total=thread.threads.get(i).getTitle()+" "+thread.threads.get(i).getSelftext();
+            originalText = total;
             byte[] bytes = total.getBytes();
             String utf_8_string = new String(bytes,StandardCharsets.UTF_8);
             r.put("sentence", utf_8_string);
@@ -123,7 +125,7 @@ public class KafkaService {
             comments.add(comment.comments.get(i));
             JSONObject r = new JSONObject();
             r.put("sentence", comment.comments.get(i).getBody());
-
+            originalText = comment.comments.get(i).getBody();
             String s=restTemplate.postForObject(inferencer, new HttpEntity<>(r.toString()), String.class);
             String bundle = restTemplate.postForObject(getBundle, new HttpEntity<>(s), String.class);
             taggedData.add(convertString(s, "Reddit", comment.comments.get(i).getBody(), bundle));
@@ -141,7 +143,7 @@ public class KafkaService {
             JSONObject r = new JSONObject();
             String addTweet = tweet.tweetList.get(i).getBody();
             r.put("sentence", addTweet);
-
+            originalText = addTweet;
             String[] words = addTweet.split("\\s+");
             if(words.length < 300) {
                 try {
@@ -163,6 +165,7 @@ public class KafkaService {
             aptSecureLists.add(apt.APTList.get(i));
             JSONObject r = new JSONObject();
             String addAPT = apt.APTList.get(i).getBody();
+            originalText = addAPT;
             byte[] bytes = addAPT.getBytes(StandardCharsets.UTF_8);
             String utf8String = new String(bytes);
             String normalized;
@@ -196,6 +199,7 @@ public class KafkaService {
             malSecureLists.add(mal.MalwareList.get(i));
             JSONObject r = new JSONObject();
             String addMalware = mal.MalwareList.get(i).getBody();
+            originalText = addMalware;
             byte[] bytes = addMalware.getBytes(StandardCharsets.UTF_8);
             String utf8String = new String(bytes);
             String normalized;
@@ -228,6 +232,7 @@ public class KafkaService {
             spamSecureLists.add(spam.SpamList.get(i));
             JSONObject r = new JSONObject();
             String addSpam = spam.SpamList.get(i).getBody();
+            originalText = addSpam;
             byte[] bytes = addSpam.getBytes(StandardCharsets.UTF_8);
             String utf8String = new String(bytes);
             String normalized;
@@ -260,6 +265,7 @@ public class KafkaService {
             incSecureLists.add(inc.IncidentList.get(i));
             JSONObject r = new JSONObject();
             String addIncident = inc.IncidentList.get(i).getBody();
+            originalText = addIncident;
             byte[] bytes = addIncident.getBytes(StandardCharsets.UTF_8);
             String utf8String = new String(bytes);
             String normalized;
@@ -319,6 +325,7 @@ public class KafkaService {
 
         // Create an Elastic Model Object
         ElasticModel Obj = new ElasticModel();
+        Obj.originalRawText = originalText;
         Obj.time = System.currentTimeMillis();
         Obj.source=source;
         Obj.rawText=text;
@@ -505,6 +512,7 @@ public class KafkaService {
             ElasticModel e = new ElasticModel();
             e.hash=j.getInt("hash");
             e.source=j.getString("source");
+            e.originalRawText=j.getString("originalRawText");
             e.rawText=j.getString("rawText");
             e.time=j.getLong("time");
             e.bundleJson=j.getString("bundleJson");
