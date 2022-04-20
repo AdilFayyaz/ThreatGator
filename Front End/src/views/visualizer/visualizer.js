@@ -19,6 +19,7 @@ import {
   CImage,
 } from '@coreui/react'
 import { DocsLink } from '../../components'
+import ReactSpeedometer from 'react-d3-speedometer'
 //STIX relations
 export class sro {
   constructor(type, id, relationship_type, source, target) {
@@ -203,6 +204,7 @@ const Visualizer = (props) => {
   Visualizer.propTypes = {
     graph1: PropTypes.object,
     graph2: PropTypes.array,
+    threatscore: PropTypes.string,
     // mergedReports: PropTypes.object,
     //... other props you will use in this component
   }

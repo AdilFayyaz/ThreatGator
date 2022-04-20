@@ -23,14 +23,20 @@ const Login = (props) => {
   const [username, setUsername] = useState({})
   const [password, setPassword] = useState({})
   let org = 'not'
+  let admin = 'false'
+  let userid = ' '
   const [data2, setData] = useState({})
 
   Login.propTypes = {
     parentCallback: PropTypes.string,
+    parentCallbackIsadmin: PropTypes.string,
+    parentCallbackUserid: PropTypes.string,
     //... other props you will use in this component
   }
   const sendData = () => {
     props.parentCallback(org)
+    props.parentCallbackIsadmin(admin)
+    props.parentCallbackUserid(userid)
   }
 
   //function decides whether the credetials are correct w.e.t the database(both admin's and user's)
@@ -52,13 +58,22 @@ const Login = (props) => {
     //uses the user management system
     fetch('http://127.0.0.1:8084/users/validateCredentials', requestOptions)
       .then((response) => response.json())
-      .then((data) => {
+      .then(async (data) => {
         setData(JSON.stringify(data))
 
         console.log('--' + JSON.stringify(data))
         if (JSON.parse(JSON.stringify(data)).id != null) {
           console.log('is user')
-          org = JSON.parse(JSON.stringify(data)).id
+          var x = await fetch('http://127.0.0.1:8084/users/getUserId', requestOptions)
+            .then((response) => response.json())
+            .then((data) => {
+              // setData(JSON.stringify(data))
+              console.log('got userid' + data)
+              userid = data.toString()
+            })
+          org = JSON.parse(JSON.stringify(data)).id.toString()
+          admin = 'false'
+
           sendData()
           history.push('/dashboard', {
             org_id: JSON.parse(JSON.stringify(data)).id,
@@ -72,7 +87,8 @@ const Login = (props) => {
 
               console.log('--' + JSON.stringify(data))
               if (JSON.parse(JSON.stringify(data)).id != null) {
-                org = JSON.parse(JSON.stringify(data)).id
+                org = JSON.parse(JSON.stringify(data)).id.toString()
+                admin = 'true'
                 sendData()
                 history.push('/assetManagement', {
                   org_id: JSON.parse(JSON.stringify(data)).id,
@@ -149,6 +165,7 @@ const Login = (props) => {
                       </CCol>
                       <CCol xs={6} className="text-right">
                         <CButton
+                          type="submit"
                           style={{
                             color: 'black',
                             backgroundColor: 'transparent',

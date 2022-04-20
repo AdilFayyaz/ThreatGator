@@ -20,6 +20,7 @@ import {
 } from '@coreui/react'
 import '../../scss/Report_ap.css'
 import { useHistory, useLocation } from 'react-router-dom'
+import ReactSpeedometer from 'react-d3-speedometer'
 
 const Report_ap = (props) => {
   // const [reportsData, SetReportsData] = useState({})
@@ -43,6 +44,16 @@ const Report_ap = (props) => {
   const hash = location.state.hash
   // const org_id=location.state.org_id
   // const mergedReportsBundles = []
+  var history = useHistory()
+
+  var [hash1, SetHash] = useState({})
+  // var hash1 = {}
+
+  var mergedReports = []
+  var [relatedReportData, setRelatedReportData] = useState([])
+  // var [mergedReports, SetMergedReports] = useState([])
+  // fetching data from data analysis service for reports
+
   var [mergedReportsBundles, setMergedReportsBundles] = useState([])
   var [objectMergedReport, setObjectMergedReport] = useState({})
   const relatedLinks = []
@@ -64,7 +75,15 @@ const Report_ap = (props) => {
       // body: data1,
       redirect: 'follow',
     }
-
+    console.log(
+      'request ',
+      'http://127.0.0.1:8086/threatScore/getThreatScoreByOrganizationReport?org_id=' +
+        encodeURIComponent(data1.org_id) +
+        '&report_id=' +
+        encodeURIComponent(data1.reportId) +
+        '&index=' +
+        encodeURIComponent(data1.index),
+    )
     fetch(
       'http://127.0.0.1:8086/threatScore/getThreatScoreByOrganizationReport?org_id=' +
         encodeURIComponent(data1.org_id) +
@@ -228,17 +247,6 @@ const Report_ap = (props) => {
     console.log('merged reports!!!! ' + mergedReportsBundles)
     console.log('Related links ' + relatedLinks)
   }
-
-  // const hash = location.state.hash
-  function getStix() {
-    console.log('getting stix')
-    fetch('http://127.0.0.1:8082/dataAnalysis/getStixBundle/' + hash)
-      .then((res) => res.json())
-      .then((data) => {
-        SetHash(data)
-      })
-    console.log(hash1.id)
-  }
   function saveRow() {
     console.log('save')
 
@@ -349,6 +357,7 @@ const Report_ap = (props) => {
         console.log('sending...' + JSON.stringify(req))
       })
   }
+
   useEffect(() => {
     getStix()
     getScore()
@@ -729,8 +738,26 @@ const Report_ap = (props) => {
               </CTableRow>
             </CTableBody>
           </CTable>
-          <div>
-            <p>Threat Score: {threatScore}</p>
+          {/*<div>*/}
+          {/*  <p>Threat Score: {threatScore}</p>*/}
+          {/*</div>*/}
+          <div className="d-flex justify-content-center">
+            <ReactSpeedometer
+              needleHeightRatio={0.8}
+              maxSegmentLabels={10}
+              segments={3333}
+              value={threatScore}
+              // needleColor="000"
+              // textColor="#FFF"
+              maxValue={1}
+              minValue={0}
+              forceRender={false}
+              startColor="#33CC33"
+              endColor="#FF471A"
+              currentValueText={'Threat Score: ' + JSON.stringify(threatScore)}
+              height={190}
+              paddingVertical={10}
+            />
           </div>
           <div>
             STIX Visualizer

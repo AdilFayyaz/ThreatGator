@@ -1,4 +1,5 @@
-import React, { useEffect, useState, createRef, useRef } from 'react'
+import PropTypes from 'prop-types'
+import React, { useEffect, useState, createRef } from 'react'
 import {
   CRow,
   CCol,
@@ -15,41 +16,20 @@ import {
   CTable,
   CButton,
   CBadge,
-  CToaster,
-  CToast,
-  CToastHeader,
-  CToastBody,
-  CModal,
-  CModalHeader,
-  CModalTitle,
-  CModalBody,
-  CModalFooter,
 } from '@coreui/react'
-
 import { useHistory, useLocation } from 'react-router-dom'
 
-const LatestReports_a = () => {
+const LatestReports_a = (props) => {
   const location = useLocation()
   const [reportsData, SetReportsData] = useState({})
-  const [toast, addToast] = useState(false)
-  const [visible, setVisible] = useState(false)
-  var confirm
-  const [deleteData, setDeleteData] = useState()
-  // function confirmationPrompt(el, e) {
-  //   e.preventDefault()
-  //   return (
-  //
-  //
-  //     </>
-  //   )
-  // }
   // fetching data from data analysis service for reports
-  const getReports = (props) => {
+  const getReports = () => {
     // event.preventDefault()
 
     fetch('http://127.0.0.1:8082/dataAnalysis/getReports')
       .then((res) => res.json())
       .then((data) => {
+        console.log(data)
         SetReportsData(data)
       })
     console.log('in function')
@@ -72,7 +52,7 @@ const LatestReports_a = () => {
       hash: hash,
       source: source,
       rawText: rawtext,
-      malwares: malwares,
+      malware: malwares,
       vulnerabilities: vulnerabilities,
       locations: locations,
       threatActors: threatActors,
@@ -81,6 +61,7 @@ const LatestReports_a = () => {
       infrastructure: infrastructure,
       campaigns: campaigns,
       attackPatterns: attackPatterns,
+      org_id: props.location.org_id,
     })
   }
   const history = useHistory()
@@ -93,6 +74,7 @@ const LatestReports_a = () => {
   var isInfra = false
   var isCampaign = false
   var isAttackPatterns = false
+
   function setTags(
     malwares,
     vulnerabilities,
@@ -132,42 +114,26 @@ const LatestReports_a = () => {
       isAttackPatterns = true
     }
   }
-
-  function deleteRow(item) {
-    // e.preventDefault()
-
-    console.log('confirm' + confirm)
-    if (confirm == 'yes') {
-      const data2 = Object.values(reportsData).filter((i) => i.hash !== item.hash)
-      // const data2 = reportsData.filter((i) => i.id !== item.id)
-      SetReportsData(data2)
-      deleteReport(item.hash)
-    }
-  }
-
+  var org
   useEffect(() => {
     getReports()
+
     return () => {
       console.log('returning -xyzzz')
     }
-  }, [location, confirm])
-
-  function deleteReport(hash) {
-    // /deleteFromElastic/{hash}
-    fetch('http://127.0.0.1:8082/dataAnalysis/deleteFromElastic/' + hash)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data)
-        addToast(true)
-      })
+  }, [location])
+  LatestReports_a.propTypes = {
+    graph1: PropTypes.string,
+    location: PropTypes.object,
+    org_id: PropTypes.string,
+    //... other props you will use in this component
   }
-
+  console.log('sdddsss' + JSON.stringify(props))
   return (
     <>
       {/* {getReports()} */}
       <CCard className="mb-4">
         <CCardHeader>ThreatGator&apos;s Latest Reports</CCardHeader>
-
         <CCardBody>
           <CTable align="middle" className="mb-0 border" hover responsive>
             <CTableHead color="light">
@@ -180,12 +146,11 @@ const LatestReports_a = () => {
 
                 <CTableHeaderCell className="text-center"> </CTableHeaderCell>
                 <CTableHeaderCell className="text-center"> </CTableHeaderCell>
-                <CTableHeaderCell className="text-center"> </CTableHeaderCell>
               </CTableRow>
             </CTableHead>
             <CTableBody>
               {Object.values(reportsData).map((el) => (
-                <CTableRow key={el} id={el}>
+                <CTableRow key={el}>
                   <CTableDataCell>
                     <div className="rawText">{el.rawText}</div>
                   </CTableDataCell>
@@ -298,20 +263,19 @@ const LatestReports_a = () => {
                     ) : (
                       <div></div>
                     )}
-                    {/*if campaign tag*/}
+                    {/*if attack pattern tag*/}
                     {isAttackPatterns ? (
                       <CBadge
                         className="rounded-pill"
                         style={{ margin: '1%', backgroundColor: '#BF749B' }}
                       >
-                        Attack-Pattern
+                        attack-Pattern
                       </CBadge>
                     ) : (
                       <div></div>
                     )}
                   </CTableDataCell>
                   <CTableDataCell className="text-center">
-                    {/*{console.log('hashhh' + el.hash)}*/}
                     <CButton
                       style={{ backgroundColor: 'blue', margin: '1%' }}
                       onClick={() =>
@@ -334,18 +298,6 @@ const LatestReports_a = () => {
                       Details
                     </CButton>
                   </CTableDataCell>
-                  <CTableDataCell className="text-center">
-                    {/*{console.log('hashhh' + el.hash)}*/}
-                    <CButton
-                      style={{ backgroundColor: 'blue', margin: '1%' }}
-                      onClick={() => {
-                        setVisible(!visible)
-                        setDeleteData(el)
-                      }}
-                    >
-                      Delete
-                    </CButton>
-                  </CTableDataCell>
                   <CTableDataCell className="text-center"></CTableDataCell>
 
                   {/*  <CTableRow key={el}>*/}
@@ -365,43 +317,6 @@ const LatestReports_a = () => {
           </CTable>
         </CCardBody>
       </CCard>
-      {/*  TOAST */}
-      <CToaster placement="top-end">
-        <CToast title="ThreatGator" autohide={true} visible={toast}>
-          <CToastHeader close>
-            <strong className="me-auto">ThreatGator</strong>
-            <small>Latest</small>
-          </CToastHeader>
-          <CToastBody>A Report Has been Deleted</CToastBody>
-        </CToast>
-      </CToaster>
-      <CModal visible={visible} onClose={() => setVisible(false)}>
-        <CModalHeader onClose={() => setVisible(false)}>
-          <CModalTitle>Confirmation</CModalTitle>
-        </CModalHeader>
-        <CModalBody>Do you want to delete this report?</CModalBody>
-        <CModalFooter>
-          <CButton
-            color="secondary"
-            onClick={() => {
-              setVisible(false)
-              confirm = 'no'
-            }}
-          >
-            No
-          </CButton>
-          <CButton
-            color="primary"
-            onClick={() => {
-              setVisible(false)
-              confirm = 'yes'
-              deleteRow(deleteData)
-            }}
-          >
-            Yes
-          </CButton>
-        </CModalFooter>
-      </CModal>
     </>
   )
 }

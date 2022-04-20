@@ -1,6 +1,7 @@
 import React, { useEffect, useState, createRef } from 'react'
 import Visualizer from '../../visualizer/visualizer'
 import { useHistory } from 'react-router-dom'
+import Heart from 'react-heart'
 import {
   CRow,
   CCol,
@@ -17,14 +18,16 @@ import {
   CTable,
   CButton,
   CBadge,
+  CCardTitle,
 } from '@coreui/react'
 import { useLocation } from 'react-router-dom'
+import ReactSpeedometer from 'react-d3-speedometer'
 
 const Reports = (props) => {
   var history = useHistory()
   const [reportsData, SetReportsData] = useState({})
   var [hash1, SetHash] = useState({})
-  // var hash1 = {}
+  const [active, setActive] = useState(false)
   const [threatScore, SetThreatScore] = useState('')
   var mergedReports = []
   var [relatedReportData, setRelatedReportData] = useState([])
@@ -219,10 +222,66 @@ const Reports = (props) => {
     console.log('merged reports!!!! ' + mergedReportsBundles)
     console.log('Related links ' + relatedLinks)
   }
+  function addToFavorites() {
+    console.log('bookmarking for user ', location.state.userid)
+    var myHeaders = new Headers()
+    myHeaders.append('Content-Type', 'application/json')
 
+    var raw = JSON.stringify({
+      userId: location.state.userid,
+      reportHash: hash,
+    })
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow',
+    }
+
+    fetch('http://127.0.0.1:8084/users/toggleBookmark', requestOptions)
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log('error', error))
+  }
+  function checkBookmark() {
+    var myHeaders = new Headers()
+    myHeaders.append('Content-Type', 'application/json')
+
+    var raw = JSON.stringify({
+      userId: location.state.userid,
+      reportHash: hash,
+    })
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow',
+    }
+
+    fetch('http://127.0.0.1:8084/users/checkBookmark', requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result)
+        setActive(result)
+      })
+      .catch((error) => console.log('error', error))
+  }
+  function goBack() {
+    if (location.state.src == 'bookmarks') {
+      history.push('/bookmarks', { org_id: location.state.org_id, userid: location.state.userid })
+    } else {
+      history.push('/latestReports', {
+        org_id: location.state.org_id,
+        userid: location.state.userid,
+      })
+    }
+  }
   useEffect(() => {
     getStix()
     getScore()
+    checkBookmark()
     return () => {
       console.log('returning ')
     }
@@ -232,17 +291,45 @@ const Reports = (props) => {
     <>
       <CCard className="mb-4">
         <CCardHeader>
-          Report Details
-          <CButton href="/latestReports" style={{ float: 'right' }}>
+          <b>Report Details</b>
+          <CButton onClick={() => goBack()} style={{ float: 'right' }}>
             Return
           </CButton>
         </CCardHeader>
         <CCardBody>
-          {
-            <div className="rawText" style={{ height: '200px' }}>
-              {location.state.rawText}
-            </div>
-          }
+          {/*Raw text*/}
+          <CCard>
+            <CCardBody>
+              <CCardTitle>
+                <b>Report</b>
+                <div className="d-flex justify-content-center" style={{ float: 'right' }}>
+                  <h6>Add to Favourites </h6>
+                  <div
+                    style={{
+                      width: '1.5rem',
+                      float: 'right',
+                      marginLeft: '0.5rem',
+                      marginBottom: '2rem',
+                    }}
+                  >
+                    {/*<p>Add to Favourites</p>*/}
+                    <Heart
+                      isActive={active}
+                      onClick={() => {
+                        setActive(!active)
+                        addToFavorites()
+                      }}
+                    />
+                  </div>
+                </div>
+              </CCardTitle>
+              {
+                <div className="rawText" style={{ height: '150px' }}>
+                  {location.state.rawText}
+                </div>
+              }
+            </CCardBody>
+          </CCard>
           {<br></br>}
           <CTable align="middle" className="mb-0 border" hover responsive>
             <CTableHead color="light">
@@ -368,8 +455,26 @@ const Reports = (props) => {
               </CTableRow>
             </CTableBody>
           </CTable>
-          <div>
-            <p>Threat Score: {threatScore}</p>
+          {/*<div>*/}
+          {/*  <p>Threat Score: {threatScore}</p>*/}
+          {/*</div>*/}
+          <div className="d-flex justify-content-center">
+            <ReactSpeedometer
+              needleHeightRatio={0.8}
+              maxSegmentLabels={10}
+              segments={3333}
+              value={threatScore}
+              // needleColor="000"
+              // textColor="#FFF"
+              maxValue={1}
+              minValue={0}
+              forceRender={false}
+              startColor="#33CC33"
+              endColor="#FF471A"
+              currentValueText={'Threat Score: ' + JSON.stringify(threatScore)}
+              height={190}
+              paddingVertical={10}
+            />
           </div>
           <div>
             STIX Visualizer

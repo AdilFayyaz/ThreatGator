@@ -19,19 +19,60 @@ import {
 } from '@coreui/react'
 import { useHistory, useLocation } from 'react-router-dom'
 
-const LatestReports = (props) => {
+const Bookmarks = (props) => {
   const location = useLocation()
   const [reportsData, SetReportsData] = useState({})
+  var bookmarkedHashes = []
+  var tempReports = []
   // fetching data from data analysis service for reports
+  const getBookmaredReportsData = () => {
+    console.log(
+      'length',
+      bookmarkedHashes,
+      ' ',
+      bookmarkedHashes.length,
+      ' ',
+      bookmarkedHashes.size,
+    )
+    for (var i = 0; i < bookmarkedHashes.length; i++) {
+      var myHeaders = new Headers()
+      myHeaders.append('Content-Type', 'application/json')
+      var raw = JSON.stringify({
+        hash: bookmarkedHashes[i],
+      })
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow',
+      }
+      var x = fetch('http://127.0.0.1:8082/dataAnalysis/getResultOnHash', requestOptions)
+        .then((response) => response.json())
+        .then((data) => {
+          tempReports.push(JSON.parse(JSON.stringify(data)))
+
+          console.log('bookmarked Reports', JSON.stringify(tempReports))
+          SetReportsData(Object.assign({}, tempReports))
+        })
+        .catch((error) => console.log('error', error))
+    }
+  }
+  //gets all bookmaked reports hashes
   const getReports = () => {
     // event.preventDefault()
+    var requestOptions = {
+      method: 'POST',
+      redirect: 'follow',
+    }
 
-    fetch('http://127.0.0.1:8082/dataAnalysis/getReports')
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data)
-        SetReportsData(data)
+    var x = fetch('http://127.0.0.1:8084/users/getBookmarks/' + location.userid, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log('got hashes', result)
+        bookmarkedHashes = result
+        getBookmaredReportsData()
       })
+      .catch((error) => console.log('error', error))
     console.log('in function')
   }
   function goToDetails(
@@ -48,7 +89,6 @@ const LatestReports = (props) => {
     campaigns,
     attackPatterns,
   ) {
-    console.log('user id in latest reports ', props.location.userid)
     history.push('/Report', {
       hash: hash,
       source: source,
@@ -64,7 +104,7 @@ const LatestReports = (props) => {
       attackPatterns: attackPatterns,
       org_id: props.location.org_id,
       userid: props.location.userid,
-      src: 'latestReports',
+      src: 'bookmarks',
     })
   }
   const history = useHistory()
@@ -125,17 +165,16 @@ const LatestReports = (props) => {
       console.log('returning -xyzzz')
     }
   }, [location])
-  LatestReports.propTypes = {
+  Bookmarks.propTypes = {
     graph1: PropTypes.string,
     location: PropTypes.object,
     org_id: PropTypes.string,
-    userid: PropTypes.string,
     //... other props you will use in this component
   }
   console.log('sdddsss' + JSON.stringify(props))
   return (
     <>
-      {/* {getReports()} */}
+      {console.log('rep data here' + JSON.stringify(reportsData))}
       <CCard className="mb-4">
         <CCardHeader>ThreatGator&apos;s Latest Reports</CCardHeader>
         <CCardBody>
@@ -325,4 +364,4 @@ const LatestReports = (props) => {
   )
 }
 
-export default LatestReports
+export default Bookmarks

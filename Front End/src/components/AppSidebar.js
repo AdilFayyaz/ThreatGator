@@ -16,6 +16,8 @@ import PropTypes from 'prop-types'
 const AppSidebar = (props) => {
   AppSidebar.propTypes = {
     graph1: PropTypes.string,
+    isadmin: PropTypes.string,
+    userid: PropTypes.string,
     //... other props you will use in this component
   }
   var bundle = props.graph1
@@ -44,7 +46,12 @@ const AppSidebar = (props) => {
       </CSidebarBrand>
       <CSidebarNav>
         <SimpleBar>
-          <AppSidebarNav items={navigation} graph1={bundle} />
+          <AppSidebarNav
+            items={navigation}
+            graph1={bundle}
+            isadmin={props.isadmin}
+            userid={props.userid}
+          />
         </SimpleBar>
       </CSidebarNav>
       <CSidebarToggler

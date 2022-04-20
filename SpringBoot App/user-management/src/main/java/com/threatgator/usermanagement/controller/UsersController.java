@@ -1,6 +1,7 @@
 package com.threatgator.usermanagement.controller;
 
 import com.threatgator.usermanagement.model.Assets;
+import com.threatgator.usermanagement.model.Organization;
 import com.threatgator.usermanagement.service.BookmarkService;
 import com.threatgator.usermanagement.service.OrganizationService;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
@@ -58,17 +59,31 @@ public class UsersController {
     // validate the credentials of the user
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/validateCredentials")
-    public boolean validateCredentials(@RequestBody user_details userDetails){
+    public Organization validateCredentials(@RequestBody user_details userDetails){
+        Organization organization = new Organization();
         List<Users> usersList= usersService.getAllUsers();
         for (int i=0; i< usersList.size(); i++){
             if (usersList.get(i).getEmail().equals(userDetails.username) && usersList.get(i).getPassword().equals(userDetails.password)){
-                return true;
+                return usersList.get(i).getOrganization();
             }
         }
 
-        return false;
+        return organization ;
     }
+    //return userid
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PostMapping("/getUserId")
+    public int getUserId(@RequestBody user_details userDetails){
 
+        List<Users> usersList= usersService.getAllUsers();;
+        for (int i=0; i< usersList.size(); i++){
+            if (usersList.get(i).getEmail().equals(userDetails.username) && usersList.get(i).getPassword().equals(userDetails.password)){
+                return usersList.get(i).getId();
+            }
+        }
+
+        return 0 ;
+    }
     // toggleBookmark of report for user
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/toggleBookmark")
