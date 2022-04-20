@@ -202,17 +202,17 @@ public class elasticMapper {
     }
 
     // get results for search keyword
-    public void GetSearchResult(searchResults _reports, String keyword) throws IOException, JSONException {
+    public String GetSearchResult(String keyword) throws IOException, JSONException {
         SearchRequest request = new SearchRequest("tagged_bundle_data");
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.query(QueryBuilders.matchAllQuery());
         request.source(searchSourceBuilder);
 
-
         SearchResponse response = client.search(request, COMMON_OPTIONS);
 
         SearchHit[] hits = response.getHits().getHits();
-
+        JSONObject j = new JSONObject();
+        Integer i = 0;
         for (SearchHit hit : hits) {
             String sourceAsString = hit.getSourceAsString();
             JSONObject jsonComplete = new JSONObject(sourceAsString);
@@ -224,13 +224,19 @@ public class elasticMapper {
                 keyword = keyword.toLowerCase(Locale.ROOT);
                 if (!sentence.isEmpty() && processed_sentence.contains(keyword)) {
                     String _hash = jsonComplete.getString("hash"); // get hash of the string
-                    _reports.addSearchReports(_hash, sentence);
+                    allFields af = new allFields();
+                    af = GetAllResultsOnHash(af, _hash);
+                    JSONObject r = af.getJSONFields();
+                    j.put(String.valueOf(i),r);
+                    i++;
+//                    _reports.addSearchReports(_hash, sentence);
                 }
 
             } catch (JSONException | NullPointerException n) {
                 System.out.println("");
             }
         }
+        return j.toString();
     }
 
     // helper function - get results from elastic given a hashed value
@@ -251,6 +257,10 @@ public class elasticMapper {
             // Get hash and raw text
             fields.setHash(hash);
             fields.setRawText(rawText);
+            // Get date of the report fetched
+            Long time = jsonComplete.getLong("time");
+            Date d = new Date(time);
+            fields.setTime(d.toLocaleString());
 
             // Get malware information
             String mals = "";

@@ -41,9 +41,10 @@ public class analysisController {
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/getSearchResults")
     public String getSearchResults(@RequestBody String keyword) throws JSONException, IOException {
-        searchResults search = new searchResults();
-        connect.GetSearchResult(search, keyword);
-        String r = search.getSearchResults().toString();
+//        searchResults search = new searchResults();
+        JSONObject j = new JSONObject(keyword);
+        String r = connect.GetSearchResult(j.getString("keyword"));
+//        String r = search.getSearchResults().toString();
         return r;
     }
     // helper function that fetches result given the hash of a document from elastic store

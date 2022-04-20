@@ -9,6 +9,7 @@ import java.util.Map;
 public class allFields {
     String source;
     String hash;
+    String time;
     String rawText;
     String malwares;
     String threatActors;
@@ -24,7 +25,7 @@ public class allFields {
     public allFields() {
     }
 
-    public allFields(String source, String hash, String rawText, String malwares, String threatActors, String identities, String locations, String tools, String vulnerabilities, String infrastructures, String indicators, String campaigns, String attackPatterns) {
+    public allFields(String source, String hash, String time,String rawText, String malwares, String threatActors, String identities, String locations, String tools, String vulnerabilities, String infrastructures, String indicators, String campaigns, String attackPatterns) {
         this.source = source;
         this.hash = hash;
         this.rawText = rawText;
@@ -38,10 +39,19 @@ public class allFields {
         this.indicators = indicators;
         this.campaigns = campaigns;
         this.attackPatterns = attackPatterns;
+        this.time = time;
     }
     // Getters and Setters
     public String getSource() {
         return source;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public void setSource(String source) {
@@ -145,6 +155,7 @@ public class allFields {
         JSONObject j = new JSONObject();
         j.put("hash", getHash());
         j.put("source", getSource());
+        j.put("time", getTime());
         j.put("rawText",getRawText());
         j.put("malwares", getMalwares());
         j.put("threatActors", getThreatActors());
@@ -163,6 +174,7 @@ public class allFields {
         Map j = new LinkedHashMap<String,String>();
         j.put("hash", getHash());
         j.put("source", getSource());
+        j.put("time", getTime());
         j.put("rawText",getRawText());
         j.put("malwares", getMalwares());
         j.put("threatActors", getThreatActors());
