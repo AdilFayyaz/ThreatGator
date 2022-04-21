@@ -62,4 +62,18 @@ public class AdminController {
 
         return organization ;
     }
+    //return userid
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PostMapping("/getAdminId")
+    public int getAdminId(@RequestBody user_details userDetails){
+
+        List<Admin> usersList= AdminService.getAllAdmin();;
+        for (int i=0; i< usersList.size(); i++){
+            if (usersList.get(i).getEmail().equals(userDetails.username) && usersList.get(i).getPassword().equals(userDetails.password)){
+                return usersList.get(i).getId();
+            }
+        }
+
+        return 0 ;
+    }
 }

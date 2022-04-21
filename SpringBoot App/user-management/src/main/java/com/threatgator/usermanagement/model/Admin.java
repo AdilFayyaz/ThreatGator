@@ -52,4 +52,11 @@ public class Admin {
     public void setOrganization(Organization organization) {
         this.organization = organization;
     }
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 }

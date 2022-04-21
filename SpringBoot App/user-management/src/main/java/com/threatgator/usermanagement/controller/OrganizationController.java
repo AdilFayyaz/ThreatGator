@@ -28,6 +28,7 @@ public class OrganizationController {
         return organizationService.getAll();
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/getOrganization/{Org_id}")
     public Optional<Organization> getOrganization(@PathVariable(value="Org_id") Integer org_id){
         return organizationService.getOrganization(org_id);
