@@ -37,18 +37,21 @@ public class SourceController {
     }
 
     // Get list of all accounts
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/getAll/listAccount")
     public List<Account> listAccounts(){
         return accountsService.getAllAccounts();
     }
 
     // delete an account
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/delete/account/{id}")
     public String deleteAccount(@PathVariable int id){
         return accountsService.deleteAccount(id);
     }
 
     // delete a source
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/delete/source/{id}")
     public String deleteSource(@PathVariable int id){
         return sourcesService.deleteSource(id);
