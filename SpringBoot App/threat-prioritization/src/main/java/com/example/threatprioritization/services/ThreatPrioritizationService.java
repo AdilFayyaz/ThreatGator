@@ -128,6 +128,28 @@ public class ThreatPrioritizationService {
         return reports;
     }
 
+    public List<StixBundle> getAllIndividualReports() throws IOException, JSONException {
+
+        ArrayList<StixBundle> reports = new ArrayList<>();
+
+        //first from one index
+        SearchRequest request = new SearchRequest("tagged_bundle_data");
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.matchAllQuery());
+        request.source(searchSourceBuilder);
+        SearchResponse response = client.search(request, RequestOptions.DEFAULT);
+
+        for (SearchHit hit : response.getHits().getHits()) {
+            JSONObject j = new JSONObject(hit.getSourceAsString());
+            Integer id = j.getInt("hash");
+            StixBundle obj = new StixBundle(j.getString("bundleJson"), id, j.getLong("time"));
+            obj.standalone = true;
+            reports.add(obj);
+        }
+
+        return reports;
+    }
+
     public boolean assetMentioned(Assets[] assets, String name) {
 
         LevenshteinDistance lev = new LevenshteinDistance();
@@ -396,7 +418,7 @@ public class ThreatPrioritizationService {
     }
 
     public ArrayList<ReportScores> getThreatScoresForOrganization(Organization organization) throws JSONException, IOException { //for all reports
-        List<StixBundle> reports = getAllReports();
+        List<StixBundle> reports = getAllIndividualReports();
         ArrayList<ReportScores> reportScores = new ArrayList<ReportScores>();
         for (StixBundle report : reports) {
             ReportScores reportScores1 = new ReportScores();
