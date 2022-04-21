@@ -134,8 +134,10 @@ public class ThreatPrioritizationService {
 
         if (assets != null) {
             for (int i = 0; i < assets.length; i++) {
-                if (lev.getDistance(assets[i].getName(), name) >= 0.7 || lev.getDistance(assets[i].getVendor(), name) >= 0.7
-                        || lev.getDistance(assets[i].getVersion(), name) >= 0.7) {
+                if (lev.getDistance(assets[i].getName().toLowerCase(), name) >= 0.7 || lev.getDistance(assets[i].getVendor().toLowerCase(), name) >= 0.7
+                        || lev.getDistance(assets[i].getVersion().toLowerCase(), name) >= 0.7
+                || name.contains(assets[i].getName().toLowerCase()) || assets[i].getName().toLowerCase().contains(name)
+                || name.contains(assets[i].getVendor().toLowerCase()) || assets[i].getVendor().toLowerCase().contains(name)) {
                     System.out.println("*********Matching assetttt***********");
                     return true;
                 }
@@ -147,8 +149,11 @@ public class ThreatPrioritizationService {
 
     public boolean identityExists(String orgName, String orgSector, String orgCountry, Assets[] assets, String identity) {
         LevenshteinDistance lev = new LevenshteinDistance();
+        orgName=orgName.toLowerCase();
+        orgSector = orgSector.toLowerCase();
+        orgCountry = orgCountry.toLowerCase();
 
-        if (lev.getDistance(identity, orgName) >= 0.7 || identity.contains(orgSector)
+        if (lev.getDistance(identity, orgName) >= 0.7 || identity.contains(orgSector) || orgSector.contains(identity)
                 || identity.contains(orgCountry) || orgCountry.contains(identity)
                 || assetMentioned(assets, identity)) {
             System.out.println("*********Matching identity***********");
