@@ -31,6 +31,7 @@ import org.json.JSONObject;
 import org.python.core.*;
 import org.springframework.http.HttpEntity;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -119,7 +120,7 @@ public class KafkaService {
     @KafkaListener(topics = "reddit-comments",
             groupId = "id", containerFactory
             = "RedditCommentListener")
-    public void publish(redditKafkaC comment) throws JSONException {
+    public void publish(redditKafkaC comment) throws JSONException, IOException {
 //        System.out.println("New Entry: " + comment);
         for (int i=0; i<comment.comments.size(); i++){
             comments.add(comment.comments.get(i));
@@ -129,6 +130,9 @@ public class KafkaService {
             String s=restTemplate.postForObject(inferencer, new HttpEntity<>(r.toString()), String.class);
             String bundle = restTemplate.postForObject(getBundle, new HttpEntity<>(s), String.class);
             taggedData.add(convertString(s, "Reddit", comment.comments.get(i).getBody(), bundle));
+            addToElastic();
+            taggedData = new ArrayList<>();
+            finalObjects = new ArrayList<>();
         }
 
     }
@@ -150,9 +154,15 @@ public class KafkaService {
                     String s = restTemplate.postForObject(inferencer, new HttpEntity<>(r.toString()), String.class);
                     String bundle = restTemplate.postForObject(getBundle, new HttpEntity<>(s), String.class);
                     taggedData.add(convertString(s, "Twitter", addTweet, bundle));
+                    addToElastic();
+                    taggedData = new ArrayList<>();
+                    finalObjects = new ArrayList<>();
                 }
                 catch (HttpStatusCodeException e) {
                     System.out.println("Error Found");
+                } catch (IOException e) {
+                    System.out.println("Error pushing to elastic");
+                    throw new RuntimeException(e);
                 }
             }
         }
@@ -183,9 +193,14 @@ public class KafkaService {
                     System.out.println(s);
                     String bundle = restTemplate.postForObject(getBundle, new HttpEntity<>(s), String.class);
                     taggedData.add(convertString(s, "APTSecureList", normalized, bundle));
+                    addToElastic();
+                    taggedData = new ArrayList<>();
+                    finalObjects = new ArrayList<>();
                 }
                 catch (HttpStatusCodeException e) {
                     System.out.println("Error Found");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
             }
         }
@@ -217,9 +232,14 @@ public class KafkaService {
                     System.out.println(s);
                     String bundle = restTemplate.postForObject(getBundle, new HttpEntity<>(s), String.class);
                     taggedData.add(convertString(s, "MalwareSecureList", normalized, bundle));
+                    addToElastic();
+                    taggedData = new ArrayList<>();
+                    finalObjects = new ArrayList<>();
                 }
                 catch (HttpStatusCodeException e) {
                     System.out.println("Error Found");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
             }
         }
@@ -250,9 +270,14 @@ public class KafkaService {
                     System.out.println(s);
                     String bundle = restTemplate.postForObject(getBundle, new HttpEntity<>(s), String.class);
                     taggedData.add(convertString(s, "SpamSecureList", normalized, bundle));
+                    addToElastic();
+                    taggedData = new ArrayList<>();
+                    finalObjects = new ArrayList<>();
                 }
                 catch (HttpStatusCodeException e) {
                     System.out.println("Error Found");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
             }
         }
@@ -283,9 +308,14 @@ public class KafkaService {
                     System.out.println(s);
                     String bundle = restTemplate.postForObject(getBundle, new HttpEntity<>(s), String.class);
                     taggedData.add(convertString(s, "IncidentSecureList", normalized, bundle));
+                    addToElastic();
+                    taggedData = new ArrayList<>();
+                    finalObjects = new ArrayList<>();
                 }
                 catch (HttpStatusCodeException e) {
                     System.out.println("Error Found");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
             }
         }
@@ -452,6 +482,7 @@ public class KafkaService {
     }
 
 
+
     public void correlateArrays(ArrayList<StixBundle> initials, ArrayList<StixBundle> finals, int start, int end){
         LevenshteinDistance lev = new LevenshteinDistance();
         for (int i=start; i<end; i++) {
@@ -494,6 +525,7 @@ public class KafkaService {
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @RequestMapping("/correlate")
+    @Scheduled(cron = "0 0 7 * * ?")
     public void correlateBundles() throws IOException, JSONException {
         RestHighLevelClient client = new RestHighLevelClient(
                 RestClient.builder(
@@ -512,7 +544,8 @@ public class KafkaService {
             ElasticModel e = new ElasticModel();
             e.hash=j.getInt("hash");
             e.source=j.getString("source");
-            e.originalRawText=j.getString("originalRawText");
+            if(j.has("originalRawText"))
+                e.originalRawText=j.getString("originalRawText");
             e.rawText=j.getString("rawText");
             e.time=j.getLong("time");
             e.bundleJson=j.getString("bundleJson");
