@@ -71,8 +71,36 @@ function getNotificationCards(x) {
 }
 
 const Dashboard = (props) => {
+  function normalizeCountryName(str) {
+    if (str.toLowerCase() == 'uk') {
+      return 'United Kingdom'
+    } else if (str.toLowerCase() == 'us') {
+      return 'United States'
+    } else if (str.toLowerCase() == 'north korea') {
+      console.log('herer', str.toLowerCase())
+      return "Korea, Democratic People's Republic of"
+    } else if (str.toLowerCase() == 'south korea' || str.toLowerCase() == 'korea') {
+      return 'Korea, Republic of'
+    } else if (str.toLowerCase() == 'iran') {
+      return 'Iran, Islamic Republic of'
+    } else if (str.toLowerCase() == 'syria') {
+      return 'Syrian Arab Republic'
+    } else if (str.toLowerCase() == 'venezuela') {
+      return 'Venezuela, Bolivarian Republic of'
+    } else if (str.toLowerCase() == 'dominica') {
+      return 'Dominican Republic'
+    } else if (str.toLowerCase() == 'russia') {
+      return 'Russian Federation'
+    } else if (str.toLowerCase() == 'united arab emirates' || str.toLowerCase() == 'uae') {
+      return 'United Arab Emirates'
+    } else {
+      return str
+    }
+  }
   function capitalizeFirstLetter(str) {
-    const c = str.replace(/^./, str[0].toUpperCase())
+    // const c = str.replace(/^./, str[0].toUpperCase())
+    var c = str.replace(/(^\w|\s\w)/g, (m) => m.toUpperCase())
+    c = normalizeCountryName(c)
     return c
   }
   const random = (min, max) => {
@@ -123,14 +151,16 @@ const Dashboard = (props) => {
       .then((res) => res.json())
       .then((data) => {
         loc = Object.keys(data)
-
+        var val = Object.values(data)
+        console.log('locationss val', val)
         for (var i = 0; i < loc.length; i++) {
           var countryFullName = capitalizeFirstLetter(loc[i])
+          console.log('locationss', countryFullName)
           if (lookup.countries({ name: countryFullName })[0] != undefined) {
             console.log(lookup.countries({ name: countryFullName })[0].alpha2)
             objects.push({
               country: lookup.countries({ name: countryFullName })[0].alpha2,
-              value: ' ',
+              value: val[i],
             })
           }
         }
@@ -210,20 +240,78 @@ const Dashboard = (props) => {
       })
   }
   // fetching data from data analysis service for notifications
+  let topNotif = []
+  const notifications = async () => {
+    // let alerts = []
+    // let keys = []
+    // fetch('http://127.0.0.1:8082/dataAnalysis/getNotifications/5')
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     alerts = Object.values(data)
+    //     keys = Object.keys(data)
+    //     SetHashNotif(keys)
+    //     setNotificationsData(alerts)
+    //
+    //     SetHashNotif(Object.keys(data))
+    //   })
+    // var myHeaders = new Headers();
+    // myHeaders.append("Content-Type", "application/json");
+    //
+    // var raw = JSON.stringify({
+    //   "userId": props.location.userid,
+    //   "reportHash": "-718702783"
+    // });
 
-  const notifications = () => {
-    let alerts = []
-    let keys = []
-    fetch('http://127.0.0.1:8082/dataAnalysis/getNotifications/5')
-      .then((res) => res.json())
-      .then((data) => {
-        alerts = Object.values(data)
-        keys = Object.keys(data)
-        SetHashNotif(keys)
-        setNotificationsData(alerts)
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow',
+    }
 
-        SetHashNotif(Object.keys(data))
+    x = await fetch(
+      'http://127.0.0.1:8086/threatScore/getTopReports?org_id=' + location.state.org_id,
+      requestOptions,
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        console.log('top reports ', JSON.stringify(result), ' ', result.length)
+        for (var i = 0; i < result.length; i++) {
+          topNotif.push(result[i])
+        }
       })
+      .catch((error) => console.log('error', error))
+
+    //  get those notification's contents
+    console.log('length', topNotif.length)
+    var temp2 = []
+    var outternotif = []
+    for (var i = 0; i < topNotif.length; i++) {
+      console.log('!!', topNotif[i].reportId)
+      var myHeaders = new Headers()
+      myHeaders.append('Content-Type', 'application/json')
+      var raw = JSON.stringify({
+        hash: topNotif[i].reportId.toString(),
+      })
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow',
+      }
+      var x = await fetch('http://127.0.0.1:8082/dataAnalysis/getResultOnHash', requestOptions)
+        .then((response) => response.json())
+        .then((data) => {
+          temp2.push(data)
+          outternotif.push(data.hash)
+          console.log('got data S', JSON.stringify(data), data)
+        })
+        .catch((error) => console.log('error', error))
+    }
+    console.log(temp2, '---', outternotif)
+    setNotificationsData(temp2)
+    //
+    SetHashNotif(outternotif)
   }
   // fetching data from data analysis service for vulnerability button
 
@@ -267,7 +355,7 @@ const Dashboard = (props) => {
     var preHash
     NotificationsData.forEach((m) => {
       count += 1
-      if (m == event.target.value) {
+      if (m.rawText == event.target.value) {
         preHash = count
       }
     })
@@ -286,10 +374,16 @@ const Dashboard = (props) => {
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: _hash,
+      body: { hash: _hash.toString() },
     }
+    console.log("notification's hash ", _hash)
     // <Redirect to={ pathname: "/notification"}></Redirect>
-    history.push('/notification', { requestOptions: requestOptions })
+    history.push('/notification', {
+      hash: _hash.toString(),
+      org_id: location.state.org_id,
+      userid: location.state.userid,
+      src: 'dashboard',
+    })
   }
   // const openVisualizer = (event) => {
   //   navigate('/visualizer', { replace: true })
@@ -304,12 +398,27 @@ const Dashboard = (props) => {
     }
     return hash
   }
-
+  // useEffect(() => {
+  //   location.state.userid = window.localStorage.getItem('userid')
+  //   location.state.org_id = window.localStorage.getItem('org_id')
+  // }, [])
+  Dashboard.propTypes = {
+    graph1: PropTypes.string,
+    location: PropTypes.object,
+    org_id: PropTypes.string,
+    userid: PropTypes.string,
+    //... other props you will use in this component
+  }
   useEffect(() => {
     doughnut()
     notifications()
     hitsGraph()
     getLocations()
+    console.log('saving state', props.location.userid)
+    // window.sessionStorage.setItem('userid', props.location.userid)
+    // window.localStorage.setItem('org_id', location.state.org_id)
+    // location.state.userid = window.localStorage.getItem('userid')
+    // location.state.org_id = window.localStorage.getItem('org_id')
     return () => {
       console.log('returning -xyzzz')
     }
@@ -317,9 +426,9 @@ const Dashboard = (props) => {
   return (
     <>
       <CCard className="mb-4" style={{ backgroundColor: 'transparent', border: 'transparent' }}>
-        {/* <CRow>
-        <h1>Welcome {location.state.username}!</h1>
-      </CRow> */}
+        <CRow>
+          <h1>Welcome {props.location.userid}!</h1>
+        </CRow>
 
         <CCard className="mb-4" style={{ height: '15rem', padding: '2rem' }}>
           <CRow>
@@ -334,8 +443,8 @@ const Dashboard = (props) => {
             {/*  Button*/}
             {/*  some notification*/}
             {/*</CButton>*/}
-            {NotificationsData.map((notif) => (
-              <CRow key={notif}>
+            {NotificationsData.map((notif, i) => (
+              <CRow key={i}>
                 <CButton
                   // color="primary"
                   onClick={handleNotifClick}
@@ -346,9 +455,9 @@ const Dashboard = (props) => {
                     backgroundColor: '#1c2b45',
                     borderRadius: '3rem',
                   }}
-                  value={notif}
+                  value={notif.rawText}
                 >
-                  {notif}
+                  {notif.rawText.slice(0, 100) + '...'}
                 </CButton>
               </CRow>
 

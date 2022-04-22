@@ -51,12 +51,17 @@ public class analysisController {
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/getResultOnHash")
     public String getResultsOnHash(@RequestBody String hash) throws JSONException, IOException {
-        allFields fields = new allFields();
+                allFields fields = new allFields();
         JSONObject j = new JSONObject(hash);
         fields = connect.GetAllResultsOnHash(fields, j.getString("hash"));
         String r = fields.getJSONFields().toString();
         System.out.println(r);
         return r;
+//        allFields fields = new allFields();
+//        connect.GetAllResultsOnHash(fields, hash);
+//        String r = fields.getJSONFields().toString();
+//        System.out.println(r);
+//        return r;
     }
 
     // this function gives an array that tells what reports are related and which index that related report is in

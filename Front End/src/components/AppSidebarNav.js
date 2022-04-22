@@ -33,7 +33,7 @@ export const AppSidebarNav = ({ items, graph1, isadmin, userid }) => {
   var bundle = graph1
   var isadmin2 = isadmin
   var userid2 = userid
-  console.log(userid)
+  console.log('user id! ', userid)
   var location = useLocation()
   const navLink = (name, icon, badge) => {
     return (
@@ -60,16 +60,8 @@ export const AppSidebarNav = ({ items, graph1, isadmin, userid }) => {
       rest.to.pathname = '/assetManagement'
       name = 'Asset Management'
       icon = <CIcon icon={cilDiamond} customClassName="nav-icon" />
-      console.log(
-        'path changed for admin2',
-        '>>>>' + JSON.stringify(icon.props.icon),
-        '-----',
-        name,
-      )
     }
-    if (rest.to.pathname == '/assetManagement') {
-      console.log('after', 'after' + JSON.stringify(icon.props.icon), 'after', name)
-    }
+
     location.org_id = bundle.toString()
     location.isadmin = isadmin2.toString()
     location.userid = userid2.toString()

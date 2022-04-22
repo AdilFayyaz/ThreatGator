@@ -39,7 +39,7 @@ var _nav = [
   {
     component: CNavItem,
     name: 'Latest Reports',
-    to: { pathname: '/latestReports', org_id: 'someTitle', userid: 'someid', isddmin: 'false' },
+    to: { pathname: '/latestReports', org_id: 'someTitle', userid: 'someid', isadmin: 'false' },
     icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
     graph1: '--',
   },

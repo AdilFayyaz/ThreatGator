@@ -120,7 +120,7 @@ const LatestReports = (props) => {
   var org
   useEffect(() => {
     getReports()
-
+    console.log('saving state2', props.location.userid)
     return () => {
       console.log('returning -xyzzz')
     }
@@ -130,6 +130,7 @@ const LatestReports = (props) => {
     location: PropTypes.object,
     org_id: PropTypes.string,
     userid: PropTypes.string,
+    isadmin: PropTypes.string,
     //... other props you will use in this component
   }
   console.log('sdddsss' + JSON.stringify(props))

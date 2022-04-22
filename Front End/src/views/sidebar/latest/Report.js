@@ -270,11 +270,16 @@ const Reports = (props) => {
   }
   function goBack() {
     if (location.state.src == 'bookmarks') {
-      history.push('/bookmarks', { org_id: location.state.org_id, userid: location.state.userid })
+      history.push('/bookmarks', {
+        org_id: location.state.org_id,
+        userid: location.state.userid,
+        isadmin: location.state.isadmin,
+      })
     } else {
       history.push('/latestReports', {
         org_id: location.state.org_id,
         userid: location.state.userid,
+        isadmin: location.state.isadmin,
       })
     }
   }

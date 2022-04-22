@@ -17,6 +17,7 @@ import {
   CButton,
   CBadge,
   CFormInput,
+  CTableCaption,
 } from '@coreui/react'
 import '../../scss/Report_ap.css'
 import { useHistory, useLocation } from 'react-router-dom'
@@ -56,6 +57,7 @@ const Report_ap = (props) => {
 
   var [mergedReportsBundles, setMergedReportsBundles] = useState([])
   var [objectMergedReport, setObjectMergedReport] = useState({})
+  var [EditHistory, setEditHistory] = useState({})
   const relatedLinks = []
   console.log('hash' + hash)
   const data1 = { org_id: location.state.org_id, reportId: hash, index: 'tagged_bundle_data' }
@@ -301,7 +303,7 @@ const Report_ap = (props) => {
     event.preventDefault()
     location.state.attackPatterns = event.target.value
   }
-  function updateElastic() {
+  function updateElastic(input, init) {
     if (!location.state.malwares) {
       location.state.malwares = ''
     }
@@ -349,15 +351,44 @@ const Report_ap = (props) => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(req),
+      redirect: 'follow',
     }
-    fetch('http://127.0.0.1:8082/dataAnalysis/updateElasticDocument', requestOptions)
+    fetch(
+      'http://127.0.0.1:8082/dataAnalysis/updateElasticDocument?adminId=' +
+        location.state.userid +
+        '&orgId=' +
+        location.state.org_id,
+      requestOptions,
+    )
       .then((res) => res.json())
       .then((data) => {
-        console.log('got...' + JSON.stringify(data))
         console.log('sending...' + JSON.stringify(req))
+        console.log('got...' + JSON.stringify(data))
       })
   }
+  function getReportEditHistory() {
+    var myHeaders = new Headers()
+    myHeaders.append('Content-Type', 'application/json')
 
+    var raw = JSON.stringify({
+      hash: hash,
+    })
+
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow',
+    }
+
+    fetch('http://127.0.0.1:8082/dataAnalysis/getHistory', requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log('edit history', result)
+        setEditHistory(result)
+      })
+      .catch((error) => console.log('error', error))
+  }
   useEffect(() => {
     getStix()
     getScore()
@@ -365,13 +396,27 @@ const Report_ap = (props) => {
       console.log('returning ')
     }
   }, [])
-
+  function goBack() {
+    if (location.state.src == 'bookmarks') {
+      history.push('/bookmarks', {
+        org_id: location.state.org_id,
+        userid: location.state.userid,
+        isadmin: location.state.isadmin,
+      })
+    } else {
+      history.push('/latestReports_admin', {
+        org_id: location.state.org_id,
+        userid: location.state.userid,
+        isadmin: location.state.isadmin,
+      })
+    }
+  }
   return (
     <>
       <CCard className="mb-4">
         <CCardHeader>
           Report Details
-          <CButton href="/latestReports_admin" style={{ float: 'right' }}>
+          <CButton onClick={() => goBack()} style={{ float: 'right' }}>
             Return
           </CButton>
         </CCardHeader>
@@ -808,6 +853,32 @@ const Report_ap = (props) => {
                   // <CDropdownItem onClick={() => handleSelect(el)} key={el}>
                   //   Report: {i + 1}
                   // </CDropdownItem>
+                ))}
+              </CTableBody>
+            </CTable>
+          </div>
+          <div>
+            {/*  adding history table*/}
+            <CTable align="middle" className="mb-0 border" hover responsive>
+              <CTableHead>
+                <CTableCaption>Edit history of the report</CTableCaption>
+                <CTableHeaderCell>Admin id</CTableHeaderCell>
+                <CTableHeaderCell>Organization id</CTableHeaderCell>
+                <CTableHeaderCell>Time</CTableHeaderCell>
+                <CTableHeaderCell>New Entities</CTableHeaderCell>
+                <CTableHeaderCell>Deleted Entities</CTableHeaderCell>
+                <CTableHeaderCell>Changed Types</CTableHeaderCell>
+              </CTableHead>
+              <CTableBody>
+                {Object.values(EditHistory).map((el) => (
+                  <CTableRow key={el}>
+                    <CTableDataCell className="text-center">el.adminId </CTableDataCell>
+                    <CTableDataCell className="text-center">el.orgId</CTableDataCell>
+                    <CTableDataCell className="text-center">el.timestamp</CTableDataCell>
+                    <CTableDataCell className="text-center">el.newEntities</CTableDataCell>
+                    <CTableDataCell className="text-center">el.deletedEntities</CTableDataCell>
+                    <CTableDataCell className="text-center">el.changedTypes</CTableDataCell>
+                  </CTableRow>
                 ))}
               </CTableBody>
             </CTable>

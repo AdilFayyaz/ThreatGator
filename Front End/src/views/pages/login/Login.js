@@ -76,17 +76,25 @@ const Login = (props) => {
 
           sendData()
           history.push('/dashboard', {
-            org_id: JSON.parse(JSON.stringify(data)).id,
+            org_id: JSON.parse(JSON.stringify(data)).id.toString(),
+            userid: userid,
           })
         } else {
           //Admin checking
           fetch('http://127.0.0.1:8084/Admin/validateAdminCredentials', requestOptions)
             .then((response) => response.json())
-            .then((data) => {
+            .then(async (data) => {
               setData(JSON.stringify(data))
 
               console.log('--' + JSON.stringify(data))
               if (JSON.parse(JSON.stringify(data)).id != null) {
+                var x = await fetch('http://127.0.0.1:8084/Admin/getAdminId', requestOptions)
+                  .then((response) => response.json())
+                  .then((data) => {
+                    // setData(JSON.stringify(data))
+                    console.log('got userid' + data)
+                    userid = data.toString()
+                  })
                 org = JSON.parse(JSON.stringify(data)).id.toString()
                 admin = 'true'
                 sendData()

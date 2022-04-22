@@ -62,6 +62,8 @@ const LatestReports_a = (props) => {
       campaigns: campaigns,
       attackPatterns: attackPatterns,
       org_id: props.location.org_id,
+      userid: props.location.userid,
+      src: 'latestReports',
     })
   }
   const history = useHistory()
@@ -126,6 +128,8 @@ const LatestReports_a = (props) => {
     graph1: PropTypes.string,
     location: PropTypes.object,
     org_id: PropTypes.string,
+    userid: PropTypes.string,
+    isadmin: PropTypes.string,
     //... other props you will use in this component
   }
   console.log('sdddsss' + JSON.stringify(props))
