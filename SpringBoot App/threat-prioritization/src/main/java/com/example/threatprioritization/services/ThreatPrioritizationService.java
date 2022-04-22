@@ -31,6 +31,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -38,6 +39,8 @@ public class ThreatPrioritizationService {
 
     @Autowired
     ThreatScoresRepository threatScoresRepository;
+
+
 
     String organizationPath = "http://127.0.0.1:8084/organization/getOrganization/{Org_id}";
     String getAssetsPath = "http://127.0.0.1:8084/assets/assetsByOrganization/{id}";
@@ -100,7 +103,7 @@ public class ThreatPrioritizationService {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.query(QueryBuilders.matchAllQuery());
         request.source(searchSourceBuilder);
-        SearchResponse response = client.search(request, RequestOptions.DEFAULT);
+        SearchResponse response = client.search(request, COMMON_OPTIONS);
 
         for (SearchHit hit : response.getHits().getHits()) {
             JSONObject j = new JSONObject(hit.getSourceAsString());
@@ -137,7 +140,7 @@ public class ThreatPrioritizationService {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.query(QueryBuilders.matchAllQuery());
         request.source(searchSourceBuilder);
-        SearchResponse response = client.search(request, RequestOptions.DEFAULT);
+        SearchResponse response = client.search(request, COMMON_OPTIONS);
 
         for (SearchHit hit : response.getHits().getHits()) {
             JSONObject j = new JSONObject(hit.getSourceAsString());
