@@ -50,10 +50,6 @@ import org.python.util.PythonInterpreter;
 //Install jython 2.7.2 and add the jar file here
 
 
-interface PyFunc{
-    public void makeStixObjects(String x);
-}
-
 @Service
 @RestController
 public class KafkaService {
@@ -107,8 +103,13 @@ public class KafkaService {
                         String s = restTemplate.postForObject(inferencer, new HttpEntity<>(r.toString()), String.class);
                         String bundle = restTemplate.postForObject(getBundle, new HttpEntity<>(s), String.class);
                         taggedData.add(convertString(s, "Reddit",total,bundle ));
+                        addToElastic();
+                        taggedData = new ArrayList<>();
+                        finalObjects = new ArrayList<>();
                     } catch (HttpStatusCodeException e) {
                         System.out.println("Error Found");
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
                     }
                 }
 
@@ -502,7 +503,7 @@ public class KafkaService {
 
                                 if (lev.getDistance(ent1.name, ent2.name) >= 0.7) { //use levenshtein distance here
                                     // add all entities and relationships of initialBundle to finalBundle
-                                    System.out.println("MERGINGGGGG");
+//                                    System.out.println("MERGINGGGGG");
                                     for (SDO ent : initials.get(i).entities)
                                         tempAFinal.addEntity(ent, initials.get(i).hash);
                                     for (SRO rel : initials.get(i).relationships)
