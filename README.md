@@ -22,9 +22,9 @@ It includes curation of threat intelligence data from different sources particul
 ### Start Python Crawler
 1. Navigate to Crawler Directory
 2. Run the following command: uvicorn main:app --reload (running on port 8000)
-### Start BERT Inference
-1. Download Model from https://drive.google.com/drive/folders/1eGOOkR304ssgh_Bh0-6ZWEsoGEGvmveJ?usp=sharing *
-2. Place Model in bert_inference directory
+### Start Relationship Inference
+1. Download NER model from https://drive.google.com/drive/folders/1-yTogPLXktBQ42uEtcv8lanIh9liaLwn?usp=sharing and place it in a directory "roberta_spacy_model" in spacy pipeline
+2. Download Relationship Extraction model from https://drive.google.com/drive/folders/1-9PEbwgovBVdcjz42K-5v8ZTVUZuRLUW?usp=sharing and place it in a directory "relation_extraction_model" in spacy pipeline
 3. Run the following command: uvicorn relation_inferencer:app --reload --port 5000
 ### Start SpringBoot Services
 1. Open SpringBoot App as a Maven Project on IntelliJ
@@ -37,8 +37,8 @@ It includes curation of threat intelligence data from different sources particul
 4. Navigate to https://localhost:3000 to access sign in page for ThreatGator
 
 ## Hardware Requirements
-Minimum 12 GB RAM <br/>
-Preferably 16 GB RAM
+Minimum 16 GB RAM <br/>
+Preferably 20 GB RAM
 
 <br/>
-*Model has been trained using the following notebook by Niels Rogge: https://colab.research.google.com/github/NielsRogge/Transformers-Tutorials/blob/master/BERT/Custom_Named_Entity_Recognition_with_BERT_only_first_wordpiece.ipynb#scrollTo=4Gz-wHAw3xMk
+*Model has been trained using the following guidelines by Walid Amamou: https://towardsdatascience.com/how-to-train-a-joint-entities-and-relation-extraction-classifier-using-bert-transformer-with-spacy-49eb08d91b5c
