@@ -23,6 +23,7 @@ public class OrganizationController {
         return "New organization added";
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/getAll")
     public List<Organization> getAll(){
         return organizationService.getAll();
@@ -34,16 +35,19 @@ public class OrganizationController {
         return organizationService.getOrganization(org_id);
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/getName/{Org_id}")
     public String getName(@PathVariable(value = "Org_id") Integer org_id){
         return organizationService.getName(org_id);
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/getCountry/{Org_id}")
     public String getCountry(@PathVariable(value = "Org_id") Integer org_id){
         return organizationService.getCountry(org_id);
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/getSector/{Org_id}")
     public String getSector(@PathVariable(value = "Org_id") Integer org_id){
         return organizationService.getSector(org_id);

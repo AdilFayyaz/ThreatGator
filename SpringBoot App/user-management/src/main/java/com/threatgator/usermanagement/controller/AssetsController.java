@@ -32,7 +32,7 @@ public class AssetsController {
     @Autowired
     private OrganizationService organizationService;
 
-
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/addAsset/{OrganizationId}")
     public ResponseEntity<Assets> createAsset(@PathVariable(value = "OrganizationId") Integer OrganizationId,
                                               @RequestBody Assets assets) {
@@ -45,13 +45,14 @@ public class AssetsController {
         return new ResponseEntity<>(assets1, HttpStatus.CREATED);
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     // get all users
     @GetMapping("/getAll")
     public List<Assets> list(){
         return assetsService.getAllAssets();
     }
 
-
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/assetsByOrganization/{organizationId}")
     public ResponseEntity<List<Assets>> getAllAssetsByOrganizationId(@PathVariable(value = "organizationId") Integer OrganizationId) {
         if (!organizationRepository.existsById(OrganizationId)) {

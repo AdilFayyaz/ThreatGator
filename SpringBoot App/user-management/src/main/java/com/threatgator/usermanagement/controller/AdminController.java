@@ -23,6 +23,7 @@ public class AdminController {
     @Autowired
     private OrganizationService organizationService;
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     // add user to the table
     @PostMapping("/adduser")
     public String add(@RequestBody Admin user){
@@ -30,6 +31,7 @@ public class AdminController {
         return "New admin added";
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/addAdmin/{OrganizationId}")
     public ResponseEntity<Admin> createAdmin(@PathVariable(value = "OrganizationId") Integer OrganizationId,
                                             @RequestBody Admin admin) {
@@ -42,6 +44,7 @@ public class AdminController {
         return new ResponseEntity<>(admin1, HttpStatus.CREATED);
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     // get all users
     @GetMapping("/getAll")
     public List<Admin> list(){

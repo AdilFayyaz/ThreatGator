@@ -31,6 +31,7 @@ public class UsersController {
     @Autowired
     private BookmarkService bookmarkService;
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     // add a user
     @PostMapping("/adduser")
     public String add(@RequestBody Users user){
@@ -38,6 +39,7 @@ public class UsersController {
         return "New user added";
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/addUser/{OrganizationId}")
     public ResponseEntity<Users> createUser(@PathVariable(value = "OrganizationId") Integer OrganizationId,
                                               @RequestBody Users users) {
@@ -50,6 +52,7 @@ public class UsersController {
         return new ResponseEntity<>(users1, HttpStatus.CREATED);
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     // get all users
     @GetMapping("/getAll")
     public List<Users> list(){
