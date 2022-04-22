@@ -53,7 +53,7 @@ const LatestReports_a = (props) => {
       hash: hash,
       source: source,
       rawText: rawtext,
-      malware: malwares,
+      malwares: malwares,
       vulnerabilities: vulnerabilities,
       locations: locations,
       threatActors: threatActors,
@@ -70,7 +70,7 @@ const LatestReports_a = (props) => {
   }
   const history = useHistory()
   var isVulnerability = false
-  var isMalware = false
+  var isMalwares = false
   var isLocation = false
   var isThreatActor = false
   var isIdentitites = false
@@ -91,7 +91,7 @@ const LatestReports_a = (props) => {
     attackPatterns,
   ) {
     if (malwares) {
-      isMalware = true
+      isMalwares = true
     }
     if (vulnerabilities) {
       isVulnerability = true
@@ -162,7 +162,7 @@ const LatestReports_a = (props) => {
                   </CTableDataCell>
                   <CTableDataCell className="tags">
                     {(isVulnerability = false)}
-                    {(isMalware = false)}
+                    {(isMalwares = false)}
                     {(isLocation = false)}
                     {(isThreatActor = false)}
                     {(isIdentitites = false)}
@@ -193,12 +193,12 @@ const LatestReports_a = (props) => {
                       <div></div>
                     )}
                     {/*if malware then malware tag*/}
-                    {isMalware ? (
+                    {isMalwares ? (
                       <CBadge
                         className="rounded-pill"
                         style={{ margin: '1%', backgroundColor: '#ea8e8e' }}
                       >
-                        malware
+                        malwares
                       </CBadge>
                     ) : (
                       <div></div>

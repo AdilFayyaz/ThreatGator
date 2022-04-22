@@ -118,7 +118,7 @@ const Report_ap = (props) => {
       hash: hash,
       source: source,
       rawText: rawtext,
-      malware: malwares,
+      malwares: malwares,
       vulnerabilities: vulnerabilities,
       locations: locations,
       threatActors: threatActors,
@@ -375,7 +375,7 @@ const Report_ap = (props) => {
     })
 
     var requestOptions = {
-      method: 'GET',
+      method: 'POST',
       headers: myHeaders,
       body: raw,
       redirect: 'follow',
@@ -392,6 +392,7 @@ const Report_ap = (props) => {
   useEffect(() => {
     getStix()
     getScore()
+    getReportEditHistory()
     return () => {
       console.log('returning ')
     }
@@ -861,7 +862,7 @@ const Report_ap = (props) => {
             {/*  adding history table*/}
             <CTable align="middle" className="mb-0 border" hover responsive>
               <CTableHead>
-                <CTableCaption>Edit history of the report</CTableCaption>
+                {/*<CTableCaption>Edit history of the report</CTableCaption>*/}
                 <CTableHeaderCell>Admin id</CTableHeaderCell>
                 <CTableHeaderCell>Organization id</CTableHeaderCell>
                 <CTableHeaderCell>Time</CTableHeaderCell>
@@ -870,14 +871,15 @@ const Report_ap = (props) => {
                 <CTableHeaderCell>Changed Types</CTableHeaderCell>
               </CTableHead>
               <CTableBody>
+                {console.log('Edit History is: ' + JSON.stringify(EditHistory))}
                 {Object.values(EditHistory).map((el) => (
                   <CTableRow key={el}>
-                    <CTableDataCell className="text-center">el.adminId </CTableDataCell>
-                    <CTableDataCell className="text-center">el.orgId</CTableDataCell>
-                    <CTableDataCell className="text-center">el.timestamp</CTableDataCell>
-                    <CTableDataCell className="text-center">el.newEntities</CTableDataCell>
-                    <CTableDataCell className="text-center">el.deletedEntities</CTableDataCell>
-                    <CTableDataCell className="text-center">el.changedTypes</CTableDataCell>
+                    <CTableDataCell className="text-center">{el.adminId} </CTableDataCell>
+                    <CTableDataCell className="text-center">{el.orgId}</CTableDataCell>
+                    <CTableDataCell className="text-center">{el.timestamp}</CTableDataCell>
+                    <CTableDataCell className="text-center">{el.newEntities}</CTableDataCell>
+                    <CTableDataCell className="text-center">{el.deletedEntities}</CTableDataCell>
+                    <CTableDataCell className="text-center">{el.changedTypes}</CTableDataCell>
                   </CTableRow>
                 ))}
               </CTableBody>
