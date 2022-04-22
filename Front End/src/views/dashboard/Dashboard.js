@@ -254,13 +254,8 @@ const Dashboard = (props) => {
     //
     //     SetHashNotif(Object.keys(data))
     //   })
-    // var myHeaders = new Headers();
-    // myHeaders.append("Content-Type", "application/json");
-    //
-    // var raw = JSON.stringify({
-    //   "userId": props.location.userid,
-    //   "reportHash": "-718702783"
-    // });
+    var myHeaders = new Headers()
+    myHeaders.append('Content-Type', 'application/json')
 
     var requestOptions = {
       method: 'GET',
@@ -270,7 +265,7 @@ const Dashboard = (props) => {
     }
 
     x = await fetch(
-      'http://127.0.0.1:8086/threatScore/getTopReports?org_id=' + location.state.org_id,
+      'http://127.0.0.1:8086/threatScore/getTopReports?org_id=' + props.location.org_id,
       requestOptions,
     )
       .then((response) => response.json())
@@ -376,12 +371,12 @@ const Dashboard = (props) => {
       headers: { 'Content-Type': 'application/json' },
       body: { hash: _hash.toString() },
     }
-    console.log("notification's hash ", _hash)
+
     // <Redirect to={ pathname: "/notification"}></Redirect>
     history.push('/notification', {
       hash: _hash.toString(),
-      org_id: location.state.org_id,
-      userid: location.state.userid,
+      org_id: props.location.org_id,
+      userid: props.location.userid,
       src: 'dashboard',
     })
   }
@@ -412,6 +407,7 @@ const Dashboard = (props) => {
   useEffect(() => {
     doughnut()
     notifications()
+    console.log("notification's hash ", ' ', props.location.org_id)
     hitsGraph()
     getLocations()
     console.log('saving state', props.location.userid)
@@ -452,7 +448,7 @@ const Dashboard = (props) => {
                     marginBottom: '1rem',
                     width: '80rem',
                     height: '3rem',
-                    backgroundColor: '#1c2b45',
+                    backgroundColor: '#250c0e',
                     borderRadius: '3rem',
                   }}
                   value={notif.rawText}

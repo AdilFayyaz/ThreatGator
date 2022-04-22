@@ -47,6 +47,7 @@ const LatestReports = (props) => {
     infrastructure,
     campaigns,
     attackPatterns,
+    time,
   ) {
     console.log('user id in latest reports ', props.location.userid)
     history.push('/Report', {
@@ -62,6 +63,7 @@ const LatestReports = (props) => {
       infrastructure: infrastructure,
       campaigns: campaigns,
       attackPatterns: attackPatterns,
+      time: time,
       org_id: props.location.org_id,
       userid: props.location.userid,
       src: 'latestReports',
@@ -297,6 +299,7 @@ const LatestReports = (props) => {
                           el.infrastructure,
                           el.campaigns,
                           el.attackPatterns,
+                          el.time,
                         )
                       }
                     >

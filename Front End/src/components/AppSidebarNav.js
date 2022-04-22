@@ -55,7 +55,11 @@ export const AppSidebarNav = ({ items, graph1, isadmin, userid }) => {
     let Component = component
 
     changePath(rest, icon, name)
-    if (rest.to.pathname == '/bookmarks' && isadmin == 'true') {
+    console.log('nav bar^', location.org_id, location.isadmin, location.userid)
+    if (
+      (rest.to.pathname == '/bookmarks' || rest.to.pathname == '/assetManagement') &&
+      isadmin == 'true'
+    ) {
       console.log('$$' + JSON.stringify(icon.props.icon), '##', name)
       rest.to.pathname = '/assetManagement'
       name = 'Asset Management'

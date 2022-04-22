@@ -43,18 +43,18 @@ var _nav = [
     icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
     graph1: '--',
   },
-  {
-    component: CNavItem,
-    name: 'TEP Reports',
-    to: { pathname: '/TEPReports', org_id: 'someTitle', userid: 'someid', isadmin: 'false' },
-    icon: <CIcon icon={cilShieldAlt} customClassName="nav-icon" />,
-  },
-  {
-    component: CNavItem,
-    name: 'Visualizer',
-    to: { pathname: '/visualizer', org_id: 'someTitle', userid: 'someid', isadmin: 'false' },
-    icon: <CIcon icon={cilGraph} customClassName="nav-icon" />,
-  },
+  // {
+  //   component: CNavItem,
+  //   name: 'TEP Reports',
+  //   to: { pathname: '/TEPReports', org_id: 'someTitle', userid: 'someid', isadmin: 'false' },
+  //   icon: <CIcon icon={cilShieldAlt} customClassName="nav-icon" />,
+  // },
+  // {
+  //   component: CNavItem,
+  //   name: 'Visualizer',
+  //   to: { pathname: '/visualizer', org_id: 'someTitle', userid: 'someid', isadmin: 'false' },
+  //   icon: <CIcon icon={cilGraph} customClassName="nav-icon" />,
+  // },
   {
     component: CNavItem,
     name: 'Favourites',

@@ -39,20 +39,43 @@ const Searchbar = () => {
   const getSearchResults = (event) => {
     event.preventDefault()
 
-    let reports = []
-    const requestOptions = {
+    // let reports = []
+    // const requestOptions = {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: SearchKeyword,
+    // }
+    // fetch('http://127.0.0.1:8082/dataAnalysis/getSearchResults', requestOptions)
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     SetKeywordResult(data)
+    //     // console.log(data)
+    //     // openModalSearch()
+    //     history.push('/searchResults', { keyword: SearchKeyword, data: KeywordResult })
+    //   })
+    var myHeaders = new Headers()
+    myHeaders.append('Content-Type', 'application/json')
+
+    var raw = JSON.stringify({
+      keyword: SearchKeyword,
+    })
+
+    var requestOptions = {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: SearchKeyword,
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow',
     }
+
     fetch('http://127.0.0.1:8082/dataAnalysis/getSearchResults', requestOptions)
-      .then((res) => res.json())
-      .then((data) => {
-        SetKeywordResult(data)
-        // console.log(data)
-        // openModalSearch()
-        history.push('/searchResults', { keyword: SearchKeyword, data: KeywordResult })
+      .then((response) => response.json())
+      .then((result) => {
+        console.log('search results', result)
+        SetKeywordResult(result)
+
+        history.push('/searchResults', { keyword: SearchKeyword, data: result })
       })
+      .catch((error) => console.log('error', error))
   }
 
   //handlers for input fields

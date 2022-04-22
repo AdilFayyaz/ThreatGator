@@ -415,7 +415,7 @@ const Report_ap = (props) => {
     <>
       <CCard className="mb-4">
         <CCardHeader>
-          Report Details
+          <b> Report Details: {location.state.time}</b>
           <CButton onClick={() => goBack()} style={{ float: 'right' }}>
             Return
           </CButton>

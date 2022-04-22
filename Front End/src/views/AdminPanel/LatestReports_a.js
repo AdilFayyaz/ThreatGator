@@ -47,6 +47,7 @@ const LatestReports_a = (props) => {
     infrastructure,
     campaigns,
     attackPatterns,
+    time,
   ) {
     history.push('/Report_admin', {
       hash: hash,
@@ -61,6 +62,7 @@ const LatestReports_a = (props) => {
       infrastructure: infrastructure,
       campaigns: campaigns,
       attackPatterns: attackPatterns,
+      time: time,
       org_id: props.location.org_id,
       userid: props.location.userid,
       src: 'latestReports',
@@ -296,6 +298,7 @@ const LatestReports_a = (props) => {
                           el.infrastructure,
                           el.campaigns,
                           el.attackPatterns,
+                          el.time,
                         )
                       }
                     >
