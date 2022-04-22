@@ -316,3 +316,107 @@ def makeStixBundle2(finalBundle):
 async def make_stix_bundle(req: Request):
 	finalBundle = await req.json()
 	return makeStixBundle2(finalBundle)
+
+@app.post("/getLiveInference")
+async def getLiveInference(req:Request):
+  #return [["ok"]["ok"]]
+    
+  requestData = await req.json()
+  
+  # sentence = requestData['sentence'].encode().decode('utf-8', 'replace')
+  text=[]
+  sentence = str(requestData['sentence']).replace('\n','')
+  sentence = sentence.replace(',','')
+  # sentence = sentence.encode('utf-8').strip()
+  
+  if(len(sentence.split()) > 510):
+    return [[],[]]
+  else:
+    x= sentence.lower()
+    
+    x =  re.sub(r'[^a-zA-Z0-9_ !@#$%^&*()-<>:;.~=]+', '', str(x))
+    
+    text.append(x)
+
+  
+  prediction = relationExtracter.getInference(text)
+  
+  # Fix location adjectives to nouns
+  prediction = fixLocationAdjectives(prediction)
+
+  # only keep those entities in prediction too that are in some relationship
+  entities = prediction["entity tags"]
+  temp_entities = copy.deepcopy(entities[0])
+  for e in entities[0]:
+    if (hasRelationship(e[1], prediction)==False): # if the entity is not in an relationship
+      temp_entities.remove(e)
+    
+  entities[0] = temp_entities
+
+  entities = prediction["entity tags"]
+  relations = prediction["relationships"]
+  
+  entities_list = []
+
+
+  for e in entities[0]:
+    if (exists(entities_list, e[1])==False):
+      if(e[2] == "TA"):
+        entities_list.append(ThreatActor(name=e[1]))
+      elif(e[2] == "M"):
+        entities_list.append(Malware(name=e[1], is_family = False))
+      elif(e[2] == "IND"):
+        entities_list.append(Indicator(name=e[1],pattern="[user-account:value = 'none']", pattern_type="stix"))
+      elif(e[2] == "ID"):
+        entities_list.append(Identity(name=e[1]))
+      elif(e[2] == "T"):
+        entities_list.append(Tool(name=e[1]))
+      elif(e[2] == "V"):
+        entities_list.append(Vulnerability(name=e[1]))
+      elif(e[2] == "L"):
+        entities_list.append(Location(name=e[1], longitude=0.0, latitude=0.0,region="", country=""))
+      elif(e[2]=="INF"):
+        entities_list.append(Infrastructure(name=e[1]))
+      elif(e[2]=="AP"):
+        entities_list.append(AttackPattern(name=e[1]))
+      elif(e[2]=="C"):
+        entities_list.append(Campaign(name=e[1]))
+     
+
+  a_list = []
+  global a
+  a= None 
+  global b
+  b= None 
+  # for e in entities_list:
+  #   a_list.append(e)
+
+  print(a_list)
+
+  for val in relations:
+    for ent in entities_list:
+        # Find the entity match
+        if (val["entities"][0] == ent["name"]):
+          a = ent
+        if (val["entities"][1] == ent["name"]):
+          b = ent
+          
+        # Found both entities
+        if a and b:
+          print(val["predicted_relations"]+" "+ a["name"]+" "+ b["name"])
+          relationship = Relationship(relationship_type=val["predicted_relations"],
+          source_ref=a,
+          target_ref=b)
+          
+          # only add those entities that have some relationship
+          if (inBundle(a_list, a)==False):
+            a_list.append(a)
+          if (inBundle(a_list, b)==False):
+            a_list.append(b)
+          a_list.append(relationship)
+          a= None
+          b=None
+          
+  bundle = Bundle(a_list)
+
+  return bundle
