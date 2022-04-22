@@ -15,6 +15,7 @@ import {
   cilShieldAlt,
   cilSpeedometer,
   cilStar,
+  cilSearch,
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 import Searchbar from './components/Searchbar'
@@ -22,9 +23,10 @@ import Searchbar from './components/Searchbar'
 var _nav = [
   {
     component: Searchbar,
-    // name: 'Latest Reports',
+    name: 'Searchbar',
     to: { pathname: '/searchResults', org_id: 'someTitle', userid: 'someid', isadmin: 'false' },
     // icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilSearch} customClassName="nav-icon" />,
   },
   {
     component: CNavItem,

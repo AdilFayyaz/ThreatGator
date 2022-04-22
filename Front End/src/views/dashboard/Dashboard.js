@@ -423,7 +423,7 @@ const Dashboard = (props) => {
     <>
       <CCard className="mb-4" style={{ backgroundColor: 'transparent', border: 'transparent' }}>
         <CRow>
-          <h1>Welcome {props.location.userid}!</h1>
+          <h1>Welcome!</h1>
         </CRow>
 
         <CCard className="mb-4" style={{ height: '15rem', padding: '2rem' }}>

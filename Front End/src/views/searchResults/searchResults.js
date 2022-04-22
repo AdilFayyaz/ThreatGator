@@ -48,7 +48,9 @@ const SearchResult = () => {
     infrastructure,
     campaigns,
     attackPatterns,
+    time,
   ) {
+    // console.log('user id in latest reports ', props.location.userid)
     history.push('/Report', {
       hash: hash,
       source: source,
@@ -62,6 +64,9 @@ const SearchResult = () => {
       infrastructure: infrastructure,
       campaigns: campaigns,
       attackPatterns: attackPatterns,
+      time: time,
+      org_id: location.state.org_id,
+      userid: location.state.userid,
       src: 'search',
     })
   }

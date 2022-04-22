@@ -131,9 +131,6 @@ const AssetManagement = () => {
       <CCard className="mb-4">
         <CCardHeader>
           <h3>Asset Management</h3>
-          <CButton href="/latestReports_admin" style={{ float: 'right' }}>
-            Latest Reports
-          </CButton>
         </CCardHeader>
         <CCardBody id="card">
           <h5>Add Your Organizations Assets Below</h5>

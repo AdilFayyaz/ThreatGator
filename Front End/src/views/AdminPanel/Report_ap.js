@@ -814,7 +814,7 @@ const Report_ap = (props) => {
               console.log('Visualizer not called')
             )}
           </div>
-          <div>
+          <div style={{ marginBottom: '5%' }}>
             Related Links
             {/*  Adding related links */}
             {console.log(relatedReportData)}
@@ -858,6 +858,7 @@ const Report_ap = (props) => {
               </CTableBody>
             </CTable>
           </div>
+          Edit History
           <div>
             {/*  adding history table*/}
             <CTable align="middle" className="mb-0 border" hover responsive>

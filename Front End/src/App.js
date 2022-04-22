@@ -18,7 +18,8 @@ const Page404 = React.lazy(() => import('./views/pages/page404/Page404'))
 const Page500 = React.lazy(() => import('./views/pages/page500/Page500'))
 
 class App extends Component {
-  state = { message: '1', isadmin: 'false' }
+  state = { message: '1', isadmin: 'false', userid: '1' }
+  // state = { message: '1', isadmin: 'false' }
   callbackFunction = (childData) => {
     this.setState({ message: childData })
   }

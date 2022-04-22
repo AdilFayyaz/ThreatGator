@@ -24,6 +24,12 @@ import { useLocation } from 'react-router-dom'
 import ReactSpeedometer from 'react-d3-speedometer'
 
 const Reports = (props) => {
+  const [value, setValue] = useState(0)
+  function ForceUpdate2() {
+    // integer state
+    return () => setValue((value) => value + 1) // update the state to force render
+  }
+  // const forceUpdate = useForceUpdate2()
   var history = useHistory()
   const [reportsData, SetReportsData] = useState({})
   var [hash1, SetHash] = useState({})
@@ -39,6 +45,7 @@ const Reports = (props) => {
   // const mergedReportsBundles = []
   var [mergedReportsBundles, setMergedReportsBundles] = useState([])
   var [objectMergedReport, setObjectMergedReport] = useState({})
+  var [tempObj, setTempObj] = useState()
   const relatedLinks = []
   console.log('hash' + hash)
   const data1 = { org_id: location.state.org_id, reportId: hash, index: 'tagged_bundle_data' }
@@ -73,7 +80,7 @@ const Reports = (props) => {
       .catch((error) => console.log('error', error))
   }
 
-  function goToDetails(
+  async function goToDetails(
     hash,
     source,
     rawtext,
@@ -86,6 +93,7 @@ const Reports = (props) => {
     infrastructure,
     campaigns,
     attackPatterns,
+    time,
   ) {
     history.push('/Report', {
       hash: hash,
@@ -101,6 +109,9 @@ const Reports = (props) => {
       campaigns: campaigns,
       attackPatterns: attackPatterns,
       org_id: data1.org_id,
+      time: time,
+      userid: data1.userid,
+      src: 'reports',
     })
     window.location.reload(true)
   }
@@ -504,8 +515,10 @@ const Reports = (props) => {
 
                     <CTableDataCell className="text-center">
                       <CButton
+                        type="Submit"
                         style={{ backgroundColor: 'blue', margin: '1%' }}
-                        onClick={() =>
+                        // onClick={() => forceUpdate}
+                        onClick={() => {
                           goToDetails(
                             el.hash,
                             el.source,
@@ -519,8 +532,10 @@ const Reports = (props) => {
                             el.infrastructure,
                             el.campaigns,
                             el.attackPatterns,
+                            el.time,
                           )
-                        }
+                          ForceUpdate2()
+                        }}
                       >
                         Details
                       </CButton>

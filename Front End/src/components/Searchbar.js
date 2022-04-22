@@ -1,10 +1,10 @@
 import { CButton, CForm, CFormInput, CFormLabel, CImage } from '@coreui/react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import * as PropTypes from 'prop-types'
 import { useHistory } from 'react-router-dom'
 // fetching data from data analysis service for any keyword's search result
 
-const Searchbar = () => {
+const Searchbar = (props) => {
   const history = useHistory()
   //hooks to cater data state changes
   const [DoughnutData, setDoughnutData] = useState({})
@@ -73,7 +73,13 @@ const Searchbar = () => {
         console.log('search results', result)
         SetKeywordResult(result)
 
-        history.push('/searchResults', { keyword: SearchKeyword, data: result })
+        history.push('/searchResults', {
+          keyword: SearchKeyword,
+          data: result,
+          org_id: 1,
+          userid: 1,
+          isadmin: false,
+        })
       })
       .catch((error) => console.log('error', error))
   }
@@ -84,6 +90,19 @@ const Searchbar = () => {
     SetSearchKeyword(event.target.value)
     console.log(SearchKeyword)
   }
+  Searchbar.propTypes = {
+    graph1: PropTypes.string,
+    location: PropTypes.object,
+    org_id: PropTypes.string,
+    userid: PropTypes.string,
+    isadmin: PropTypes.string,
+    //... other props you will use in this component
+  }
+  useEffect(() => {
+    return () => {
+      console.log('returning ')
+    }
+  }, [])
   return (
     <CForm onSubmit={getSearchResults}>
       <div className="d-flex flex-row" style={{ width: '15rem', marginLeft: '0.5rem' }}>
