@@ -25,7 +25,7 @@ class SecureListScrapper:
             soup = BeautifulSoup(page.content, 'html.parser')
             for a in (soup.find_all('a',href=True,class_='c-card__figure')):
                 # FOR TESTING, REMOVE IN PRODUCTION
-                if len(articles)>3:
+                if len(articles)>1:
                     break
                 # Link should not already have been fetched
                 if (a['href'] not in articles and a['href'] not in fileContent):
@@ -62,26 +62,27 @@ class SecureListScrapper:
             if para == '':
                 paragraphs.pop(index)
         for index, para in enumerate(paragraphs):
-            if (len(para.split()) > 512):
-                text += ' '
-                text += para[0:511]
-                text.strip
-                final_paragraphs.append(text)
-                text = ""
-                text += para[511:len(para)-1]
-                text.strip
-                final_paragraphs.append(text)
-            else:
-                # Input size to the Inference model limits length of sentences
-                if (len(para.split()) + len(text.split()) < 512):
+            if (index<3):
+                if (len(para.split()) > 512):
                     text += ' '
-                    text += para
-                else:
-                    text = text[1:]
+                    text += para[0:511]
                     text.strip
-                    # text= text.translate(str.maketrans('', '', string.punctuation))
                     final_paragraphs.append(text)
                     text = ""
+                    text += para[511:len(para)-1]
+                    text.strip
+                    final_paragraphs.append(text)
+                else:
+                    # Input size to the Inference model limits length of sentences
+                    if (len(para.split()) + len(text.split()) < 512):
+                        text += ' '
+                        text += para
+                    else:
+                        text = text[1:]
+                        text.strip
+                        # text= text.translate(str.maketrans('', '', string.punctuation))
+                        final_paragraphs.append(text)
+                        text = ""
             
         # If multiple paragraphs are not formed
         if len(final_paragraphs) == 0:
