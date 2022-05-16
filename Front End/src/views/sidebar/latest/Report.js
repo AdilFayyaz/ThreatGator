@@ -286,12 +286,14 @@ const Reports = (props) => {
         userid: location.state.userid,
         isadmin: location.state.isadmin,
       })
-    } else {
+    } else if (location.state.src == 'latestReports') {
       history.push('/latestReports', {
         org_id: location.state.org_id,
         userid: location.state.userid,
         isadmin: location.state.isadmin,
       })
+    } else if (location.state.src == 'search') {
+      history.goBack()
     }
   }
   useEffect(() => {

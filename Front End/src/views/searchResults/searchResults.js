@@ -35,6 +35,9 @@ const SearchResult = () => {
       })
     console.log('in function')
   }
+  let loc
+  loc = ''
+
   function goToDetails(
     hash,
     source,
@@ -51,7 +54,13 @@ const SearchResult = () => {
     time,
   ) {
     // console.log('user id in latest reports ', props.location.userid)
-    history.push('/Report', {
+
+    if (location.state.isadmin == false) {
+      loc = '/Report'
+    } else {
+      loc = '/Report_admin'
+    }
+    history.push(loc, {
       hash: hash,
       source: source,
       rawText: rawtext,
@@ -159,8 +168,8 @@ const SearchResult = () => {
                 </CTableRow>
               </CTableHead>
               <CTableBody>
-                {Object.values(KeywordResult).map((item) => (
-                  <CTableRow key={item}>
+                {Object.values(KeywordResult).map((item, i) => (
+                  <CTableRow key={i}>
                     <CTableDataCell>
                       <div className="rawText">{item.rawText}</div>
                     </CTableDataCell>

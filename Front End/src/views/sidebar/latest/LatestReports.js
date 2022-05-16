@@ -66,6 +66,7 @@ const LatestReports = (props) => {
       time: time,
       org_id: props.location.org_id,
       userid: props.location.userid,
+      isadmin: props.location.isadmin,
       src: 'latestReports',
     })
   }

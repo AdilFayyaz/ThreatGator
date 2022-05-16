@@ -58,3 +58,116 @@ $enable-rtl: true;
 .campaigns{
   background: #F39E29;
 }
+
+
+
+.login-card{
+  box-shadow: 0px 12px 36px 0px rgba(9, 61, 89, 0.5);
+  -webkit-box-shadow: 0px 12px 36px 0px rgba(9, 61, 89, 0.5);
+
+  position: relative;
+  //animation-name: example;
+  //animation-duration: 10s;
+  -webkit-animation: slideIn 2s forwards;
+
+}
+.login-card-body{
+  //position: relative;
+  //animation-name: example;
+  //animation-duration: 10s;
+
+
+  //-webkit-animation: slideIn 2s forwards;
+  //-moz-animation: slideIn 2s forwards;
+  //animation: slideIn 2s forwards;
+  //-webkit-animation: colorChange 2s forwards;
+}
+@-webkit-keyframes colorChange {
+  0% {
+
+    //background-color: #250c0e;
+  }
+  100% {
+
+    background-color: #250c0e;
+  }
+}
+
+@-webkit-keyframes slideIn {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-200px);
+    //background-color: #250c0e;
+  }
+}
+@-moz-keyframes slideIn {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-200px);
+    //background-color: #250c0e;
+  }
+}
+@keyframes slideIn {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-200px);
+    //background-color: #250c0e;
+  }
+}
+
+//////
+.white-login-card{
+  box-shadow: 0px 12px 36px 0px rgba(9, 61, 89, 0.5);
+  -webkit-box-shadow: 0px 12px 36px 0px rgba(9, 61, 89, 0.5);
+
+  position: relative;
+  //animation-name: example2;
+  //animation-duration: 10s;
+
+  -webkit-animation: slideOut 2s forwards;
+}
+.white-login-card-body{
+  //position: relative;
+  //animation-name: example2;
+  //animation-duration: 10s;
+
+
+}
+@-webkit-keyframes slideOut {
+  0% {
+    transform: translateX(0);
+    //width: 50%;
+  }
+  100% {
+    transform: scaleX(0.5);
+    transform: translateX(167px);
+
+  }
+}
+@-moz-keyframes slideOut {
+  0% {
+    transform: translateX(0);
+    //width: 50%;
+  }
+  100% {
+    transform: scaleX(0.5);
+    transform: translateX(167px);
+
+  }
+}
+@keyframes slideOut {
+  0% {
+    transform: translateX(0);
+    //width: 50%;
+  }
+  100% {
+    transform: scaleX(0.5);
+    transform: translateX(167px);
+  }
+}

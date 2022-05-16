@@ -18,6 +18,7 @@ import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
 import { lazy, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
+import AnimatedButton from './loginButton'
 
 const Login = (props) => {
   const [username, setUsername] = useState({})
@@ -124,14 +125,29 @@ const Login = (props) => {
       console.log('returning ')
     }
   }, [])
+  const [animation, setAnimation] = useState(false)
+  const animate = () => {
+    // Button triggers animation
+    console.log('here')
+    setAnimation(true)
+
+    setTimeout(() => setAnimation(false), 5000)
+  }
+
   return (
-    <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
-      <CContainer>
+    <div className="bg-light min-vh-100 d-flex flex-row align-items-center ">
+      <CContainer style={{ borderRadius: '10px' }}>
         <CRow className="justify-content-center">
           <CCol md={8}>
             <CCardGroup>
-              <CCard className="p-4">
-                <CCardBody>
+              <CCard
+                // className="p-4 white-login-card"
+                className={animation ? 'p-4 white-login-card ' : 'p-4'}
+              >
+                <CCardBody
+                  // className="white-login-card-body"
+                  className={animation ? 'white-login-card-body ' : null}
+                >
                   <CForm
                     onSubmit={
                       //check  email and password before any nabvigation
@@ -163,13 +179,21 @@ const Login = (props) => {
                     </CInputGroup>
                     <CRow>
                       <CCol xs={6}>
-                        <CButton
+                        <button
                           type="submit"
-                          style={{ backgroundColor: '#162237' }}
+                          style={{
+                            backgroundColor: '#162237',
+                            borderRadius: '5px',
+                            borderColor: '#162237',
+                            color: '#ffff',
+                            height: '100%',
+                          }}
                           className="px-4"
+                          onClick={animate}
                         >
                           Login
-                        </CButton>
+                        </button>
+                        {/*<AnimatedButton />*/}
                       </CCol>
                       <CCol xs={6} className="text-right">
                         <CButton
@@ -189,10 +213,15 @@ const Login = (props) => {
                 </CCardBody>
               </CCard>
               <CCard
-                className="text-white py-5"
+                // className="text-white py-5 login-card"
+                className={animation ? 'login-card text-white py-5 ' : 'text-white py-5 '}
                 style={{ width: '44%', backgroundColor: '#162237' }}
               >
-                <CCardBody className="text-center" style={{ backgroundColor: '#162237' }}>
+                <CCardBody
+                  // className="text-center login-card-body "
+                  className={animation ? 'text-center login-card-body  ' : 'text-center '}
+                  style={{ backgroundColor: '#162237' }}
+                >
                   <div>
                     <img src={'./threatgator.png'} style={{ height: '75%', width: '75%' }} />
                   </div>

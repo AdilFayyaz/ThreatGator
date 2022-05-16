@@ -12,6 +12,7 @@ const Report_ap = React.lazy(() => import('./views/AdminPanel/Report_ap.js'))
 const notification = React.lazy(() => import('./views/dashboard/notification.js'))
 const assetmanagement = React.lazy(() => import('./views/AdminPanel/AssetManagement.js'))
 const bookmarks = React.lazy(() => import('./views/sidebar/bookmarks.js'))
+const inference = React.lazy(() => import('./views/AdminPanel/Inference.js'))
 
 // Base
 // const Accordion = React.lazy(() => import('./views/base/accordion/Accordion'))
@@ -72,6 +73,7 @@ const routes = [
   { path: '/Report_admin', name: 'ReportDetails', component: Report_ap },
   { path: '/notification', name: 'notification', component: notification },
   { path: '/bookmarks', name: 'bookmarks', component: bookmarks },
+  { path: '/inference', name: 'inference', component: inference },
   {
     path: '/assetManagement',
     name: 'assetManagement',

@@ -65,7 +65,8 @@ const LatestReports_a = (props) => {
       time: time,
       org_id: props.location.org_id,
       userid: props.location.userid,
-      src: 'latestReports',
+      isadmin: props.location.isadmin,
+      src: 'latestReports_admin',
     })
   }
   const history = useHistory()

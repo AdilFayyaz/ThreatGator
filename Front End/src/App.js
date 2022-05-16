@@ -18,16 +18,29 @@ const Page404 = React.lazy(() => import('./views/pages/page404/Page404'))
 const Page500 = React.lazy(() => import('./views/pages/page500/Page500'))
 
 class App extends Component {
-  state = { message: '1', isadmin: 'false', userid: '1' }
+  constructor() {
+    super()
+    this.state = JSON.parse(window.localStorage.getItem('state')) || {
+      message: '1',
+      isadmin: 'false',
+      userid: '1',
+    }
+  }
+  setState(state, callback) {
+    window.localStorage.setItem('state', JSON.stringify(state))
+    super.setState(state, callback)
+  }
+
+  // state = { message: '1', isadmin: 'false', userid: '1' }
   // state = { message: '1', isadmin: 'false' }
   callbackFunction = (childData) => {
-    this.setState({ message: childData })
+    this.setState({ ...this.state, message: childData })
   }
   callbackFunction2 = (childData2) => {
-    this.setState({ isadmin: childData2 })
+    this.setState({ ...this.state, isadmin: childData2 })
   }
   callbackFunction3 = (childData3) => {
-    this.setState({ userid: childData3 })
+    this.setState({ ...this.state, userid: childData3 })
   }
   render() {
     return (

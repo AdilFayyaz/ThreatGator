@@ -39,20 +39,6 @@ const Searchbar = (props) => {
   const getSearchResults = (event) => {
     event.preventDefault()
 
-    // let reports = []
-    // const requestOptions = {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: SearchKeyword,
-    // }
-    // fetch('http://127.0.0.1:8082/dataAnalysis/getSearchResults', requestOptions)
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     SetKeywordResult(data)
-    //     // console.log(data)
-    //     // openModalSearch()
-    //     history.push('/searchResults', { keyword: SearchKeyword, data: KeywordResult })
-    //   })
     var myHeaders = new Headers()
     myHeaders.append('Content-Type', 'application/json')
 
@@ -76,9 +62,9 @@ const Searchbar = (props) => {
         history.push('/searchResults', {
           keyword: SearchKeyword,
           data: result,
-          org_id: 1,
-          userid: 1,
-          isadmin: false,
+          org_id: props.graph1,
+          userid: props.userid,
+          isadmin: props.isadmin,
         })
       })
       .catch((error) => console.log('error', error))
@@ -99,6 +85,9 @@ const Searchbar = (props) => {
     //... other props you will use in this component
   }
   useEffect(() => {
+    {
+      console.log('propss', props)
+    }
     return () => {
       console.log('returning ')
     }
