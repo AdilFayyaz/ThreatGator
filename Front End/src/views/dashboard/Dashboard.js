@@ -62,7 +62,7 @@ const WidgetsBrand = lazy(() => import('../widgets/WidgetsBrand.js'))
 function getNotificationCards(x) {
   return (
     <CButton
-      style={{ width: '40rem', height: '3rem', backgroundColor: '#1c2b45', borderRadius: '3rem' }}
+      style={{ width: '40rem', height: '3rem', backgroundColor: '#1c2b45', borderRadius: '10%' }}
       value={x}
     >
       {x}
@@ -449,7 +449,7 @@ const Dashboard = (props) => {
                     width: '80rem',
                     height: '3rem',
                     backgroundColor: '#250c0e',
-                    borderRadius: '3rem',
+                    borderRadius: '10%',
                   }}
                   value={notif.rawText}
                 >
@@ -519,21 +519,23 @@ const Dashboard = (props) => {
             </CCard>
           </CCol>
           <CCol>
-            <CCol xs>
-              <CCard className="mb-4" style={{ position: 'absolute' }}>
-                <CCardBody>
-                  {/* {donughnut} */}
-                  <CCol sm={5}>
-                    <h4 id="topmalwares" className="card-title mb-0">
-                      Top Malwares
-                    </h4>
-                  </CCol>
+            {/*<CCol xs>*/}
+            <CCard className="mb-4" style={{ position: 'absolute', height: '31.5%', width: '40%' }}>
+              <CCardBody>
+                {/* {donughnut} */}
+                <CCol sm={8}>
+                  <h4 id="topmalwares" className="card-title mb-0">
+                    Top Malwares
+                  </h4>
+                </CCol>
+                <CCol sm={9} lg={8} style={{ marginLeft: '17%', marginTop: '10%' }}>
                   {/*replace data1 with DoughnutData*/}
                   {/* <Doughnut data={DoughnutData}  /> */}
                   <CChartDoughnut data={DoughnutData} />
-                </CCardBody>
-              </CCard>
-            </CCol>
+                </CCol>
+              </CCardBody>
+            </CCard>
+            {/*</CCol>*/}
           </CCol>
         </CRow>
 

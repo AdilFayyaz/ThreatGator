@@ -284,7 +284,7 @@ const LatestReports_a = (props) => {
                   </CTableDataCell>
                   <CTableDataCell className="text-center">
                     <CButton
-                      style={{ backgroundColor: 'blue', margin: '1%' }}
+                      style={{ margin: '1%' }}
                       onClick={() =>
                         goToDetails(
                           el.hash,
