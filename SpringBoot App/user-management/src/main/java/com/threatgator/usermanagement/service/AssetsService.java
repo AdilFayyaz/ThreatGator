@@ -10,5 +10,6 @@ import java.util.List;
 // Users Service Interface
 public interface AssetsService {
     public Assets saveAsset(Assets assets);
+    public void deleteAsset(Assets assets);
     public List<Assets> getAllAssets();
 }

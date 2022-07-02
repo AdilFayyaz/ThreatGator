@@ -17,5 +17,8 @@ public class AssetsServiceImplemented implements AssetsService{
 
     @Override
     public List<Assets> getAllAssets() {return (List<Assets>) assetsRepository.findAll();}
+    @Override
+    public void deleteAsset(Assets assets) { assetsRepository.deleteById(assets.getId());}
+
 
 }

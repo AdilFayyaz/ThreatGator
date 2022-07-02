@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.threatgator.usermanagement.model.Users;
-import com.threatgator.usermanagement.service.UsersService;
 
 import java.util.List;
 
@@ -44,9 +42,20 @@ public class AssetsController {
         }).orElseThrow(() -> new ResourceNotFoundException("Not found Organization with id = " + OrganizationId));
         return new ResponseEntity<>(assets1, HttpStatus.CREATED);
     }
-
+//delete an asset
     @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PostMapping("/deleteAsset/{OrganizationId}")
+    public void deleteAsset(@PathVariable(value = "OrganizationId") Integer OrganizationId,
+                            @RequestBody Assets assets) {
+
+        System.out.println(assets.getName());
+
+             assetsService.deleteAsset(assets);
+
+    }
+
     // get all users
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/getAll")
     public List<Assets> list(){
         return assetsService.getAllAssets();
