@@ -449,7 +449,7 @@ const Dashboard = (props) => {
                     width: '80rem',
                     height: '3rem',
                     backgroundColor: '#250c0e',
-                    borderRadius: '10%',
+                    borderRadius: '10px',
                   }}
                   value={notif.rawText}
                 >

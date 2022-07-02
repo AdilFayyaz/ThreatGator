@@ -24,6 +24,15 @@ $enable-rtl: true;
 
 
 }
+.assets{
+
+  word-wrap: anywhere;
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+
+
+}
 .overflow1{
   overflow: hidden;
 }

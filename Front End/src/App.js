@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import { BrowserRouter, HashRouter, Route, Switch } from 'react-router-dom'
 import './scss/style.scss'
-
+//
+// Citation: The UI for threat gator has been developed with the help of CoreUI Admin Panel Template
+//https://coreui.io/react/
+//
 const loading = (
   <div className="pt-3 text-center">
     <div className="sk-spinner sk-spinner-pulse"></div>
