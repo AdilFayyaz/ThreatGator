@@ -95,7 +95,7 @@ const AssetManagement = () => {
       body: JSON.stringify(req),
     }
 
-    fetch('http://127.0.0.1:8084/assets/addAsset/' + location.state.org_id, requestOptions)
+    fetch('http://127.0.0.1:8084/assets/addAsset/' + location.org_id, requestOptions)
       .then((res) => res.json())
       .then((data) => {
         console.log('got...' + JSON.stringify(data))
@@ -110,8 +110,9 @@ const AssetManagement = () => {
       })
   }
   function getAssets() {
-    console.log('org id ', location.state.org_id)
-    fetch('http://127.0.0.1:8084/assets/assetsByOrganization/' + location.state.org_id)
+    console.log('org id ', JSON.stringify(location.org_id))
+    //location.state.org_id
+    fetch('http://127.0.0.1:8084/assets/assetsByOrganization/' + location.org_id)
       .then((res) => res.json())
       .then((data) => {
         console.log('assets' + JSON.stringify(data))
@@ -140,7 +141,7 @@ const AssetManagement = () => {
       redirect: 'follow',
     }
 
-    await fetch('http://127.0.0.1:8084/assets/deleteAsset/' + location.state.org_id, requestOptions)
+    await fetch('http://127.0.0.1:8084/assets/deleteAsset/' + location.org_id, requestOptions)
       .then((response) => response.text())
       .then((result) => {
         console.log('........', result)
