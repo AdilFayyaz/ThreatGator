@@ -1,6 +1,5 @@
-# ThreatGator
+# ThreatGator - a Threat Intelligence Platform (TIP)
 ## Description
-ThreatGator is a Threat Intelligence Platform (TIP). <br/>
 It includes curation of threat intelligence data from different sources particularly social media, prioritization of threats, correlation of data based on Indicators of Compromise (IOCs) and effective visualization of extracted information on an interative dashboard. <br/>
 ## Required Tools & Technologies
 1. Java 8 and 11
